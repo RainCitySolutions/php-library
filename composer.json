@@ -1,0 +1,34 @@
+{
+	"name" : "raincity/php-library",
+	"description" : "Library to support implementations in PHP",
+	"type" : "library",
+	"version" : "2.0.0",
+	"license" : "BSD-3-Clause",
+	"minimum-stability" : "stable",
+	"require" : {
+		"php" : ">=7.4",
+		"composer/installers" : "~2.2",
+		"psr/log" : "~1.1",
+		"monolog/monolog" : "~2.8"
+	},
+	"autoload" : {
+		"classmap" : [
+			"src/"
+		],
+		"psr-4" : {
+			"" : [
+				"src",
+				"test"
+			]
+		}
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "~9.5",
+		"brain/monkey" : "~2.6"
+	},
+	"config" : {
+		"allow-plugins" : {
+			"composer/installers" : true
+		}
+	}
+}
