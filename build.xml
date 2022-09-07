@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
 
-<project name="wp-plugin-framework" default="dist">
+<project name="php-library" default="dist">
 
 	<property name="buildDir" value="${project.basedir}/build" />
 	<property name="reportDir" value="${project.basedir}/report" />
