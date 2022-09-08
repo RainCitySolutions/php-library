@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
  * Wrapper class for managing loggers using a specified logger class.
  *
  * By default will use the FileSystemLogger. A different logger can be used
- * by calling the setLogger method with a class that support the HsirLogger
+ * by calling the setLogger method with a class that support the LoggerIntf
  * interface.
  */
 final class Logger implements LoggerIntf

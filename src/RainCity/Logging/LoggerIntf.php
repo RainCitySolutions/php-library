@@ -11,7 +11,7 @@ interface LoggerIntf {
      *      logger instance.
      * @param string $loggerKey An optional key to be used in grouping
      *      loggers. If not provided, loggers will be grouped by the class
-     *      implementing HsirLogger.
+     *      implementing LoggerIntf.
      *
      * @return LoggerInterface A logger
      */
