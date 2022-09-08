@@ -4,8 +4,102 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "511130174919c253abbd663bf67f4947",
+    "content-hash": "c663d1225e94de64a0288f04508e3b97",
     "packages": [
+        {
+            "name": "apix/cache",
+            "version": "1.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/apix/cache.git",
+                "reference": "1ed9395a0c42c9029c17462df1927d4536b513da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/apix/cache/zipball/1ed9395a0c42c9029c17462df1927d4536b513da",
+                "reference": "1ed9395a0c42c9029c17462df1927d4536b513da",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "psr/cache": "^1.0"
+            },
+            "provide": {
+                "psr/cache-implementation": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0|^5.0",
+                "satooshi/php-coveralls": "~0.7.1"
+            },
+            "suggest": {
+                "ext-apc": "Allows to cache into APC data store ~ up to PHP 5.4.",
+                "ext-apcu": "Allows to use APCu userland caching ~ any PHP version.",
+                "ext-igbinary": "Fast and small serialization format",
+                "ext-memcached": "Allows to use Memcached distributed memory caching system",
+                "ext-mongo": "Allows to cache into MongoDB instances using http://php.net/mongo  ~ up to PHP 5.6.",
+                "ext-mongodb": "Allows to cache into MongoDB instances using https://php.net/mongodb ~ from PHP 7 and above and HHVM.",
+                "ext-pdo": "Allows to cache into PDO supported DBs such as Oracle, MS SQL server, IBM DB2.",
+                "ext-pdo_mysql": "Allows to use MySQL.",
+                "ext-pdo_pgsql": "Allows to use PostgreSQL",
+                "ext-pdo_sqlite": "Allows to cache into SQLite.",
+                "ext-redis": "So you can cache into Redis servers.",
+                "msgpack/msgpack-php": "MessagePack serialization format"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Apix\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Franck Cassedanne",
+                    "email": "franck@ouarz.net"
+                },
+                {
+                    "name": "Apix Cache Community",
+                    "homepage": "https://github.com/frqnck/apix-cache/contributors"
+                }
+            ],
+            "description": "A thin PSR-6 cache wrapper with a generic interface to various caching backends emphasising cache taggging and indexing to Redis, Memcached, PDO/SQL, APC and other adapters.",
+            "homepage": "https://github.com/frqnck/apix-cache",
+            "keywords": [
+                "apc",
+                "apcu",
+                "cache",
+                "caching",
+                "filesystem",
+                "igbinary",
+                "json",
+                "memcache",
+                "memcached",
+                "mongo",
+                "mongodb",
+                "msgpack",
+                "mysql",
+                "pdo",
+                "pgsql",
+                "postgres",
+                "psr-6",
+                "psr-cache",
+                "psrCache",
+                "redis",
+                "serializer",
+                "session",
+                "sqlite",
+                "tagging"
+            ],
+            "support": {
+                "irc": "irc://irc.freenode.org/ouarz",
+                "issues": "https://github.com/apix/cache/issues",
+                "source": "https://github.com/apix/cache/tree/1.3.5"
+            },
+            "time": "2020-06-11T09:10:14+00:00"
+        },
         {
             "name": "composer/installers",
             "version": "v2.2.0",
@@ -254,6 +348,55 @@
             "time": "2022-07-24T11:55:47+00:00"
         },
         {
+            "name": "psr/cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for caching libraries",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr-6"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/cache/tree/master"
+            },
+            "time": "2016-08-06T20:24:11+00:00"
+        },
+        {
             "name": "psr/log",
             "version": "1.1.4",
             "source": {
@@ -302,6 +445,57 @@
                 "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
             "time": "2021-05-03T11:20:27+00:00"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/simple-cache/tree/master"
+            },
+            "time": "2017-10-23T01:57:42+00:00"
         }
     ],
     "packages-dev": [

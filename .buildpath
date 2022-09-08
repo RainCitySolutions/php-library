@@ -11,6 +11,11 @@
 			<attribute name="composer" value="source"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/apix/cache/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/brain/monkey/inc">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -106,7 +111,17 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/psr/cache/src">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/psr/log/Psr/Log">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/psr/simple-cache/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
