@@ -1,4 +1,5 @@
-<?php namespace RainCity;
+<?php
+namespace RainCity;
 
 use Psr\Log\LoggerInterface;
 use RainCity\Logging\Logger;

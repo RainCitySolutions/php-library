@@ -1,4 +1,5 @@
-<?php namespace RainCity\Logging;
+<?php
+namespace RainCity\Logging;
 
 class RotatingFileHandler extends \Monolog\Handler\RotatingFileHandler
 {

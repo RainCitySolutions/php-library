@@ -1,4 +1,5 @@
-<?php namespace RainCity;
+<?php
+namespace RainCity;
 
 /**
  * Simple PHP script timing class.

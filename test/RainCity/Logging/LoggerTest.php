@@ -1,4 +1,5 @@
-<?php namespace RainCity\Logging;
+<?php
+namespace RainCity\Logging;
 
 use PHPUnit\Framework\TestCase;
 use RainCity\TestHelper\StubLogger;

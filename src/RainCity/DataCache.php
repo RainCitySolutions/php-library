@@ -1,4 +1,5 @@
-<?php namespace RainCity;
+<?php
+namespace RainCity;
 
 use RainCity\Logging\Logger;
 use RainCity\Logging\BaseLogger;

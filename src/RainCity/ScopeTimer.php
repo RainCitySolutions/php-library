@@ -1,4 +1,5 @@
-<?php namespace RainCity;
+<?php
+namespace RainCity;
 
 /**
  * A convienence class to time a period of execution. The timer starts when
