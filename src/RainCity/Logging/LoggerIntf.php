@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 namespace RainCity\Logging;
 
 use Psr\Log\LoggerInterface;
+
 
 interface LoggerIntf {
     /**

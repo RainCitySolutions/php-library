@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace RainCity\TestHelper;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
