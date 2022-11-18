@@ -55,7 +55,6 @@ class BaseLogger implements LoggerIntf
         $logger = new \Monolog\Logger(self::BASE_LOGGER); // create an initial logger
 
         $this->setupLogger($logger);
-//        $this->setupChromeLogging($logger, $pluginName);
 
         $this->loggers[self::BASE_LOGGER] = $logger;
     }
@@ -80,12 +79,6 @@ class BaseLogger implements LoggerIntf
 
         $logger->pushProcessor(new \Monolog\Processor\PsrLogMessageProcessor(null, true));
     }
-
-/*
-    private function setupChromeLogging($logger, $pluginName) {
-        $logger->pushHandler(new ChromePHPHandler($this->getLogLevel($pluginName)));
-    }
-*/
 
 
     /**

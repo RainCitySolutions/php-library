@@ -21,23 +21,13 @@ implements \Psr\SimpleCache\CacheInterface
         // need to add support for Memcached
         $options = array();
         if (extension_loaded('memcached')) {
-//            $this->log->debug('Using Memcached for caching');
 
             $backend = new \Memcached();
             $backend->addServer('127.0.0.1', 11211);
-/*
-            $stats = $backend->getStats();
-
-            ob_start();
-            var_dump($stats);
-            $this->log->info("Memcached stats2: " . ob_get_clean());
-//            if ($stats['127.0.0.1:11211']['pid'] == -1)
-*/
 
             $this->cache = \Apix\Cache\Factory::getPool($backend, $options);
         }
         else if (extension_loaded('pdo_sqlite')) {
-//            $this->log->debug('Using Sqlite for caching');
 
             $dbFile = self::getSqliteFile();
             $dbDir = dirname($dbFile);
@@ -50,8 +40,6 @@ implements \Psr\SimpleCache\CacheInterface
             $this->cache = \Apix\Cache\Factory::getPool($backend);
         }
         else {
-//            $this->log->debug('Using Files for caching');
-
             $options['directory'] = self::getFilesCacheDir(); // Directory where the cache is created
             $options['locking'] = true;                       // File locking (recommended)
 
@@ -66,12 +54,12 @@ implements \Psr\SimpleCache\CacheInterface
 
     public function setMultiple($values, $ttl = null)
     {
-
+        // Multiple values aren't being supported
     }
 
     public function getMultiple($keys, $default = null)
     {
-
+        // Multiple values aren't being supported
     }
 
     public function set($key, $value, $ttl = null)
@@ -90,15 +78,11 @@ implements \Psr\SimpleCache\CacheInterface
             }
         }
 
-//        $this->log->debug('Setting entry in cache', array($key, $value, $ttl));
-
         return $this->cache->save($item);
     }
 
     public function get($key, $default = null)
     {
-//        $this->log->debug('Getting entry in cache', array($key, $default));
-
         $item = $this->cache->getItem($key);
         if (!isset($item) && isset($default)) {
             $this->log->debug("Request for $key not found, returning default");

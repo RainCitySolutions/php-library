@@ -76,14 +76,15 @@ abstract class Singleton {
      * A dummy magic method to prevent from being cloned
      */
     public function __clone() {
-        _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'raincity' ), '1.0' ); }
+        _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'raincity' ), '1.0' );
+    }
 
     /**
      * A dummy magic method to prevent from being unserialized
      */
     public function __wakeup() {
-        _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'raincity' ), '1.0' ); }
-
+        _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'raincity' ), '1.0' );
+    }
 
 
     /**

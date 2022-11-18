@@ -12,9 +12,6 @@ use RainCity\TestHelper\StubLogger;
  */
 class SingletonTest extends RainCityTestCase
 {
-    private $testSingleton;
-
-
     /**
      * {@inheritDoc}
      * @see \PHPUnit\Framework\TestCase::setUpBeforeClass()

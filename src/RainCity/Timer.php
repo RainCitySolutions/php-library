@@ -95,8 +95,6 @@ class Timer {
      */
     private function getMicroTime() {
         return microtime(true);
-//         list($usec, $sec) = explode(' ', microtime());
-//         return ((float) $usec + (float) $sec);
     }
 
     /**
