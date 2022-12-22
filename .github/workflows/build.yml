@@ -120,15 +120,11 @@ jobs:
       - name: Create Release
         id: create-release
         uses: ncipollo/release-action@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag: ${{ steps.build-vars.outputs.version }}
           name: Release ${{ steps.build-vars.outputs.version }}
           commit: ${{ env.version-commit-ref }}
           omitBody: true
-#          artifacts: build/${{ steps.build-vars.outputs.project-name }}_${{ steps.build-vars.outputs.version }}.zip
-#          artifactContentType: application/zip
           token: ${{ secrets.GITHUB_TOKEN }}
 
 #      - name: Create Release
