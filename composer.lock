@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "445d001673ea5ddc98d2d8eff98496ae",
+    "content-hash": "6f1ede81460044505afaef8fead2a5ca",
     "packages": [
         {
             "name": "apix/cache",
