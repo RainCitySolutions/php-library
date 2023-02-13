@@ -18,12 +18,18 @@ abstract class RainCityTestCase
     protected function setUp(): void {
         parent::setUp();
         \Brain\Monkey\setUp();
+
+        set_error_handler(static function (int $errno, string $errstr) {
+            throw new RainCityTestException($errstr, $errno);
+        }, E_USER_WARNING);
     }
 
     /**
      * Runs after each test.
      */
     protected function tearDown(): void {
+        restore_error_handler();
+
         \Brain\Monkey\tearDown();
         parent::tearDown();
     }

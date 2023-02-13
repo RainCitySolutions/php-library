@@ -23,6 +23,10 @@ abstract class Singleton {
     /** @var LoggerInterface */
     protected $log;
 
+    static function triggerIncorrectUseWarning(string $function) {
+        trigger_error($function . ' should not be called on singleton class', E_USER_WARNING);
+    }
+
     /**
      * Initializes an instance of the called class or returned an existing
      * instance if one already exists.
@@ -76,14 +80,14 @@ abstract class Singleton {
      * A dummy magic method to prevent from being cloned
      */
     public function __clone() {
-        _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'raincity' ), '1.0' );
+        self::triggerIncorrectUseWarning(__FUNCTION__);
     }
 
     /**
      * A dummy magic method to prevent from being unserialized
      */
     public function __wakeup() {
-        _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'raincity' ), '1.0' );
+        self::triggerIncorrectUseWarning(__FUNCTION__);
     }
 
 

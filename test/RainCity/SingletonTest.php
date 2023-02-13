@@ -27,17 +27,18 @@ class SingletonTest extends RainCityTestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
         ReflectionHelper::setClassProperty(TestSingleton::class, 'instance', array(), true);
     }
 
     public function testClone () {
-        $this->expectError();
+        $this->expectExceptionMessage('__clone should not be called on singleton class');
         $obj = TestSingleton::instance();
         $obj->__clone();
     }
 
     public function testWakeup () {
-        $this->expectError();
+        $this->expectExceptionMessage('__wakeup should not be called on singleton class');
         $obj = TestSingleton::instance();
         $obj->__wakeup();
     }

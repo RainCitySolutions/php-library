@@ -32,15 +32,15 @@ trait SingletonTrait {
     /**
      * A dummy magic method to prevent from being cloned
      */
-    final private function __clone() {
-        _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'raincity' ), '1.0' );
+    final public function __clone() {
+        Singleton::triggerIncorrectUseWarning(__FUNCTION__);
     }
 
     /**
      * A dummy magic method to prevent from being unserialized
      */
-    final private function __wakeup() {
-        _doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'raincity' ), '1.0' );
+    final public function __wakeup() {
+        Singleton::triggerIncorrectUseWarning(__FUNCTION__);
     }
 
 
@@ -53,7 +53,7 @@ trait SingletonTrait {
      * recursive loop. It is preferred to do any initialization of the
      * instance in the initializeInstance() method.
      */
-    final private function __construct() {
+    final protected function __construct() {
         $this->initializeInstance();
     }
 
