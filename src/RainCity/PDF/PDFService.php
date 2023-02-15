@@ -1,77 +1,125 @@
-<?php
-declare (strict_types=1);
+<?php declare (strict_types=1);
 namespace RainCity\PDF;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use RainCity\Logging\Logger;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Client\ClientExceptionInterface;
 
+/**
+ * Class to support sending requests to the PDF Service.
+ */
 class PDFService
 {
-    protected $svcUrl;
-    protected $xsltFilename;
-    protected $supportFiles;
+    const EXPECTED_VERBS = 'POST,OPTIONS';
+    const INVALID_URL_ERROR = 'Invalid service URL provided.';
 
-    private $isSvcActive;
-    private $httpClient;
-    private $logger;
+    protected string $svcUrl;
+
+    private ClientInterface $httpClient;
+    private LoggerInterface $logger;
 
     /**
      * Constructs a PDF Serivce instance.
      *
-     * @param string $svcUrl The URL to the PDF Web Service
-     * @param string $xsltFilename The fully qualified name of the XSLT file.
-     * @param array $supportFiles An array of fully qualified filenames to be
-     *      included with the request to the PDF service. These might include
-     *      background images, or child XSLT files referenced by the XSLT file.
-     */
-    public function __construct(string $svcUrl, string $xsltFilename, array $supportFiles) {
-        $this->isSvcActive = false;
+     * If the $httpClient parameter is not set the Guzzle HTTP Client will be
+     * used by default. See {@link https://docs.guzzlephp.org/en/stable/}
 
+     *
+     * @param string $svcUrl The URL to the PDF Web Service
+     * @param ClientInterface $httpClient (Optional) An HTTP Client to be used for
+     *      requests. Can be overridden later by a call to {@see PDFService::setHttpClient()}.
+     *
+     * @throws PDFServiceException Thrown if the URL provided does not refer
+     *      to a valid PDF Service instance.
+     */
+    public function __construct(string $svcUrl, ClientInterface $httpClient = null)
+    {
         $this->logger = Logger::getLogger(get_class());
 
-        $this->svcUrl = $svcUrl;
-        $this->xsltFilename = $xsltFilename;
-        $this->supportFiles = $supportFiles;
+        $this->httpClient = $httpClient ?? self::getDefaultHttpClient();
 
-        if (isset($svcUrl)) {
-            $this->httpClient = new Client([
-                // Base URI is used with relative requests
-                'base_uri' => $svcUrl,
-                // You can set any number of default request options.
-                'timeout'  => 30.0,
-                'read_timeout' => 30.0,
-                'cookies' => true,
-                'verify' => true
-            ]);
-
-            $this->isSvcActive = filter_var($svcUrl, FILTER_VALIDATE_URL) !== false ? self::isValidServiceUrl($this->httpClient, $svcUrl) : false;
+        if ($this->isValidServiceUrl($svcUrl)) {
+            $this->svcUrl = $svcUrl;
+        } else {
+            throw new PDFServiceException(self::INVALID_URL_ERROR, PDFServiceException::INVALID_URL_ERROR);
         }
     }
 
-    public static function isValidServiceUrl(Client $httpClient, string $url) {
+    /**
+     * Set the HTTP Client to use for requests to the PDF Service.
+     *
+     * If not called, the Guzzle HTTP Client will be used by default.
+     * @link https://docs.guzzlephp.org/en/stable/
+     *
+     * @param ClientInterface $httpClient An HTTP Client.
+     */
+    public function setHttpClient(ClientInterface $httpClient): void
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    protected static function getDefaultHttpClient(): ClientInterface
+    {
+        return new Client([
+            // You can set any number of default request options.
+            'timeout'  => 30.0,
+            'read_timeout' => 30.0,
+            'cookies' => true,
+            'verify' => true,
+            'http_errors' => false
+        ]);
+    }
+
+    /**
+     * Check if the provided URL refers to an instance of the PDF service.
+     *
+     * @param string $url The URL for the PDF service.
+     *
+     * @return bool Returns true if the URL is valid, otherwise returns false.
+     */
+    protected function isValidServiceUrl(string $url): bool
+    {
         $isValid = false;
 
-        // get the initial login page (just contains the email/username field
-        try {
-            $request = new Request('OPTIONS', $url);
-            $response = $httpClient->send($request, ['http_errors' => false]);
-            if (200 === $response->getStatusCode()) {
-                $verbs = $response->getHeader('Allow');
-                if (is_array($verbs) && !empty($verbs) && 'POST,OPTIONS' === $verbs[0]) {
-                    $isValid = true;
+        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+            // get the initial login page (just contains the email/username field
+            try {
+                /** @var ResponseInterface $response */
+                $response = $this->httpClient->sendRequest(new Request('OPTIONS', $url));
+
+                if (200 === $response->getStatusCode()) {
+                    $verbs = $response->getHeader('Allow');
+
+                    if (!empty($verbs) && self::EXPECTED_VERBS === $verbs[0]) {
+                        $isValid = true;
+                    }
                 }
+            } catch (\Exception $e) {
+                Logger::getLogger(get_class())->warning(
+                    'Unable to retrieve Options from URL {url}, {error}',
+                    array('url' => $url, 'error' => $e->getMessage())
+                    );
             }
-        }
-        catch (\Exception $e) {
-            Logger::getLogger(get_class())->warning('Unable to retrieve Options from URL {url}, {error}', array('url' => $url, 'error' => $e->getMessage()));
         }
 
         return $isValid;
     }
 
-    public function isServiceActive () {
-        return $this->isSvcActive;
+    /**
+     * Check if the PDF Service is active
+     *
+     * @return bool Returns true if the serivce is active, otherwise returns
+     *      false.
+     */
+    public function isServiceActive(): bool
+    {
+        return $this->isValidServiceUrl($this->svcUrl);
     }
 
 
@@ -81,22 +129,29 @@ class PDFService
      * Sends the XML to the PDF Service and retrieves the PDF file.
      *
      * @param string $xmlFilename   The fully qualified name of the XML file.
+     * @param string $xsltFilename The fully qualified name of the XSLT file.
      * @param string $pdfFilename   The fully qualified name of the PDF file.
+     * @param array $supportFiles An array of fully qualified filenames to be
+     *      included with the request to the PDF service. These might include
+     *      background images, or child XSLT files referenced by the XSLT file.
      *
-     * @return boolean  Returns true if the PDF file was retrieved, otherwise false.
+     * @return bool  Returns true if the PDF file was retrieved, otherwise false.
+     *
+     * @throws PDFServiceException
      */
-    public function fetchPDF(string $xmlFilename, string $pdfFilename) {
+    public function fetchPDF(string $xmlFilename, string $xsltFilename, string $pdfFilename, array $supportFiles): bool
+    {
         $result = false;
 
         $multipartData = array();
 
         // set the names of the input and output files
         array_push($multipartData, array('name' => 'xmlfile', 'contents' => basename($xmlFilename)));
-        array_push($multipartData, array('name' => 'xsltfile', 'contents' => basename($this->xsltFilename)));
+        array_push($multipartData, array('name' => 'xsltfile', 'contents' => basename($xsltFilename)));
         array_push($multipartData, array('name' => 'pdffile', 'contents' => basename($pdfFilename)));
 
         // Add the support files
-        foreach ($this->supportFiles as $file) {
+        foreach ($supportFiles as $file) {
             array_push($multipartData, array(
                 'name' => self::FILES_FIELD,
                 'filename' => $file,
@@ -114,26 +169,74 @@ class PDFService
         // add the XSLT file
         array_push($multipartData, array(
             'name' => self::FILES_FIELD,
-            'filename' => $this->xsltFilename,
-            'contents' => fopen($this->xsltFilename, 'r')
+            'filename' => $xsltFilename,
+            'contents' => fopen($xsltFilename, 'r')
         ));
 
-        // send the conversion request to the service as Multipart form data
-        $response = $this->httpClient->post('', ['multipart' => $multipartData]);
+        try {
+            // send the conversion request to the service as Multipart form data
+            $multipartStrm = new MultipartStream($multipartData);
+            $request = new Request('POST', $this->svcUrl, array(), $multipartStrm);
+            $response = $this->httpClient->sendRequest($request);
 
-        // If the request was successful, extract the URL of the PDF file and fetch it
-        if (201 === $response->getStatusCode()) {
-            $location = $response->getHeader('Location');
+            // If the request was successful, extract the URL of the PDF file and fetch it
+            if (201 === $response->getStatusCode()) {
+                $location = $response->getHeader('Location');
 
-            if (!empty($location)) {
-                // fetch the PDF file and write it to the specified file
-                $response = $this->httpClient->get($location[0], ['sink' => $pdfFilename]);
-                if (200 === $response->getStatusCode()) {
+                if (!empty($location)) {
+                    $this->fetchPdfFile(array_shift($location), $pdfFilename);
                     $result = true;
                 }
+            } else {
+                $reason = $response->getBody() ?? $response->getReasonPhrase();
+                throw new PDFServiceException(
+                    'Error requesting PDF: ' . $reason,
+                    PDFServiceException::GENERATION_ERROR
+                    );
             }
+        } catch (ClientExceptionInterface $cei) {
+            throw new PDFServiceException(
+                'Error generating PDF: ' . $cei->getMessage(),
+                PDFServiceException::GENERATION_ERROR
+                );
         }
 
         return $result;
+    }
+
+    /**
+     * Fetch the PDF file from the URL.
+     *
+     * @param string $pdfUrl    The URL to the PDF file.
+     * @param string $pdfFilename The file to write the PDF contents to.
+     *
+     * @throws PDFServiceException Thrown if there is an issue fetching the
+     *      URL or writting the PDF to the file.
+     */
+    private function fetchPdfFile(string $pdfUrl, string $pdfFilename): void
+    {
+        // fetch the PDF file and write it to the specified file
+        $request = new Request('GET', $pdfUrl);
+        $response = $this->httpClient->sendRequest($request);
+
+        if (200 === $response->getStatusCode()) {
+            try {
+                $outRsrc = Utils::tryFopen($pdfFilename, 'w');
+                $outStrm = Utils::streamFor($outRsrc);
+                Utils::copyToStream($response->getBody(), $outStrm);
+                fclose($outRsrc);
+            } catch (\RuntimeException $re) {
+                throw new PDFServiceException(
+                    'Unable to create PDF file: ' . $re->getMessage(),
+                    PDFServiceException::PDF_FILE_ERROR
+                    );
+            }
+        } else {
+            $reason = $response->getBody() ?? $response->getReasonPhrase();
+            throw new PDFServiceException(
+                'Error retrieving PDF: ' . $reason,
+                PDFServiceException::PDF_FETCH_ERROR
+                );
+        }
     }
 }
