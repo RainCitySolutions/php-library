@@ -61,7 +61,10 @@ trait JsonClientTrait
     final protected function getCacheKey(string ...$keyParams)
     {
         // Because we are a trait, __CLASS__ will be the class using the trait.
-        return str_replace(__NAMESPACE__ . '\\', '', __CLASS__).'_'.join('_', $keyParams);
+        $nsParts = explode('\\', __CLASS__);
+
+        // Use the class name without the namespace
+        return end($nsParts).'_'.join('_', $keyParams);
     }
 
     /**

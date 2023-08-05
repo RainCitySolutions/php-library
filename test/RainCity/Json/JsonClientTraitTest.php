@@ -5,6 +5,7 @@ use JsonMapper\JsonMapper;
 use JsonMapper\Handler\FactoryRegistry;
 use JsonMapper\Handler\PropertyMapper;
 use RainCity\DataCache;
+use RainCity\Json\Test\JsonClientTraitTestClass;
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
 
@@ -65,6 +66,7 @@ class JsonClientTraitTest extends RainCityTestCase
         $this->assertNotNull($key);
         $this->assertStringContainsString('JsonClientTraitTestClass', $key);
         $this->assertStringContainsString(__FUNCTION__, $key);
+        $this->assertStringNotContainsString('\\', $key);
     }
     
     public function testProcessJsonResponse_notJson()
@@ -173,24 +175,6 @@ class JsonClientTraitTest extends RainCityTestCase
         $obj->number = $obj->id * rand (1, 9);
 
         return array ($obj, json_encode($obj));
-    }
-}
-
-class JsonClientTraitTestClass
-{
-    use JsonClientTrait;
-    
-    public function __construct(?int $ttl = null, ?FactoryRegistry $factory = null)
-    {
-        if (isset($ttl)) {
-            if (isset($factory)) {
-                $this->initJsonClientTrait($ttl, $factory);
-            } else {
-                $this->initJsonClientTrait($ttl);
-            }
-        } else {
-            $this->initJsonClientTrait();
-        }
     }
 }
 
