@@ -5,9 +5,7 @@ use RainCity\Logging\Logger;
 use RainCity\Logging\BaseLogger;
 
 
-class DataCache
-extends Singleton
-implements \Psr\SimpleCache\CacheInterface
+class DataCache extends Singleton implements \Psr\SimpleCache\CacheInterface
 {
     /** @var \Apix\Cache\PsrCache\Pool | \Apix\Cache\PsrCache\TaggablePool */
     private $cache;
@@ -15,7 +13,8 @@ implements \Psr\SimpleCache\CacheInterface
     /** @var int TTL in seconds */
     private $defaultTTL = 600;
 
-    protected function __construct () {
+    protected function __construct()
+    {
         parent::__construct();
 
         // need to add support for Memcached
@@ -26,24 +25,23 @@ implements \Psr\SimpleCache\CacheInterface
             $backend->addServer('127.0.0.1', 11211);
 
             $this->cache = \Apix\Cache\Factory::getPool($backend, $options);
-        }
-        else if (extension_loaded('pdo_sqlite')) {
+        } else {
+            if (extension_loaded('pdo_sqlite')) {
+                $dbFile = self::getSqliteFile();
+                $dbDir = dirname($dbFile);
 
-            $dbFile = self::getSqliteFile();
-            $dbDir = dirname($dbFile);
+                if (!file_exists($dbDir)) {
+                    mkdir($dbDir);
+                }
 
-            if (!file_exists($dbDir)) {
-                mkdir($dbDir);
+                $backend = new \PDO('sqlite:'.self::getSqliteFile());
+                $this->cache = \Apix\Cache\Factory::getPool($backend);
+            } else {
+                $options['directory'] = self::getFilesCacheDir(); // Directory where the cache is created
+                $options['locking'] = true;                       // File locking (recommended)
+
+                $this->cache = \Apix\Cache\Factory::getPool('Files', $options);
             }
-
-            $backend = new \PDO('sqlite:'.self::getSqliteFile());
-            $this->cache = \Apix\Cache\Factory::getPool($backend);
-        }
-        else {
-            $options['directory'] = self::getFilesCacheDir(); // Directory where the cache is created
-            $options['locking'] = true;                       // File locking (recommended)
-
-            $this->cache = \Apix\Cache\Factory::getPool('Files', $options);
         }
     }
 
@@ -70,8 +68,7 @@ implements \Psr\SimpleCache\CacheInterface
         $item->set($value);
         if (isset($ttl)) {
             $item->expiresAfter($ttl);
-        }
-        else {
+        } else {
             if (isset($this->defaultTTL)) {
                 $ttl = $this->defaultTTL;
                 $item->expiresAfter($ttl);
@@ -112,19 +109,23 @@ implements \Psr\SimpleCache\CacheInterface
      *
      * @param int $ttl
      */
-    public function setDefaultTTL(int $ttl) {
+    public function setDefaultTTL(int $ttl)
+    {
         $this->defaultTTL = $ttl;
     }
 
-    private static function getSqliteFile () {
+    private static function getSqliteFile()
+    {
         return sys_get_temp_dir() . '/datacache.sqlite3';
     }
 
-    private static function getFilesCacheDir () {
+    private static function getFilesCacheDir()
+    {
         return sys_get_temp_dir() . '/files.cache';
     }
 
-    public static function uninstall() {
+    public static function uninstall()
+    {
         Logger::getLogger(BaseLogger::BASE_LOGGER)->info('DataCache::uninstall() called');
 
         @unlink(self::getSqliteFile());

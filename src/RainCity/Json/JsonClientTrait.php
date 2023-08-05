@@ -1,7 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 namespace RainCity\Json;
 
+use JsonMapper\JsonMapperBuilder;
+use JsonMapper\JsonMapperFactory;
 use JsonMapper\JsonMapperInterface;
+use JsonMapper\Handler\FactoryRegistry;
+use JsonMapper\Handler\PropertyMapper;
 use JsonMapper\Middleware\Rename\Rename;
 use RainCity\DataCache;
 
@@ -19,56 +23,94 @@ trait JsonClientTrait
     protected JsonMapperInterface $mapper;
 
     /**
-     * Constructor which can be overwritten by child classes. They should
-     * still call this constructor so that logging is initialized.
+     * Initialize the cache TTL and the mapper.
      *
-     * Care should be taken in the constructor to avoid doing anything that
-     * might call instance() on the singleton as this will lead to a
-     * recursive loop. It is preferred to do any initialization of the
-     * instance in the initializeInstance() method.
+     * @param int $cacheTTL The Time-To-Live for cache entries, in seconds.
+     *      Defaults to 10 seconds.
+     * @param FactoryRegistry $factoryRegistry A factory to use in mapping
+     *      properties. If not provide no special factory registry will be
+     *      used.
      */
-    final protected function __construct(int $cacheTTL = 10)
+    final protected function initJsonClientTrait(int $cacheTTL = 10, FactoryRegistry $factoryRegistry = null)
     {
         $this->cache = DataCache::instance();
         $this->cache->setDefaultTTL($cacheTTL);
-    }
 
-    final protected function getCacheKey(string $method, ...$params)
-    {
-        $key = str_replace(__NAMESPACE__ . '\\', '', __CLASS__).'_'.$method;
-        
-        if (!empty($params)) {
-            $key = $key.'_'.join('_', $params);
+        // Create our own builder so we can include a PropertyMapper with additional class factories
+        $builder = JsonMapperBuilder::new();
+
+        if (isset($factoryRegistry)) {
+            $builder->withPropertyMapper(new PropertyMapper($factoryRegistry));
         }
-        
-        return $key;
+
+        $this->mapper = (new JsonMapperFactory($builder))->bestFit();
     }
 
+    /**
+     * Create a key for use with with the cache which is unique to the class
+     * using JsonClientTrait.
+     *
+     * The method does not check that the generated key is unique within the
+     * cache.
+     *
+     * @param  string ...$keyParams A set of strings to be used to create a
+     *      unique key.
+     *
+     * @return string The generated cache key.
+     */
+    final protected function getCacheKey(string ...$keyParams)
+    {
+        // Because we are a trait, __CLASS__ will be the class using the trait.
+        return str_replace(__NAMESPACE__ . '\\', '', __CLASS__).'_'.join('_', $keyParams);
+    }
+
+    /**
+     * Process a Json object (as a string), converting it to an entity or
+     * array of entities.
+     *
+     * @param string $jsonPayload The Json string
+     * @param JsonEntity $entityObj An instance of a class extending
+     *      JsonEntity
+     * @param string $cacheKey The key to use for caching the result. Pass
+     *      null to avoid caching the result.
+     *
+     * @return object|array|NULL An entity instance, array of instances or
+     *      null if the Json cannot be converted.
+     */
     final protected function processJsonResponse(
         string $jsonPayload,
         JsonEntity $entityObj,
-//        Rename $rename,
         ?string $cacheKey = null
-        ): ?array
+        )
     {
-        $jsonArray = json_decode($jsonPayload);
-        
-        // Convert array of arrays to array of stdClass
-        $json = array_map(fn($entry) => (object)$entry, $jsonArray);
+        $result = null;
 
         /** @var Rename */
         $rename = $entityObj->getRenameMapping();
-        
+
         $this->mapper->unshift($rename);
-        
-        $entityArray = $this->mapper->mapArray($json, $entityObj);
-        
-        $this->mapper->remove($rename);
-        
-        if (null != $cacheKey) {
-            $this->cache->set($cacheKey, $entityArray);
+
+        try {
+            $json = json_decode($jsonPayload);
+
+            if (isset($json)) {
+                if (is_array($json)) {
+                    // Convert array of arrays to array of stdClass
+                    $json = array_map(fn($entry) => (object)$entry, $json);
+
+                    $result = $this->mapper->mapArray($json, $entityObj);
+                } else {
+                    $result = $this->mapper->mapObject($json, $entityObj);
+                }
+
+                if (null != $cacheKey) {
+                    $this->cache->set($cacheKey, $result);
+                }
+            }
+        } finally {
+            $this->mapper->remove($rename);
         }
-        
-        return $entityArray;
+
+        return $result;
     }
 }

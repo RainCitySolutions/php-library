@@ -13,7 +13,8 @@ class ReflectionHelper
      * @return mixed The value of the property. Note: If the value passed for
      *      $clazz is not actually a class then null is returned.
      */
-    public static function getClassProperty(string $clazz, string $prop) {
+    public static function getClassProperty(string $clazz, string $prop)
+    {
         return self::getObjectProperty($clazz, $prop, null);
     }
 
@@ -29,7 +30,8 @@ class ReflectionHelper
      * @return mixed The value of the property. Note: If the value passed for
      *      $clazz is not actually a class then null is returned.
      */
-    public static function getObjectProperty(string $clazz, string $prop, ?object $obj) {
+    public static function getObjectProperty(string $clazz, string $prop, ?object $obj)
+    {
         $result = null;
 
         if (class_exists($clazz)) {
@@ -38,17 +40,14 @@ class ReflectionHelper
             if ($reflectionClass->hasProperty($prop)) {
                 $reflectionProp = $reflectionClass->getProperty($prop);
 
-                if ($reflectionProp->isPrivate() || $reflectionProp->isProtected())
-                {
+                if ($reflectionProp->isPrivate() || $reflectionProp->isProtected()) {
                     $reflectionProp->setAccessible(true);
                     $result = $reflectionProp->getValue($obj);
                     $reflectionProp->setAccessible(false);
-                }
-                else {
+                } else {
                     $result = $reflectionProp->getValue($obj);
                 }
-            }
-            else {
+            } else {
                 $parentClass = $reflectionClass->getParentClass();
                 if ($parentClass) {
                     $result = static::getObjectProperty($parentClass->getName(), $prop, $obj);
@@ -67,7 +66,8 @@ class ReflectionHelper
      * @param string $prop The name of the property to set.
      * @param mixed $value The value to set for the property.
      */
-    public static function setClassProperty(string $clazz, string $prop, $value) {
+    public static function setClassProperty(string $clazz, string $prop, $value)
+    {
         self::setObjectProperty($clazz, $prop, $value, null);
     }
 
@@ -81,7 +81,8 @@ class ReflectionHelper
      * @param object|NULL $obj The object to retrieve the value from. If
      *      passed as null assumes the property is a class property.
      */
-    public static function setObjectProperty(string $clazz, string $prop, $value, ?object $obj) {
+    public static function setObjectProperty(string $clazz, string $prop, $value, ?object $obj)
+    {
         if (class_exists($clazz)) {
             $reflectionClass = (new \ReflectionClass($clazz));
 
@@ -92,12 +93,10 @@ class ReflectionHelper
                     $reflectionProp->setAccessible(true);
                     $value = $reflectionProp->setValue($obj, $value);
                     $reflectionProp->setAccessible(false);
-                }
-                else {
+                } else {
                     $value = $reflectionProp->setValue($obj, $value);
                 }
-            }
-            else {
+            } else {
                 $parentClass = $reflectionClass->getParentClass();
                 if ($parentClass) {
                     static::setObjectProperty($parentClass->getName(), $prop, $value, $obj);
@@ -117,7 +116,8 @@ class ReflectionHelper
      *
      * @return mixed The value returned by the method.
      */
-    public static function invokeObjectMethod(string $clazz, object $obj, string $methodName, ...$args) {
+    public static function invokeObjectMethod(string $clazz, object $obj, string $methodName, ...$args)
+    {
         $result = null;
 
         if (class_exists($clazz)) {
@@ -130,12 +130,10 @@ class ReflectionHelper
                     $method->setAccessible(true);
                     $result = $method->invokeArgs($obj, $args);
                     $method->setAccessible(false);
-                }
-                else {
+                } else {
                     $result = $method->invokeArgs($obj, $args);
                 }
-            }
-            else {
+            } else {
                 $parentClass = $reflection->getParentClass();
                 if ($parentClass) {
                     $result = static::invokeObjectMethod($parentClass->getName(), $obj, $methodName, $args);
