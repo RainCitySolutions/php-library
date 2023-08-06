@@ -25,6 +25,20 @@ class JsonClientTraitTest extends RainCityTestCase
 
         $this->testObj = new JsonClientTraitTestClass();
     }
+    
+    /**
+     * {@inheritDoc}
+     * @see \RainCity\TestHelper\RainCityTestCase::tearDown()
+     */
+    protected function tearDown(): void
+    {
+        // Reset static fields in test JSON class
+        JsonEntityTestClass::$fieldMap = array();
+        JsonEntityTestClass::$byIndex = false;
+
+        parent::tearDown();
+    }
+    
 
     public function testCtor_defaults()
     {
@@ -129,6 +143,44 @@ class JsonClientTraitTest extends RainCityTestCase
         }
     }
 
+    public function testProcessJsonResponse_listArray()
+    {
+        $jsonObjArray = array();
+        $jsonStrArray = array();
+        
+        $cnt = rand(1, 5);
+        while ($cnt >= 1) {
+            list ($testJsonObj, $testJsonStr) = $this->generateJsonEntityList();
+            
+            array_push($jsonObjArray, $testJsonObj);
+            array_push($jsonStrArray, $testJsonStr);
+            
+            $cnt--;
+        }
+        
+        JsonEntityTestClass::$fieldMap = array(
+            new FieldPropertyEntry('doesnotmatter1', 'id'),
+            new FieldPropertyEntry('doesnotmatter2', 'name'),
+            new FieldPropertyEntry('doesnotmatter3', 'number'),
+        );
+        JsonEntityTestClass::$byIndex = true;
+        
+        $result = ReflectionHelper::invokeObjectMethod(
+            get_class($this->testObj),
+            $this->testObj,
+            'processJsonResponse',
+            '['.join(', ', $jsonStrArray).']',
+            new JsonEntityTestClass()
+            );
+        
+        $this->assertNotNull($result);
+        $this->assertIsArray($result);
+        
+        foreach ($result as $ndx => $entry) {
+            $this->assertEquals($jsonObjArray[$ndx], $entry);
+        }
+    }
+    
     private function getCacheDefaultTTL(JsonClientTraitTestClass $testObj): int
     {
         /** @var DataCache */
@@ -175,6 +227,18 @@ class JsonClientTraitTest extends RainCityTestCase
         $obj->number = $obj->id * rand (1, 9);
 
         return array ($obj, json_encode($obj));
+    }
+    
+    private function generateJsonEntityList(): array
+    {
+        $obj = new JsonEntityTestClass();
+        $obj->id = rand(1, 100);
+        $obj->name = 'test-'.$obj->id;
+        $obj->number = $obj->id * rand(2, 9);
+        
+        $list = array($obj->id, $obj->name, $obj->number);
+        
+        return array ($obj, json_encode($list));
     }
 }
 

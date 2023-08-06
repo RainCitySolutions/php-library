@@ -9,17 +9,33 @@ use JsonMapper\Middleware\Rename\Rename;
 abstract class JsonEntity
 {
     /**
-     * Mapping of Json field names to class properties.
+     * Mapping of JSON field names to class properties.
      *
      * Used to generate the field names to fetch and the Rename object for
      * mapping the array indexes to class properties.
+     *
+     * When an API returns JSON Lists instead of objects the fieldMap must
+     * contain entries for all of the fields in the list in the appropriate
+     * order. Additionally, the byIndex property must be set to 'true'.
      *
      * @var FieldPropertyEntry[]
      */
     static array $fieldMap = array();
 
     /**
-     * Fetch the Json field names defined in the fieldMap.
+     * Indicator as to whether mapping of fields to properties should be be
+     * done by the index into the fieldMap or by the field name.
+     *
+     * Some REST APIs return lists and not objects in which case it is
+     * necessary to have setup te fieldMap with all of the fields in the list
+     * and then map them by index.
+     *
+     * @var boolean
+     */
+    static bool $byIndex = false;
+
+    /**
+     * Fetch the JSON field names defined in the fieldMap.
      *
      * @return string[]
      */
@@ -40,7 +56,12 @@ abstract class JsonEntity
 
         array_walk(
             self::$fieldMap,
-            fn($entry, $key) => $renameObj->addMapping(static::class, strval($key), $entry->getProperty())
+            fn($entry, $key) =>
+                $renameObj->addMapping(
+                    static::class,
+                    self::$byIndex ? strval($key) : $entry->getField(),
+                    $entry->getProperty()
+                    )
             );
 
         return $renameObj;
