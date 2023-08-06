@@ -22,29 +22,29 @@ class JsonEntityTest extends RainCityTestCase
     protected function tearDown(): void
     {
         // Reset static fields in test JSON class
-        JsonEntityTestClass::$fieldMap = array();
-        JsonEntityTestClass::$byIndex = false;
+        JsonEntityTestClass::$fieldPropertyMap = array();
+        JsonEntityTestClass::$mapByIndex = false;
 
         parent::tearDown();
     }
 
-    public function testGetFields_noMap()
+    public function testGetJsonFields_noMap()
     {
         $obj = new JsonEntityTestClass();
 
-        $this->assertEmpty($obj->getFields());
+        $this->assertEmpty($obj->getJsonFields());
     }
     
-    public function testGetFields_withMap()
+    public function testGetJsonFields_withMap()
     {
         $obj = new JsonEntityTestClass();
 
-        JsonEntityTestClass::$fieldMap = array (
+        JsonEntityTestClass::$fieldPropertyMap = array (
             new FieldPropertyEntry(self::FIELD_ID, self::PROPERTY_ID),
             new FieldPropertyEntry(self::FIELD_NUMBER, self::PROPERTY_NUMBER),
         );
 
-        $fields = $obj->getFields();
+        $fields = $obj->getJsonFields();
 
         $this->assertNotEmpty($fields);
         $this->assertCount(2, $fields);
@@ -70,7 +70,7 @@ class JsonEntityTest extends RainCityTestCase
     {
         $obj = new JsonEntityTestClass();
 
-        JsonEntityTestClass::$fieldMap = array (
+        JsonEntityTestClass::$fieldPropertyMap = array (
             new FieldPropertyEntry(self::FIELD_NAME, self::PROPERTY_NAME),
             new FieldPropertyEntry(self::FIELD_NUMBER, self::PROPERTY_NUMBER),
         );
@@ -83,11 +83,11 @@ class JsonEntityTest extends RainCityTestCase
         $mappings = ReflectionHelper::getObjectProperty(get_class($rename), 'mapping', $rename);
         
         $this->assertNotEmpty($mappings);
-        $this->assertCount(count(JsonEntityTestClass::$fieldMap), $mappings);
+        $this->assertCount(count(JsonEntityTestClass::$fieldPropertyMap), $mappings);
 
         for ($ndx = 0; $ndx < count($mappings); $ndx++) {
             $mapping = $mappings[$ndx];
-            $fieldPropEntry = JsonEntityTestClass::$fieldMap[$ndx];
+            $fieldPropEntry = JsonEntityTestClass::$fieldPropertyMap[$ndx];
             
             $clazz = ReflectionHelper::getObjectProperty(get_class($mapping), 'class', $mapping);
             $from  = ReflectionHelper::getObjectProperty(get_class($mapping), 'from', $mapping);
@@ -103,12 +103,12 @@ class JsonEntityTest extends RainCityTestCase
     {
         $obj = new JsonEntityTestClass();
         
-        JsonEntityTestClass::$fieldMap = array (
+        JsonEntityTestClass::$fieldPropertyMap = array (
             new FieldPropertyEntry(self::FIELD_ID, self::PROPERTY_ID),
             new FieldPropertyEntry(self::FIELD_NAME, self::PROPERTY_NAME),
             new FieldPropertyEntry(self::FIELD_NUMBER, self::PROPERTY_NUMBER),
         );
-        JsonEntityTestClass::$byIndex = true;
+        JsonEntityTestClass::$mapByIndex = true;
         
         /** @var Rename */
         $rename = $obj->getRenameMapping();
@@ -118,11 +118,11 @@ class JsonEntityTest extends RainCityTestCase
         $mappings = ReflectionHelper::getObjectProperty(get_class($rename), 'mapping', $rename);
         
         $this->assertNotEmpty($mappings);
-        $this->assertCount(count(JsonEntityTestClass::$fieldMap), $mappings);
+        $this->assertCount(count(JsonEntityTestClass::$fieldPropertyMap), $mappings);
         
         for ($ndx = 0; $ndx < count($mappings); $ndx++) {
             $mapping = $mappings[$ndx];
-            $fieldPropEntry = JsonEntityTestClass::$fieldMap[$ndx];
+            $fieldPropEntry = JsonEntityTestClass::$fieldPropertyMap[$ndx];
             
             $clazz = ReflectionHelper::getObjectProperty(get_class($mapping), 'class', $mapping);
             $from  = ReflectionHelper::getObjectProperty(get_class($mapping), 'from', $mapping);

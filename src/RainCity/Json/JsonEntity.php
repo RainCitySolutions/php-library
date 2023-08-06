@@ -20,7 +20,7 @@ abstract class JsonEntity
      *
      * @var FieldPropertyEntry[]
      */
-    static array $fieldMap = array();
+    static array $fieldPropertyMap = array();
 
     /**
      * Indicator as to whether mapping of fields to properties should be be
@@ -32,16 +32,16 @@ abstract class JsonEntity
      *
      * @var boolean
      */
-    static bool $byIndex = false;
+    static bool $mapByIndex = false;
 
     /**
      * Fetch the JSON field names defined in the fieldMap.
      *
      * @return string[]
      */
-    public static function getFields(): array
+    public static function getJsonFields(): array
     {
-        return array_map(fn($entry) => $entry->getField(), self::$fieldMap);
+        return array_map(fn($entry) => $entry->getField(), self::$fieldPropertyMap);
     }
 
     /**
@@ -55,11 +55,11 @@ abstract class JsonEntity
         $renameObj = new Rename();
 
         array_walk(
-            self::$fieldMap,
+            self::$fieldPropertyMap,
             fn($entry, $key) =>
                 $renameObj->addMapping(
                     static::class,
-                    self::$byIndex ? strval($key) : $entry->getField(),
+                    self::$mapByIndex ? strval($key) : $entry->getField(),
                     $entry->getProperty()
                     )
             );

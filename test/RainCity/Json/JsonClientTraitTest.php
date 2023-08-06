@@ -33,8 +33,8 @@ class JsonClientTraitTest extends RainCityTestCase
     protected function tearDown(): void
     {
         // Reset static fields in test JSON class
-        JsonEntityTestClass::$fieldMap = array();
-        JsonEntityTestClass::$byIndex = false;
+        JsonEntityTestClass::$fieldPropertyMap = array();
+        JsonEntityTestClass::$mapByIndex = false;
 
         parent::tearDown();
     }
@@ -158,12 +158,12 @@ class JsonClientTraitTest extends RainCityTestCase
             $cnt--;
         }
         
-        JsonEntityTestClass::$fieldMap = array(
+        JsonEntityTestClass::$fieldPropertyMap = array(
             new FieldPropertyEntry('doesnotmatter1', 'id'),
             new FieldPropertyEntry('doesnotmatter2', 'name'),
             new FieldPropertyEntry('doesnotmatter3', 'number'),
         );
-        JsonEntityTestClass::$byIndex = true;
+        JsonEntityTestClass::$mapByIndex = true;
         
         $result = ReflectionHelper::invokeObjectMethod(
             get_class($this->testObj),
