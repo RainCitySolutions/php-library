@@ -44,6 +44,10 @@ trait JsonClientTrait
         }
 
         $this->mapper = (new JsonMapperFactory($builder))->bestFit();
+        $this->mapper->push(new \JsonMapper\Middleware\CaseConversion(
+            \JsonMapper\Enums\TextNotation::UNDERSCORE(),
+            \JsonMapper\Enums\TextNotation::CAMEL_CASE()
+            ));
     }
 
     /**
