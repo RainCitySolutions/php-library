@@ -1,9 +1,8 @@
 <?php
 namespace RainCity\Csv;
 
-use ReflectionProperty;
-
 use Doctrine\Common\Annotations\AnnotationReader;
+use ReflectionProperty;
 
 /**
  * A Trait work in conjuction with CsvBindByName annotation.
@@ -22,23 +21,16 @@ trait CsvBindByNameTrait
     {
         $result = array();
 
-        $reader = new AnnotationReader();
-        $reflectionClass = new \ReflectionClass(get_called_class());
-        
-        /** @var ReflectionProperty[] */
-        $properties = $reflectionClass->getProperties();
-
-        foreach ($properties as $property) {
-            /** @var CsvBindByName */
-            $anno = $reader->getPropertyAnnotation(
-                $property,
-                CsvBindByName::class
-                );
-
-            if (isset($anno)) {
+        static::processAnnotations(
+            $result,
+            function (array &$result, CsvBindByName $anno, ReflectionProperty $property) {
                 $result[$anno->column] =  $property->name;
+                
+                foreach ($anno->alternates as $alt) {
+                    $result[$alt] = $property->name;
+                }
             }
-        }
+            );
 
         return $result;
     }
@@ -52,23 +44,16 @@ trait CsvBindByNameTrait
     {
         $result = array();
 
-        $reader = new AnnotationReader();
-        $reflectionClass = new \ReflectionClass(get_called_class());
-
-        /** @var ReflectionProperty[] */
-        $properties = $reflectionClass->getProperties();
-
-        foreach ($properties as $property) {
-            /** @var CsvBindByName */
-            $anno = $reader->getPropertyAnnotation(
-                $property,
-                CsvBindByName::class
-                );
-
-            if (isset($anno)) {
+        static::processAnnotations(
+            $result,
+            function (array &$result, CsvBindByName $anno, ReflectionProperty $property) {
                 array_push($result, $anno->column);
+                
+                foreach ($anno->alternates as $alt) {
+                    array_push($result, $alt);
+                }
             }
-        }
+            );
 
         return $result;
     }
@@ -85,23 +70,37 @@ trait CsvBindByNameTrait
 
         $result = array();
 
-        $reader = new AnnotationReader();
-        $reflectionClass = new \ReflectionClass(get_called_class());
-
-        /** @var ReflectionProperty[] */
-        $properties = $reflectionClass->getProperties();
-
-        foreach ($properties as $property) {
-            /** @var CsvBindByName */
-            $anno = $reader->getPropertyAnnotation(
-                $property,
-                CsvBindByName::class
-                );
-           if (isset($anno)) {
-               $result[$anno->column] = $property->isInitialized($obj) ? $property->getValue($obj) : '';
+        static::processAnnotations(
+            $result,
+            function (array &$result, CsvBindByName $anno, ReflectionProperty $property) use ($obj) {
+                $propValue = $property->isInitialized($obj) ? $property->getValue($obj) : '';
+                $result[$anno->column] = $propValue;
+                
+                foreach ($anno->alternates as $alt) {
+                    $result[$alt] = $propValue;
+                }
             }
-        }
+            );
 
         return $result;
+    }
+    
+    private static function processAnnotations(array &$result, callable $callback): void
+    {
+        $reader = new AnnotationReader();
+        $reflectionClass = new \ReflectionClass(get_called_class());
+        
+        /** @var ReflectionProperty[] */
+        $properties = $reflectionClass->getProperties();
+        
+        foreach ($properties as $property) {
+            $annotations = $reader->getPropertyAnnotations($property);
+            
+            foreach ($annotations as $anno) {
+                if ($anno instanceof CsvBindByName) {
+                    $callback($result, $anno, $property);
+                }
+            }
+        }
     }
 }

@@ -11,9 +11,16 @@ namespace RainCity\Csv;
 final class CsvBindByName
 {
     /**
-     * Used to specific the column name in a CSV to be bound to the method or property.
+     * Used to specific the column name in a CSV to be bound to the method or
+     * property.
      *
      * @Required
      */
-    public $column;
+    public string $column;
+    
+    /**
+     * Used to provide alternative column names to be bound to the method or
+     * property.
+     */
+    public array $alternates = array();
 }

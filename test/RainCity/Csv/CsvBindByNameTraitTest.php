@@ -10,7 +10,9 @@ class CsvBindByNameTraitTest extends RainCityTestCase
     private const COLUMN_FULLNAME = 'Full Name';
     private const COLUMN_DATEOFBIRTH = 'DOB';
     private const COLUMN_SUBCLASSPROP = 'Sub Class Prop';
-
+    private const COLUMN_NAMES_MEMBERSHIP = 'Membership ID';
+    private const COLUMN_NAMES_IDENTITY = 'Identity ID';
+    
     private const PROPERTY_IDENTITY = 'id';
     private const PROPERTY_FULLNAME = 'fullname';
     private const PROPERTY_DATEOFBIRTH = 'dateOfBirth';
@@ -22,6 +24,7 @@ class CsvBindByNameTraitTest extends RainCityTestCase
     
     private CsvBindByNameTraitTestClass $testObj;
     private CsvBindByNameSubClass $testSubclassObj;
+    private CsvBindByNameAltsTestClass $testNamesObj;
     
     /**
      * {@inheritDoc}
@@ -41,6 +44,9 @@ class CsvBindByNameTraitTest extends RainCityTestCase
         $this->testSubclassObj->fullname = self::TEST_FULLNAME;
         $this->testSubclassObj->dateOfBirth = new \DateTime();
         $this->testSubclassObj->subClassProp = self::TEST_SUBCLASSPROP;
+        
+        $this->testNamesObj = new CsvBindByNameAltsTestClass();
+        $this->testNamesObj->id = self::TEST_IDENTIFIER;
     }
     
     public function testGetColumnPropertyMap()
@@ -144,6 +150,49 @@ class CsvBindByNameTraitTest extends RainCityTestCase
         $this->assertEquals($this->testSubclassObj->dateOfBirth, $map[self::COLUMN_DATEOFBIRTH]);
         $this->assertEquals($this->testSubclassObj->subClassProp, $map[self::COLUMN_SUBCLASSPROP]);
     }
+
+    public function testGetColumnPropertyMap_withAlternate()
+    {
+        $map = CsvBindByNameAltsTestClass::getColumnPropertyMap();
+        
+        $this->assertNotNull($map);
+        $this->assertIsArray($map);
+        $this->assertNotEmpty($map);
+        
+        $this->assertArrayHasKey(self::COLUMN_NAMES_IDENTITY, $map);
+        $this->assertArrayHasKey(self::COLUMN_NAMES_MEMBERSHIP, $map);
+        
+        $this->assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_NAMES_IDENTITY]);
+        $this->assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_NAMES_MEMBERSHIP]);
+    }
+    
+    public function testGetColumnNames_withAlternate()
+    {
+        $names = CsvBindByNameAltsTestClass::getColumnNames();
+        
+        $this->assertNotNull($names);
+        $this->assertIsArray($names);
+        $this->assertNotEmpty($names);
+        $this->assertCount(2, $names);
+        
+        $this->assertContains(self::COLUMN_NAMES_IDENTITY, $names);
+        $this->assertContains(self::COLUMN_NAMES_MEMBERSHIP, $names);
+    }
+    
+    public function testGetFieldValues_withAlternate()
+    {
+        $map = CsvBindByNameAltsTestClass::getColumnValues($this->testNamesObj);
+        
+        $this->assertNotNull($map);
+        $this->assertIsArray($map);
+        $this->assertNotEmpty($map);
+        
+        $this->assertArrayHasKey(self::COLUMN_NAMES_IDENTITY, $map);
+        $this->assertArrayHasKey(self::COLUMN_NAMES_MEMBERSHIP, $map);
+        
+        $this->assertEquals($this->testNamesObj->id, $map[self::COLUMN_NAMES_IDENTITY]);
+        $this->assertEquals($this->testNamesObj->id, $map[self::COLUMN_NAMES_MEMBERSHIP]);
+    }
 }
 
 class CsvBindByNameTraitTestClass
@@ -164,4 +213,14 @@ class CsvBindByNameSubClass extends CsvBindByNameTraitTestClass
 {
     /** @CsvBindByName(column = "Sub Class Prop") */
     public string $subClassProp;
+}
+
+class CsvBindByNameAltsTestClass
+{
+    use CsvBindByNameTrait;
+    
+    /**
+     * @CsvBindByName(column = "Membership ID", alternates = {"Identity ID"})
+     */
+    public int $id;
 }
