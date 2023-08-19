@@ -220,7 +220,7 @@ class CsvBindByNameAltsTestClass
     use CsvBindByNameTrait;
     
     /**
-     * @CsvBindByName(column = "Membership ID", alternates = {"Identity ID"})
+     * @CsvBindByName(column = {"Membership ID", "Identity ID"})
      */
     public int $id;
 }

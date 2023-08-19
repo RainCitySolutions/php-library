@@ -24,10 +24,8 @@ trait CsvBindByNameTrait
         static::processAnnotations(
             $result,
             function (array &$result, CsvBindByName $anno, ReflectionProperty $property) {
-                $result[$anno->column] =  $property->name;
-                
-                foreach ($anno->alternates as $alt) {
-                    $result[$alt] = $property->name;
+                foreach ($anno->getColumns() as $column) {
+                    $result[$column] = $property->name;
                 }
             }
             );
@@ -47,10 +45,8 @@ trait CsvBindByNameTrait
         static::processAnnotations(
             $result,
             function (array &$result, CsvBindByName $anno, ReflectionProperty $property) {
-                array_push($result, $anno->column);
-                
-                foreach ($anno->alternates as $alt) {
-                    array_push($result, $alt);
+                foreach ($anno->getColumns() as $column) {
+                    array_push($result, $column);
                 }
             }
             );
@@ -74,10 +70,8 @@ trait CsvBindByNameTrait
             $result,
             function (array &$result, CsvBindByName $anno, ReflectionProperty $property) use ($obj) {
                 $propValue = $property->isInitialized($obj) ? $property->getValue($obj) : '';
-                $result[$anno->column] = $propValue;
-                
-                foreach ($anno->alternates as $alt) {
-                    $result[$alt] = $propValue;
+                foreach ($anno->getColumns() as $column) {
+                    $result[$column] = $propValue;
                 }
             }
             );
