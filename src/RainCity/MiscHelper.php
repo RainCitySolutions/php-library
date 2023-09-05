@@ -11,6 +11,8 @@ class MiscHelper
      * Creates a temporary file in the system temp directory with the
      * specified extension.
      *
+     * @deprecated Use FileSystem::createTempFile()
+     *
      * @param string $extension The desired file extention.
      *
      * @return string The full path to the tempoary file. May return FALSE if
@@ -18,17 +20,7 @@ class MiscHelper
      */
     public static function createTempFile(string $extension): string
     {
-        $finalFilename = FALSE;
-        $tmpFilename = tempnam(sys_get_temp_dir(), '');
-
-        if ($tmpFilename) {
-            $finalFilename = $tmpFilename . $extension;
-            if (!rename ($tmpFilename, $finalFilename)) {
-                $finalFilename = FALSE;
-            }
-        }
-
-        return $finalFilename;
+        return FileSystem::createTempFile($extension);
     }
 
     /**
