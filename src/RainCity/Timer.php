@@ -6,10 +6,13 @@ namespace RainCity;
  * @author Jonathan Jones
  */
 class Timer {
-    private $_start, $_pause, $_stop, $_elapsed;
-    private $_laps = array();
-    private $_count = 1;
-    private $_lapTotalTime = 0;
+    private float $start;
+    private float $pause;
+    private float $stop;
+    private float $elapsed;
+    private array $laps = array();
+    private int $count = 1;
+    private float $lapTotalTime = 0;
 
     /**
      * Instantiation method, if `start` is declared then the timing will
@@ -18,37 +21,37 @@ class Timer {
      * @param string $start Only acceptable string currently is `start`.
      */
     public function __construct($start = '') {
-        ('start' === strtolower($start)) ? $this->start() : NULL;
+        ('start' === strtolower($start)) ? $this->start() : null;
     }
 
     /**
      * Starts the timer. Resets on each call.
      */
     public function start() {
-        $this->_start = $this->getMicroTime();
-        unset($this->_stop);    // reset the stop time
+        $this->start = $this->getMicroTime();
+        unset($this->stop);    // reset the stop time
     }
 
     /**
      * Stops the timer.
      */
     public function stop() {
-        $this->_stop = $this->getMicroTime();
+        $this->stop = $this->getMicroTime();
     }
 
     /**
      * Pauses the timer.
      */
     public function pause() {
-        $this->_pause = $this->getMicroTime();
-        $this->_elapsed += ($this->_pause - $this->_start);
+        $this->pause = $this->getMicroTime();
+        $this->elapsed += ($this->pause - $this->start);
     }
 
     /**
      * Resumes the timer after a pause is called.
      */
     public function resume() {
-        $this->_start = $this->getMicroTime();
+        $this->start = $this->getMicroTime();
     }
 
     /**
@@ -57,12 +60,12 @@ class Timer {
      */
     public function lap($key = '') {
         $key = ($key === '') ? 'Lap' : $key;
-        if (isset($this->_start)) {
+        if (isset($this->start)) {
             $this->stop();
-            $this->_lapTotalTime += ($this->_stop - $this->_start);
-            $this->_laps[$key . ' ' . $this->_count] = $this->getLapTime();
+            $this->lapTotalTime += ($this->stop - $this->start);
+            $this->laps[$key . ' ' . $this->count] = $this->getLapTime();
             $this->start();
-            $this->_count++;
+            $this->count++;
         }
     }
 
@@ -71,12 +74,12 @@ class Timer {
      * @return string Time
      */
     public function getTime() {
-        if (!isset($this->_stop)) {
-            $this->_stop = $this->getMicroTime();
+        if (!isset($this->stop)) {
+            $this->stop = $this->getMicroTime();
         }
-        if (!empty($this->_laps)) {
-            $this->_laps['Total'] = $this->timeToString($this->_lapTotalTime);
-            return $this->_laps;
+        if (!empty($this->laps)) {
+            $this->laps['Total'] = $this->timeToString($this->lapTotalTime);
+            return $this->laps;
         }
         return $this->timeToString();
     }
@@ -104,13 +107,13 @@ class Timer {
      */
     private function timeToString($seconds = '') {
         if ($seconds === '') {
-            $seconds = ($this->_stop - $this->_start) + $this->_elapsed;
+            $seconds = ($this->stop - $this->start) + $this->elapsed;
         }
         $seconds = $this->roundMicroTime($seconds);
         // Hours?? Just because we can.
         $hours = floor($seconds / (60 * 60));
-        $divisor_for_minutes = $seconds % (60 * 60);
-        $minutes = floor($divisor_for_minutes / 60);
+        $divisorForMinutes = $seconds % (60 * 60);
+        $minutes = floor($divisorForMinutes / 60);
         $hours = ($hours == 0 || $hours == '0') ? '' : $hours . ' hours ';
         $minutes = ($minutes == 0 || $minutes == '0') ? '' : $minutes . ' minutes ';
         $seconds = ($seconds == 0 || $seconds == '0') ? '' : $seconds . ' seconds ';

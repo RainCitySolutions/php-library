@@ -12,16 +12,18 @@ class MethodLogger
     public function __construct()
     {
         $this->method = $this->getCallingMethodName();
-        Logger::getLogger(get_class($this))->debug("Entering {$this->method}");
+        Logger::getLogger(get_class($this))
+            ->debug("Entering {$this->method}");
 
         $this->timer = new Timer('start');
     }
 
-    function __destruct()
+    public function __destruct()
     {
         $this->timer->stop();
 
-        Logger::getLogger(get_class($this))->debug("Exiting {$this->method} after {$this->timer->getTime()}");
+        Logger::getLogger(get_class($this))
+            ->debug("Exiting {$this->method} after {$this->timer->getTime()}");
     }
 
     private function getCallingMethodName()

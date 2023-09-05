@@ -44,7 +44,7 @@ trait CsvBindByNameTrait
 
         static::processAnnotations(
             $result,
-            function (array &$result, CsvBindByName $anno, ReflectionProperty $property) {
+            function (array &$result, CsvBindByName $anno, ReflectionProperty $property) {  // NOSONAR - ignore unused parameter
                 foreach ($anno->getColumns() as $column) {
                     array_push($result, $column);
                 }

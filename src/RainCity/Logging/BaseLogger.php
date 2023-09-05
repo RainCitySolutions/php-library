@@ -67,8 +67,9 @@ class BaseLogger implements LoggerIntf
      * @param \Monolog\Logger $logger
      */
     protected function setupLogger(\Monolog\Logger $logger) {
-        $dateformat = "M d H:i:s";
-        $format = "%datetime% %level_name% %channel% (%extra.userId%/%extra.userName%): %message% %context% %extra%".PHP_EOL;
+        $dateformat = 'M d H:i:s';
+        $format =
+            '%datetime% %level_name% %channel% (%extra.userId%/%extra.userName%): %message% %context% %extra%'.PHP_EOL;
 
         $formatter = new \Monolog\Formatter\LineFormatter ($format, $dateformat, false, true);
 

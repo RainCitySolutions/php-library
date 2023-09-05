@@ -23,7 +23,7 @@ abstract class Singleton {
     /** @var LoggerInterface */
     protected $log;
 
-    static function triggerIncorrectUseWarning(string $function) {
+    public static function triggerIncorrectUseWarning(string $function) {
         trigger_error($function . ' should not be called on singleton class', E_USER_WARNING);
     }
 
