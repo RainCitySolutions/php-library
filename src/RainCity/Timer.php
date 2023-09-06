@@ -9,7 +9,7 @@ class Timer {
     private float $start;
     private float $pause;
     private float $stop;
-    private float $elapsed;
+    private float $elapsed = 0;
     private array $laps = array();
     private int $count = 1;
     private float $lapTotalTime = 0;
