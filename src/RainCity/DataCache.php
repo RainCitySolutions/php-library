@@ -1,14 +1,17 @@
 <?php declare(strict_types=1);
 namespace RainCity;
 
-use RainCity\Logging\Logger;
+use Psr\SimpleCache\CacheInterface;
 use RainCity\Logging\BaseLogger;
+use RainCity\Logging\Logger;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\MemcachedAdapter;
+use Symfony\Component\Cache\Adapter\PdoAdapter;
 use Traversable;
 
-
-class DataCache extends Singleton implements \Psr\SimpleCache\CacheInterface
+class DataCache extends Singleton implements CacheInterface
 {
-    /** @var \Apix\Cache\PsrCache\Pool | \Apix\Cache\PsrCache\TaggablePool */
+    /** @var CacheInterface */
     private $cache;
 
     /** @var int TTL in seconds */
@@ -19,30 +22,23 @@ class DataCache extends Singleton implements \Psr\SimpleCache\CacheInterface
         parent::__construct();
 
         // need to add support for Memcached
-        $options = array();
         if (extension_loaded('memcached')) {
 
-            $backend = new \Memcached();
-            $backend->addServer('127.0.0.1', 11211);
+            $client = MemcachedAdapter::createConnection('memcached://localhost:11211');
+            
+            $this->cache = new MemcachedAdapter($client);
+        } elseif (extension_loaded('pdo_sqlite')) {
+            $dbFile = self::getSqliteFile();
+            $dbDir = dirname($dbFile);
 
-            $this->cache = \Apix\Cache\Factory::getPool($backend, $options);
-        } else {
-            if (extension_loaded('pdo_sqlite')) {
-                $dbFile = self::getSqliteFile();
-                $dbDir = dirname($dbFile);
-
-                if (!file_exists($dbDir)) {
-                    mkdir($dbDir);
-                }
-
-                $backend = new \PDO('sqlite:'.self::getSqliteFile());
-                $this->cache = \Apix\Cache\Factory::getPool($backend);
-            } else {
-                $options['directory'] = self::getFilesCacheDir(); // Directory where the cache is created
-                $options['locking'] = true;                       // File locking (recommended)
-
-                $this->cache = \Apix\Cache\Factory::getPool('Files', $options);
+            if (!file_exists($dbDir)) {
+                mkdir($dbDir);
             }
+
+            $backend = new \PDO('sqlite:'.self::getSqliteFile());
+            $this->cache = new PdoAdapter($backend);
+        } else {
+            $this->cache = new FilesystemAdapter('', 0, self::getFilesCacheDir());
         }
     }
 
