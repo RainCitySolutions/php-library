@@ -3,6 +3,7 @@ namespace RainCity;
 
 use RainCity\Logging\Logger;
 use RainCity\Logging\BaseLogger;
+use Traversable;
 
 
 class DataCache extends Singleton implements \Psr\SimpleCache\CacheInterface
@@ -45,22 +46,24 @@ class DataCache extends Singleton implements \Psr\SimpleCache\CacheInterface
         }
     }
 
-    public function deleteMultiple($keys)
+    public function deleteMultiple(Traversable|array $keys): bool
     {
         return $this->cache->deleteItems($keys);
     }
 
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple(Traversable|array $values, \DateInterval|int|null $ttl = null): bool
     {
         // Multiple values aren't being supported
+        return false;
     }
 
-    public function getMultiple($keys, $default = null)
+    public function getMultiple(Traversable|array $keys, mixed $default = null): Traversable|array
     {
         // Multiple values aren't being supported
+        return [];
     }
 
-    public function set($key, $value, $ttl = null)
+    public function set(string $key, mixed $value, \DateInterval|int|null $ttl = null): bool
     {
         /** @var \Psr\Cache\CacheItemInterface */
         $item = $this->cache->getItem($key);
@@ -78,7 +81,12 @@ class DataCache extends Singleton implements \Psr\SimpleCache\CacheInterface
         return $this->cache->save($item);
     }
 
-    public function get($key, $default = null)
+    /**
+     *
+     * {@inheritDoc}
+     * @see \Psr\SimpleCache\CacheInterface::get()
+     */
+    public function get(string $key, mixed $default = null): mixed
     {
         $item = $this->cache->getItem($key);
         if (!isset($item) && isset($default)) {
@@ -89,17 +97,17 @@ class DataCache extends Singleton implements \Psr\SimpleCache\CacheInterface
         return $item->get();
     }
 
-    public function clear()
+    public function clear(): bool
     {
         return $this->cache->clear();
     }
 
-    public function has($key)
+    public function has(string $key): bool
     {
         return $this->cache->hasItem($key);
     }
 
-    public function delete($key)
+    public function delete(string $key): bool
     {
         return $this->cache->deleteItem($key);
     }
