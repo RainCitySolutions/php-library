@@ -5,7 +5,7 @@ namespace RainCity;
  * Simple PHP script timing class.
  *
  * Derived from work by Jonathan Jones
- * 
+ *
  * @author Blair Cooper
  */
 class Timer {
@@ -100,10 +100,10 @@ class Timer {
 
     /**
      * Gets the time(s) in a human readable format.
-     * 
+     *
      * If lap() was called, returns an array of times, with an entry for each
      * lap and an entry for the total time.
-     * 
+     *
      * Otherwise returns the total elapsed time.
      *
      * @return string|array The elapsed time or an array of times.
