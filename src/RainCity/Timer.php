@@ -3,55 +3,84 @@ namespace RainCity;
 
 /**
  * Simple PHP script timing class.
- * @author Jonathan Jones
+ *
+ * Derived from work by Jonathan Jones
+ * 
+ * @author Blair Cooper
  */
 class Timer {
-    private float $start;
-    private float $pause;
-    private float $stop;
-    private float $elapsed = 0;
+    public const NO_TIME_MESSAGE = 'No time to return.';
+
+    private float $start = 0.0;
+    private float $pause = 0.0;
+    private float $stop = 0.0;
+    private float $elapsed = 0.0;
+    private float $lapTotalTime = 0.0;
     private array $laps = array();
     private int $count = 1;
-    private float $lapTotalTime = 0;
 
     /**
-     * Instantiation method, if `start` is declared then the timing will
-     * start, else `start()` needs to be called.
+     * Instantiation method.
      *
-     * @param string $start Only acceptable string currently is `start`.
+     * If true is passed then the timer starts immediately. If false is
+     * passed or the argument is omitted the timer is not started and start()
+     * must be called to start the timer.
+     *
+     * @param bool $startNow If set to true the timer immediately starts.
+     *      Defaults to false.
      */
-    public function __construct($start = '') {
-        ('start' === strtolower($start)) ? $this->start() : null;
+    public function __construct(bool $startNow = false) {
+        if ($startNow) {
+            $this->start();
+        }
     }
 
     /**
-     * Starts the timer. Resets on each call.
+     * Starts the timer.
+     *
+     * Resets the timer on each call.
      */
     public function start() {
         $this->start = $this->getMicroTime();
-        unset($this->stop);    // reset the stop time
+        $this->stop = 0.0;  // reset the stop time
     }
 
     /**
      * Stops the timer.
+     *
+     * If the timer has not be started, nothing happens.
      */
     public function stop() {
-        $this->stop = $this->getMicroTime();
+        // Don't set stop if we haven't started
+        if (0.0 !== $this->start) {
+            $this->stop = $this->getMicroTime();
+        }
     }
 
     /**
      * Pauses the timer.
+     *
+     * If the timer has not been started, or has already been stopped,
+     * nothing happens.
      */
     public function pause() {
-        $this->pause = $this->getMicroTime();
-        $this->elapsed += ($this->pause - $this->start);
+        // Don't set pause if we haven't started or we have already stopped or we are currently paused
+        if (0.0 !== $this->start && 0.0 === $this->stop && 0.0 === $this->pause) {
+            $this->pause = $this->getMicroTime();
+            $this->elapsed += ($this->pause - $this->start);
+        }
     }
 
     /**
      * Resumes the timer after a pause is called.
+     *
+     * If pause has not been called nothing happens.
      */
     public function resume() {
-        $this->start = $this->getMicroTime();
+        if (0.0 !== $this->pause) {
+            $this->start = $this->getMicroTime();
+            $this->pause = 0.0;
+        }
     }
 
     /**
@@ -70,17 +99,24 @@ class Timer {
     }
 
     /**
-     * Gets the time for the user after processing the time through private functions.
-     * @return string Time
+     * Gets the time(s) in a human readable format.
+     * 
+     * If lap() was called, returns an array of times, with an entry for each
+     * lap and an entry for the total time.
+     * 
+     * Otherwise returns the total elapsed time.
+     *
+     * @return string|array The elapsed time or an array of times.
      */
-    public function getTime() {
-        if (!isset($this->stop)) {
-            $this->stop = $this->getMicroTime();
-        }
+    public function getTime(): string|array
+    {
+        $this->stop();
+
         if (!empty($this->laps)) {
             $this->laps['Total'] = $this->timeToString($this->lapTotalTime);
             return $this->laps;
         }
+
         return $this->timeToString();
     }
 
@@ -102,22 +138,30 @@ class Timer {
 
     /**
      * Convert the time to a readable string for display or logging.
+     *
      * @param float $seconds Seconds gathered from the `getTime` function
+     *
      * @return string time in a displayable string
      */
-    private function timeToString($seconds = '') {
-        if ($seconds === '') {
-            $seconds = ($this->stop - $this->start) + $this->elapsed;
+    private function timeToString(?float $timeSeconds = null) {
+        if (is_null($timeSeconds)) {
+            $timeSeconds = ($this->stop - $this->start) + $this->elapsed;
         }
-        $seconds = $this->roundMicroTime($seconds);
+        $timeSeconds = $this->roundMicroTime($timeSeconds);
+        
         // Hours?? Just because we can.
-        $hours = floor($seconds / (60 * 60));
-        $divisorForMinutes = $seconds % (60 * 60);
-        $minutes = floor($divisorForMinutes / 60);
-        $hours = ($hours == 0 || $hours == '0') ? '' : $hours . ' hours ';
-        $minutes = ($minutes == 0 || $minutes == '0') ? '' : $minutes . ' minutes ';
-        $seconds = ($seconds == 0 || $seconds == '0') ? '' : $seconds . ' seconds ';
-        return ($hours == '' && $minutes == '' && $seconds == '') ? 'No time to return.' : $hours . $minutes . $seconds;
+        $hours   = floor(fdiv($timeSeconds, 60 * 60));
+        $minutes = floor(fmod(fdiv($timeSeconds, 60), 60));
+        $seconds = fmod($timeSeconds, 60);
+        $seconds = round($seconds, 3, PHP_ROUND_HALF_UP);
+
+        $hours = ($hours == 0) ? '' : $hours . ' hours ';
+        $minutes = ($minutes == 0) ? '' : $minutes . ' minutes ';
+        $seconds = ($seconds == 0) ? '' : $seconds . ' seconds';
+
+        return ($hours == '' && $minutes == '' && $seconds == '') ?
+            self::NO_TIME_MESSAGE :
+            $hours . $minutes . $seconds;
     }
 
     /**

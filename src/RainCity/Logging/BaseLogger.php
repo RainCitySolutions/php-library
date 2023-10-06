@@ -27,7 +27,9 @@ class BaseLogger implements LoggerIntf
      * @see \RainCity\Logging\LoggerIntf
      */
     public static function getLogger(string $loggerName, ?string $loggerKey = null): LoggerInterface {
-        $loggerKey ?: get_called_class();   // if $loggerKey isn't set, use the called class as the key
+        if (is_null($loggerKey)) {
+            $loggerKey = get_called_class();   // if $loggerKey isn't set, use the called class as the key
+        }
 
         if (!isset(self::$loggerImpl[$loggerKey])) {
             $calledClassName = get_called_class();
