@@ -15,7 +15,7 @@ class MethodLogger
         Logger::getLogger(get_class($this))
             ->debug("Entering {$this->method}");
 
-        $this->timer = new Timer('start');
+        $this->timer = new Timer(true);
     }
 
     public function __destruct()

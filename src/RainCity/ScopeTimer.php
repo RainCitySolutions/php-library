@@ -32,7 +32,7 @@ class ScopeTimer {
     public function __construct(\Psr\Log\LoggerInterface $logger, $msg) {
         $this->logger = $logger;
         $this->msg = $msg;
-        $this->timer = new Timer('start');
+        $this->timer = new Timer(true);
     }
 
     public function __destruct() {
