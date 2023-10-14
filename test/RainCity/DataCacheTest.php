@@ -4,10 +4,8 @@ namespace RainCity;
 /**
  * DataCache test case.
  */
-use RainCity\Logging\Logger;
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
-use RainCity\TestHelper\StubLogger;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Psr\Cache\InvalidArgumentException;
 
@@ -23,15 +21,6 @@ class DataCacheTest extends RainCityTestCase
         parent::__construct();
 
         $this->cacheAdapter = new ArrayAdapter();
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \PHPUnit\Framework\TestCase::setUpBeforeClass()
-     */
-    public static function setUpBeforeClass(): void
-    {
-        Logger::setLogger(StubLogger::class);
     }
 
     /**

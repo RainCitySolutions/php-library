@@ -5,10 +5,8 @@ namespace RainCity\PDF;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use RainCity\Logging\Logger;
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
-use RainCity\TestHelper\StubLogger;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -20,17 +18,6 @@ class PDFServiceTest extends RainCityTestCase
 {
     private const GOOD_TEST_URL = 'https://good.url.co';
     private const PDF_LOCATION_URL = 'http://test.location.co/test.pdf';
-
-    /**
-     * {@inheritDoc}
-     * @see \PHPUnit\Framework\TestCase::setUpBeforeClass()
-     */
-    public static function setUpBeforeClass(): void
-    {
-        parent::setUpBeforeClass();
-
-        Logger::setLogger(StubLogger::class);
-    }
 
     private function getTestInstance(): PDFService
     {

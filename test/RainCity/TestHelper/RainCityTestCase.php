@@ -7,12 +7,25 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Handler\MockHandler;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Psr\Http\Client\ClientInterface;
+use RainCity\Logging\Logger;
 
 /**
  * RainCityTestCase base class.
  */
 abstract class RainCityTestCase extends PHPUnitTestCase
 {
+    private static $orgLoggerClass;
+
+    /**
+     * {@inheritDoc}
+     * @see \PHPUnit\Framework\TestCase::setUpBeforeClass()
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$orgLoggerClass = ReflectionHelper::getClassProperty(Logger::class, 'loggerClazz');
+        Logger::setLogger(StubLogger::class);
+    }
+
     // Adds Mockery expectations to the PHPUnit assertions count.
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
@@ -44,6 +57,9 @@ abstract class RainCityTestCase extends PHPUnitTestCase
         $this->resetHttpHistory();
 
         \Brain\Monkey\tearDown();
+
+        ReflectionHelper::setClassProperty(Logger::class, 'loggerClazz', self::$orgLoggerClass);
+
         parent::tearDown();
     }
 

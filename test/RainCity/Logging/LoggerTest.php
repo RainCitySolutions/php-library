@@ -9,6 +9,8 @@ use RainCity\TestHelper\ReflectionHelper;
 /**
  * @covers \RainCity\Logging\Logger
  *
+ * Note: We don't extend RainCityTestCase because we need to control the
+ * logger for this test.
  */
 class LoggerTest extends TestCase
 {

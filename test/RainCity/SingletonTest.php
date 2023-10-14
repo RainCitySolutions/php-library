@@ -1,10 +1,8 @@
 <?php declare(strict_types=1);
 namespace RainCity;
 
-use RainCity\Logging\Logger;
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
-use RainCity\TestHelper\StubLogger;
 
 /**
  * @covers \RainCity\Singleton
@@ -12,15 +10,6 @@ use RainCity\TestHelper\StubLogger;
  */
 class SingletonTest extends RainCityTestCase
 {
-    /**
-     * {@inheritDoc}
-     * @see \PHPUnit\Framework\TestCase::setUpBeforeClass()
-     */
-    public static function setUpBeforeClass(): void
-    {
-        Logger::setLogger(StubLogger::class);
-    }
-
     /**
      * {@inheritDoc}
      * @see \PHPUnit\Framework\TestCase::setUp()

@@ -8,7 +8,6 @@ use RainCity\Logging\Logger;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
-use CacheItemInterface;
 use Traversable;
 
 class DataCache extends Singleton implements CacheInterface
@@ -55,7 +54,7 @@ class DataCache extends Singleton implements CacheInterface
      */
     public function set(string $key, mixed $value, \DateInterval|int|null $ttl = null): bool
     {
-        /** @var \CacheItemInterface */
+        /** @var \Psr\Cache\CacheItemInterface */
         $item = $this->cache->getItem($key);
 
         $item->set($value);
