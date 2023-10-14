@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "213d515c5ca7db572b9efe18a8038303",
+    "content-hash": "2bab586e0516860ae4aa36aed3c9c960",
     "packages": [
         {
             "name": "composer/installers",
@@ -631,16 +631,16 @@
         },
         {
             "name": "json-mapper/json-mapper",
-            "version": "2.19.0",
+            "version": "2.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JsonMapper/JsonMapper.git",
-                "reference": "10003c2e8821925906d7e35e732d0ad10ded2d78"
+                "reference": "d8c4faf90642e08ab9f3314e0a6b2d9385e3d5a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JsonMapper/JsonMapper/zipball/10003c2e8821925906d7e35e732d0ad10ded2d78",
-                "reference": "10003c2e8821925906d7e35e732d0ad10ded2d78",
+                "url": "https://api.github.com/repos/JsonMapper/JsonMapper/zipball/d8c4faf90642e08ab9f3314e0a6b2d9385e3d5a3",
+                "reference": "d8c4faf90642e08ab9f3314e0a6b2d9385e3d5a3",
                 "shasum": ""
             },
             "require": {
@@ -696,7 +696,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-06T19:32:28+00:00"
+            "time": "2023-10-09T11:33:40+00:00"
         },
         {
             "name": "monolog/monolog",
