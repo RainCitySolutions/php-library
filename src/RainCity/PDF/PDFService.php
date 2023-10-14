@@ -34,15 +34,17 @@ class PDFService
      * @param string $svcUrl The URL to the PDF Web Service
      * @param ClientInterface $httpClient (Optional) An HTTP Client to be used for
      *      requests. Can be overridden later by a call to {@see PDFService::setHttpClient()}.
+     * @param float $timeout Timeout for the default HTTP client. Ignored if
+     *      $httpClient is provided.
      *
      * @throws PDFServiceException Thrown if the URL provided does not refer
      *      to a valid PDF Service instance.
      */
-    public function __construct(string $svcUrl, ClientInterface $httpClient = null)
+    public function __construct(string $svcUrl, ClientInterface $httpClient = null, float $timeout = 30.0)
     {
         $this->logger = Logger::getLogger(get_class());
 
-        $this->httpClient = $httpClient ?? self::getDefaultHttpClient();
+        $this->httpClient = $httpClient ?? self::getDefaultHttpClient($timeout);
 
         if ($this->isValidServiceUrl($svcUrl)) {
             $this->svcUrl = $svcUrl;
@@ -64,12 +66,12 @@ class PDFService
         $this->httpClient = $httpClient;
     }
 
-    protected static function getDefaultHttpClient(): ClientInterface
+    protected static function getDefaultHttpClient(float $timeout = 30.0): ClientInterface
     {
         return new Client([
             // You can set any number of default request options.
-            'timeout'  => 30.0,
-            'read_timeout' => 30.0,
+            'timeout'  => $timeout,
+            'read_timeout' => $timeout,
             'cookies' => true,
             'verify' => true,
             'http_errors' => false
@@ -99,9 +101,24 @@ class PDFService
                     if (!empty($verbs) && self::EXPECTED_VERBS === $verbs[0]) {
                         $isValid = true;
                     }
+                    else {
+                        $this->logger->warning(
+                            'Necessary HTTP verbs not supported. Response was {verbs}',
+                            array('verbs' => $verbs)
+                            );
+                    }
+                }
+                else {
+                    $this->logger->warning(
+                        'OPTIONS request returned {errorCode}: {reason}',
+                        array(
+                            'errorCode' => $response->getStatusCode(),
+                            'reason' => $response->getReasonPhrase()
+                        )
+                        );
                 }
             } catch (\Exception $e) {
-                Logger::getLogger(get_class())->warning(
+                $this->logger->warning(
                     'Unable to retrieve Options from URL {url}, {error}',
                     array('url' => $url, 'error' => $e->getMessage())
                     );
