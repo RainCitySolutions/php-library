@@ -25,13 +25,42 @@ class DataCache extends Singleton implements CacheInterface
         if (is_array($args) && !empty($args) && $args[0] instanceof CacheItemPoolInterface) {
             $this->cache = $args[0];
         } else {
-            // need to add support for Memcached
-            if (extension_loaded('memcached')) {
+            $this->cache = $this->createMemcachedCache();
 
-                $client = MemcachedAdapter::createConnection('memcached://localhost:11211');
+            if (!isset($this->cache)) {
+                $this->cache = $this->createSqliteCache();
 
-                $this->cache = new MemcachedAdapter($client);
-            } elseif (extension_loaded('pdo_sqlite')) {
+                if (!isset($this->cache)) {
+                    $this->cache = new FilesystemAdapter('', 0, self::getFilesCacheDir());
+                }
+            }
+        }
+    }
+
+    private function createMemcachedCache(): ?CacheItemPoolInterface
+    {
+        $cache = null;
+
+        if (extension_loaded('memcached')) {
+            try {
+                $client = MemcachedAdapter::createConnection('memcached://127.0.0.1');
+
+                $cache = new MemcachedAdapter($client);
+            }
+            catch (\Exception $e) {
+                $this->log->info('Unable to setup Memcached cache: {msg}', array('msg' => $e->getMessage()));
+            }
+        }
+
+        return $cache;
+    }
+
+    private function createSqliteCache(): ?CacheItemPoolInterface
+    {
+        $cache = null;
+
+        if (extension_loaded('pdo_sqlite')) {
+            try {
                 $dbFile = self::getSqliteFile();
                 $dbDir = dirname($dbFile);
 
@@ -40,11 +69,14 @@ class DataCache extends Singleton implements CacheInterface
                 }
 
                 $backend = new \PDO('sqlite:'.self::getSqliteFile());
-                $this->cache = new PdoAdapter($backend);
-            } else {
-                $this->cache = new FilesystemAdapter('', 0, self::getFilesCacheDir());
+                $cache = new PdoAdapter($backend);
+            }
+            catch (\Exception $e) {
+                $this->log->info('Unable to setup Sqlite cache: {msg}', array('msg' => $e->getMessage()));
             }
         }
+
+        return $cache;
     }
 
     /**
