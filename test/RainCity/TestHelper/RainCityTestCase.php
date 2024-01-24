@@ -26,6 +26,24 @@ abstract class RainCityTestCase extends PHPUnitTestCase
         Logger::setLogger(StubLogger::class);
     }
 
+    /**
+     * {@inheritdoc}
+     * @see \PHPUnit\Framework\TestCase::tearDownAfterClass()
+     */
+    public static function tearDownAfterClass(): void
+    {
+        foreach (self::$tmpFiles as $file) {
+            @unlink($file);
+        }
+
+        if (isset(self::$orgLoggerClass)) {
+            ReflectionHelper::setClassProperty(Logger::class, 'loggerClazz', self::$orgLoggerClass);
+        }
+
+        parent::tearDownAfterClass();
+    }
+
+
     // Adds Mockery expectations to the PHPUnit assertions count.
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
@@ -58,22 +76,7 @@ abstract class RainCityTestCase extends PHPUnitTestCase
 
         \Brain\Monkey\tearDown();
 
-        ReflectionHelper::setClassProperty(Logger::class, 'loggerClazz', self::$orgLoggerClass);
-
         parent::tearDown();
-    }
-
-    /**
-     * {@inheritdoc}
-     * @see \PHPUnit\Framework\TestCase::tearDownAfterClass()
-     */
-    public static function tearDownAfterClass(): void
-    {
-        foreach (self::$tmpFiles as $file) {
-            @unlink($file);
-        }
-
-        parent::tearDownAfterClass();
     }
 
     protected function getTempFile(): string
