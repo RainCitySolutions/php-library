@@ -18,7 +18,7 @@ trait SerializeAsArrayTrait
              * possiblity that a field may be removed from the class in the
              * future.
              */
-            if (property_exists(__CLASS__, $var)) {
+            if (property_exists($this, $var)) {
                 $this->$var = $value;
             }
         }
