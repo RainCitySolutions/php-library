@@ -3,9 +3,37 @@ namespace RainCity;
 
 trait SerializeAsArrayTrait
 {
+    /**
+     * Method to be overridden by classes utilizing the trait should they
+     * want to manipulate the array before it is serialized.
+     *
+     * @param array $vars An array of values to be serialized.
+     *
+     * @return array The array of values to serialize which may have been
+     *      modified.
+     */
+    protected function preSerialize(array $vars): array
+    {
+        // Default implementation
+        return $vars;
+    }
+
+    /**
+     * Method to be overridden by classes utilizing the trait should they
+     * want to perform any work after the instance has been unserialized.
+     */
+    protected function postUnserialize(): void
+    {
+        // Default implementation
+    }
+
     public function __serialize(): array
     {
-        return get_object_vars($this);
+        $vars = get_object_vars($this);
+
+        $vars = $this->preSerialize($vars);
+
+        return $vars;
     }
 
     public function __unserialize(array $data): void
@@ -22,6 +50,8 @@ trait SerializeAsArrayTrait
                 $this->$var = $value;
             }
         }
+
+        $this->postUnserialize();
     }
 
     /**
