@@ -7,15 +7,11 @@ trait SerializeAsArrayTrait
      * Method to be overridden by classes utilizing the trait should they
      * want to manipulate the array before it is serialized.
      *
-     * @param array $vars An array of values to be serialized.
-     *
-     * @return array The array of values to serialize which may have been
-     *      modified.
+     * @param array &$vars A reference to the array of values to be serialized.
      */
-    protected function preSerialize(array $vars): array
+    protected function preSerialize(array &$vars): void // NOSONAR - unused parameter
     {
         // Default implementation
-        return $vars;
     }
 
     /**
