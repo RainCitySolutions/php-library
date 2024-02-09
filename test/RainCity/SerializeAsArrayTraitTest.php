@@ -52,6 +52,7 @@ class SerializeAsArrayTraitTest extends TestCase
     {
         $array = $this->testObj->__serialize();
 
+        $this->assertNotNull($array);
         $this->assertArrayHasKey(self::TEST_STR_KEY, $array);
         $this->assertEquals(self::TEST_STR_VALUE, $array[self::TEST_STR_KEY]);
 
@@ -199,19 +200,7 @@ class SerializeAsArrayTraitTest extends TestCase
     
     private function getTestObjProperty(string $prop)
     {
-        $result = null;
-
-        try {
-            $reflection = new \ReflectionClass($this->testObj);
-            $property = $reflection->getProperty($prop);
-            $property->setAccessible(true);
-
-            $result = $property->getValue($this->testObj);
-        } catch (\ReflectionException $re) {
-            // empty catch
-        }
-
-        return $result;
+        return ReflectionHelper::getObjectProperty(get_class($this->testObj), $prop, $this->testObj);
     }
 
     private function formPropertyPair(string $prop, mixed $value): string
@@ -239,11 +228,9 @@ class TestSerializeAsArrayTrait {
         $this->intValue = $intValue;
     }
     
-    protected function preSerialize(array $vars): array
+    protected function preSerialize(array &$vars): void
     {
         unset($vars['objValue']);
-
-        return $vars;
     }
     
     protected function postUnserialize(): void

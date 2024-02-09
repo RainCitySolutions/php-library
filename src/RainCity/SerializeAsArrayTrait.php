@@ -23,16 +23,16 @@ trait SerializeAsArrayTrait
         // Default implementation
     }
 
-    public function __serialize(): array
+    public function __serialize(): array    // NOSONAR - unrecognized magic method
     {
         $vars = get_object_vars($this);
 
-        $vars = $this->preSerialize($vars);
+        $this->preSerialize($vars);
 
         return $vars;
     }
 
-    public function __unserialize(array $data): void
+    public function __unserialize(array $data): void    // NOSONAR - unrecognized magic method
     {
         foreach ($data as $var => $value) {
             /**
