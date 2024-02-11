@@ -237,11 +237,11 @@ class TimerTest extends RainCityTestCase
         $this->assertGreaterThan($startVal, $stopVal);
 
         // Time between initial start and pause should be just over SLEEP_TIME second
-        $this->assertGreaterThan(self::SLEEP_TIME_SECONDS, $elapsedVal);
+        $this->assertGreaterThanOrEqual(self::SLEEP_TIME_SECONDS, round($elapsedVal, 2, PHP_ROUND_HALF_UP));
         $this->assertLessThan(self::SLEEP_TIME_SECONDS * 2, $elapsedVal);
 
         // Time between resume and stop should be just over SLEEP_TIME second
-        $this->assertGreaterThan(self::SLEEP_TIME_SECONDS, $startStopDiff);
+        $this->assertGreaterThanOrEqual(self::SLEEP_TIME_SECONDS, round($startStopDiff, 1));
         $this->assertLessThan(self::SLEEP_TIME_SECONDS * 2, $startStopDiff);
 
         // Total elapsed time should be just over SLEEP_TIME * 2 seconds

@@ -16,6 +16,21 @@ trait SerializeAsArrayTrait
 
     /**
      * Method to be overridden by classes utilizing the trait should they
+     * want to manipulate the array before it is unserialized.
+     *
+     * An example might be when the class has changed and a previously
+     * serialized value needs to be converted before being loaded into the
+     * class.
+     *
+     * @param array &$vars A reference to the array of values to be unserialized.
+     */
+    protected function preUnserialize(array &$vars): void   // NOSONAR - unused parameter
+    {
+        // Default implementation
+    }
+
+    /**
+     * Method to be overridden by classes utilizing the trait should they
      * want to perform any work after the instance has been unserialized.
      */
     protected function postUnserialize(): void
@@ -34,6 +49,8 @@ trait SerializeAsArrayTrait
 
     public function __unserialize(array $data): void    // NOSONAR - unrecognized magic method
     {
+        $this->preUnserialize ($data);
+
         foreach ($data as $var => $value) {
             /**
              * Only set values for properties of the object.
@@ -58,16 +75,16 @@ trait SerializeAsArrayTrait
      */
     public function serialize(): ?string
     {
-        return serialize($this->__serialize());
+        return \serialize($this->__serialize());
     }
 
     /**
-     * Implementation of the \Serializable::unserialize method
+     * Implementation of the \Serializable::unserialize() method
      *
      * @param string $serialized A string representation of the object
      */
     public function unserialize($serialized): void
     {
-        $this->__unserialize(unserialize($serialized));
+        $this->__unserialize(\unserialize($serialized));
     }
 }
