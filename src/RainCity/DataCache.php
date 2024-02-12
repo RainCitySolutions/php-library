@@ -9,34 +9,107 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
 use Traversable;
+use Psr\Log\LoggerInterface;
 
-class DataCache extends Singleton implements CacheInterface
+class DataCache implements CacheInterface
 {
-    /** @var CacheItemPoolInterface */
-    private $cache;
+    private const DEFAULT_TTL = 600;
+
+    /** @var CacheItemPoolInterface Underlying cache implementation */
+    private static CacheItemPoolInterface $backingCache;
+
+    /** @var CacheItemPoolInterface Cache to use for this instance */
+    private CacheItemPoolInterface $cache;
 
     /** @var int TTL in seconds */
-    private $defaultTTL = 600;
+    private int $defaultTTL = self::DEFAULT_TTL;
 
-    protected function __construct($args)
+    /** @var LoggerInterface A logger for the class */
+    private LoggerInterface $log;
+
+    /**
+     * Helper function to aid in the transition from the singleton implementation.
+     *
+     * @param mixed ...$args
+     *
+     * @return \RainCity\DataCache
+     */
+    public static function instance(...$args): DataCache
     {
-        parent::__construct();
+        $cache = null;
+        $ttl = self::DEFAULT_TTL;
 
-        if (is_array($args) && !empty($args) && $args[0] instanceof CacheItemPoolInterface) {
-            $this->cache = $args[0];
-        } else {
-            $this->cache = $this->createMemcachedCache();
-
-            if (!isset($this->cache)) {
-                $this->cache = $this->createSqliteCache();
-
-                if (!isset($this->cache)) {
-                    $this->cache = new FilesystemAdapter('', 0, self::getFilesCacheDir());
-                }
+        foreach ($args as $arg) {
+            if (is_object($arg) && ($arg instanceof CacheItemPoolInterface) ) {
+                $cache = $arg;
+            } elseif (is_int($arg) || 1 < @intval($arg)) {
+                $ttl = intval($arg);
             }
         }
+
+        return new DataCache($cache, $ttl);
     }
 
+    /**
+     * Constructs an instance of a data cache.
+     *
+     * If a cache implementation is provided it is used, otherwise a default
+     * implementation will be choosen from Memcached, SQLite or the file
+     * system depending on which one is available.
+     *
+     * @param CacheItemPoolInterface $customCache A cache implementation to
+     *      use. If not provided a default will be selected.
+     * @param int $defaultTTL The default TTL to use for items added to the
+     *      cache. If not provided the TTL is set to 600 seconds/5 minutes.
+     */
+    public function __construct(?CacheItemPoolInterface $customCache = null, int $defaultTTL = self::DEFAULT_TTL)
+    {
+        $this->log = Logger::getLogger(get_class());
+
+        if (isset($customCache)) {
+            $this->cache = $customCache;
+        } else {
+            $this->cache = $this->initBackingCache();
+        }
+
+        $this->defaultTTL = $defaultTTL;
+    }
+
+    /**
+     * Initializes the backing/default cache if it hasn't already been
+     * created.
+     *
+     * @return CacheItemPoolInterface The backing cache
+     */
+    private function initBackingCache(): CacheItemPoolInterface
+    {
+        $cache = null;
+
+        if (isset(self::$backingCache)) {
+            $cache = self::$backingCache;
+        } else {
+            $cache = $this->createMemcachedCache();
+
+            if (null === $cache) {
+                $cache = $this->createSqliteCache();
+
+                if (null === $cache) {
+                    $cache = new FilesystemAdapter('', 0, self::getFilesCacheDir());
+                }
+            }
+
+            self::$backingCache = $cache;
+        }
+
+        return $cache;
+    }
+
+    /**
+     * Attempts to create an instance of a Memcached adapter.
+     *
+     * @return CacheItemPoolInterface|NULL A reference to the cache or null
+     *      if it cannot be created.
+     */
     private function createMemcachedCache(): ?CacheItemPoolInterface
     {
         $cache = null;
@@ -55,6 +128,12 @@ class DataCache extends Singleton implements CacheInterface
         return $cache;
     }
 
+    /**
+     * Attempts to create an instance of a SQLite adapter.
+     *
+     * @return CacheItemPoolInterface|NULL A reference to the cache or null
+     *      if it cannot be created.
+     */
     private function createSqliteCache(): ?CacheItemPoolInterface
     {
         $cache = null;
@@ -208,16 +287,6 @@ class DataCache extends Singleton implements CacheInterface
         return $result;
     }
 
-    /**
-     * Time-to-live, in seconds
-     *
-     * @param int $ttl
-     */
-    public function setDefaultTTL(int $ttl)
-    {
-        $this->defaultTTL = $ttl;
-    }
-
     private static function getSqliteFile()
     {
         return sys_get_temp_dir() . '/datacache.sqlite3';
@@ -228,6 +297,9 @@ class DataCache extends Singleton implements CacheInterface
         return sys_get_temp_dir() . '/files.cache';
     }
 
+    /**
+     * Cleans up any files created by the default cache implementation
+     */
     public static function uninstall()
     {
         Logger::getLogger(BaseLogger::BASE_LOGGER)->info('DataCache::uninstall() called');
@@ -235,7 +307,11 @@ class DataCache extends Singleton implements CacheInterface
         @unlink(self::getSqliteFile());
 
         // delete all the Files cache files.
-        array_map('unlink', array_filter((array) glob(self::getFilesCacheDir())));
-        @rmdir(self::getFilesCacheDir());
+        $filesCacheDir = self::getFilesCacheDir();
+
+        if (file_exists($filesCacheDir)) {
+            FileSystem::purgeFolder($filesCacheDir);
+            @rmdir($filesCacheDir);
+        }
     }
 }

@@ -7,6 +7,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Handler\MockHandler;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Psr\Http\Client\ClientInterface;
+use RainCity\DataCache;
 use RainCity\Logging\Logger;
 
 /**
@@ -39,6 +40,9 @@ abstract class RainCityTestCase extends PHPUnitTestCase
         if (isset(self::$orgLoggerClass)) {
             ReflectionHelper::setClassProperty(Logger::class, 'loggerClazz', self::$orgLoggerClass);
         }
+
+        // Cleanup anything DataCache may have stored
+        DataCache::uninstall();
 
         parent::tearDownAfterClass();
     }

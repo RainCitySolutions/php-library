@@ -34,8 +34,7 @@ trait JsonClientTrait
      */
     final protected function initJsonClientTrait(int $cacheTTL = 10, FactoryRegistry $factoryRegistry = null)
     {
-        $this->cache = DataCache::instance();
-        $this->cache->setDefaultTTL($cacheTTL);
+        $this->cache = new DataCache(null, $cacheTTL);
 
         // Create our own builder so we can include a PropertyMapper with additional class factories
         $builder = JsonMapperBuilder::new();

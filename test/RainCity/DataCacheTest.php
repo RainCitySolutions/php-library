@@ -5,8 +5,8 @@ namespace RainCity;
  * DataCache test case.
  */
 use RainCity\TestHelper\RainCityTestCase;
-use RainCity\TestHelper\ReflectionHelper;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use RainCity\TestHelper\ReflectionHelper;
 
 class DataCacheTest extends RainCityTestCase
 {
@@ -20,6 +20,7 @@ class DataCacheTest extends RainCityTestCase
         parent::__construct();
 
         $this->cacheAdapter = new ArrayAdapter();
+        $this->dataCache = new DataCache($this->cacheAdapter);
     }
 
     /**
@@ -30,10 +31,25 @@ class DataCacheTest extends RainCityTestCase
     {
         parent::setUp();
 
-        ReflectionHelper::setClassProperty(DataCache::class, 'instance', array(), true);
-
         $this->cacheAdapter->reset();
-        $this->dataCache = DataCache::instance($this->cacheAdapter);
+    }
+
+    public function testInstance()
+    {
+        $tmpAdapter = new ArrayAdapter();
+        $tmpTTL = 5;
+
+        $instCache = DataCache::instance($tmpAdapter, 5);
+
+        $this->assertNotSame($this->dataCache, $instCache);
+        $this->assertEquals(
+            $tmpAdapter,
+            ReflectionHelper::getObjectProperty(get_class($instCache), 'cache', $instCache)
+            );
+        $this->assertEquals(
+            $tmpTTL,
+            ReflectionHelper::getObjectProperty(get_class($instCache), 'defaultTTL', $instCache)
+            );
     }
 
     public function testSet()
@@ -50,13 +66,6 @@ class DataCacheTest extends RainCityTestCase
         $this->assertNotNull($cachedValue);
         $this->assertEquals($testValue, $cachedValue);
     }
-
-//     public function testSetGet_emptyKey()
-//     {
-//         $this->expectException(InvalidArgumentException::class);
-
-//         $this->dataCache->set('', '');
-//     }
 
     public function testGet_noValue()
     {

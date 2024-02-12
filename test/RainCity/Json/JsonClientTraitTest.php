@@ -4,6 +4,7 @@ namespace RainCity\Json;
 use JsonMapper\JsonMapper;
 use JsonMapper\Handler\FactoryRegistry;
 use JsonMapper\Handler\PropertyMapper;
+use Psr\SimpleCache\CacheInterface;
 use RainCity\DataCache;
 use RainCity\Json\Test\JsonClientTraitTestClass;
 use RainCity\TestHelper\RainCityTestCase;
@@ -183,7 +184,7 @@ class JsonClientTraitTest extends RainCityTestCase
     
     private function getCacheDefaultTTL(JsonClientTraitTestClass $testObj): int
     {
-        /** @var DataCache */
+        /** @var CacheInterface */
         $cache = ReflectionHelper::getObjectProperty(get_class($testObj), 'cache', $testObj);
 
         return ReflectionHelper::getObjectProperty(DataCache::class, 'defaultTTL', $cache);
