@@ -7,6 +7,7 @@ use JsonMapper\JsonMapperInterface;
 use JsonMapper\Handler\FactoryRegistry;
 use JsonMapper\Handler\PropertyMapper;
 use JsonMapper\Middleware\Rename\Rename;
+use Psr\SimpleCache\CacheInterface;
 use RainCity\DataCache;
 
 /**
@@ -19,7 +20,7 @@ use RainCity\DataCache;
  */
 trait JsonClientTrait
 {
-    protected DataCache $cache;
+    protected CacheInterface $cache;
     protected JsonMapperInterface $mapper;
 
     /**
