@@ -128,3 +128,23 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts:
             build/${{ steps.build-vars.outputs.project-name }}_${{ steps.build-vars.outputs.version }}.zip
+
+  dispatch:
+    runs-on: ubuntu-latest
+    needs: release
+    timeout-minutes: 5
+
+    env:
+      PACKAGES_TO_UPGRADE: ${{ needs.run_publish.outputs.packages }}
+
+    strategy:
+      matrix:
+        repo: ['RainCitySolutions/wp-plugin-framework']
+
+    steps:
+      - name: Dispatch to workflows
+        run: |
+            curl -H "Accept: application/vnd.github.everest-preview+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            --request POST \
+            --data '{"event_type": "new_php_lib_event", "client_payload": {}}' https://api.github.com/repos/${{ matrix.repo }}/dispatches
