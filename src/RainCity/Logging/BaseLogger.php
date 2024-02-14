@@ -69,18 +69,12 @@ class BaseLogger implements LoggerIntf
      * @param \Monolog\Logger $logger
      */
     protected function setupLogger(\Monolog\Logger $logger) {
-        $dateformat = 'M d H:i:s';
-        $format =
-            join(' ', [
-                '%datetime%',
-                '%level_name%',
-                '%channel%',
-                ':',
-                '%message% %context% %extra%'
-            ])
-            .PHP_EOL;
-
-        $formatter = new \Monolog\Formatter\LineFormatter ($format, $dateformat, false, true);
+        $formatter = new \Monolog\Formatter\LineFormatter (
+            $this->getLogMsgFormat(),
+            $this->getLogDateFormat(),
+            false,
+            true
+            );
 
         $handler = new RotatingFileHandler($this->getLogFile(), 14, $this->getLogLevel());
         $handler->setFormatter($formatter); //  attach the formatter to the handler
@@ -90,6 +84,32 @@ class BaseLogger implements LoggerIntf
         $logger->pushProcessor(new \Monolog\Processor\PsrLogMessageProcessor(null, true));
     }
 
+    /**
+     * Fetch the date format for log messages.
+     *
+     * @return string A date format string.
+     */
+    protected function getLogDateFormat(): string
+    {
+        return 'M d H:i:s';
+    }
+
+    /**
+     * Fetch the format string for log messages.
+     *
+     * @return string The format string.
+     */
+    protected function getLogMsgFormat(): string
+    {
+        return join(' ', [
+            '%datetime%',
+            '%level_name%',
+            '%channel%',
+            ':',
+            '%message% %context% %extra%'
+        ])
+        .PHP_EOL;
+    }
 
     /**
      * Retrieves a logger associated with the name provided from the list
