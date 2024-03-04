@@ -27,20 +27,6 @@ class JsonClientTraitTest extends RainCityTestCase
         $this->testObj = new JsonClientTraitTestClass();
     }
     
-    /**
-     * {@inheritDoc}
-     * @see \RainCity\TestHelper\RainCityTestCase::tearDown()
-     */
-    protected function tearDown(): void
-    {
-        // Reset static fields in test JSON class
-        JsonEntityTestClass::$fieldPropertyMap = array();
-        JsonEntityTestClass::$mapByIndex = false;
-
-        parent::tearDown();
-    }
-    
-
     public function testCtor_defaults()
     {
         $this->assertEquals(10, $this->getCacheDefaultTTL($this->testObj));
@@ -159,13 +145,6 @@ class JsonClientTraitTest extends RainCityTestCase
             $cnt--;
         }
         
-        JsonEntityTestClass::$fieldPropertyMap = array(
-            new FieldPropertyEntry('doesnotmatter1', 'id'),
-            new FieldPropertyEntry('doesnotmatter2', 'name'),
-            new FieldPropertyEntry('doesnotmatter3', 'number'),
-        );
-        JsonEntityTestClass::$mapByIndex = true;
-        
         $result = ReflectionHelper::invokeObjectMethod(
             get_class($this->testObj),
             $this->testObj,
@@ -248,4 +227,18 @@ class JsonEntityTestClass extends JsonEntity
     public int $id;
     public string $name;
     public int $number;
+    
+    protected static function isMapByIndex(): bool
+    {
+        return true;
+    }
+
+    protected static function getFieldPropertyMap(): array
+    {
+        return [
+            new FieldPropertyEntry('doesnotmatter1', 'id'),
+            new FieldPropertyEntry('doesnotmatter2', 'name'),
+            new FieldPropertyEntry('doesnotmatter3', 'number')
+            ];
+    }
 }
