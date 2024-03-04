@@ -31,12 +31,22 @@ class JsonEntityTest extends RainCityTestCase
         ];
     }
 
-
     public function testGetJsonFields_noMap()
     {
         $obj = new EmptyMapEntityTestClass();
-
+        
         $this->assertEmpty($obj->getJsonFields());
+    }
+    
+    public function testGetJsonFields_justProps()
+    {
+        $obj = new JustClassPropsTestClass();
+
+        $fields = $obj->getJsonFields();
+
+        $this->assertNotEmpty($fields);
+        $this->assertContains('intVal', $fields);
+        $this->assertContains('strVal', $fields);
     }
     
     public function testGetJsonFields_withMap()
@@ -121,15 +131,6 @@ class JsonEntityTest extends RainCityTestCase
 
 class EmptyMapEntityTestClass extends JsonEntity
 {
-    /**
-     * {@inheritDoc}
-     * @see \RainCity\Json\JsonEntity::getFieldPropertyMap()
-     */
-    protected static function getFieldPropertyMap(): array
-    {
-        return [];
-    }
-    
 }
 
 class ByNameEntityTestClass extends JsonEntity
@@ -142,7 +143,6 @@ class ByNameEntityTestClass extends JsonEntity
     {
         return JsonEntityTest::$testPropertyMap;
     }
-
 }
 
 class ByIndexEntityTestClass extends JsonEntity
@@ -164,5 +164,10 @@ class ByIndexEntityTestClass extends JsonEntity
     {
         return true;
     }
+}
 
+class JustClassPropsTestClass extends JsonEntity
+{
+    public int $intVal;
+    public string $strVal;
 }

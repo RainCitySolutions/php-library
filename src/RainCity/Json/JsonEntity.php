@@ -21,9 +21,10 @@ abstract class JsonEntity
      * @return array An array of FieldPropertyEntry objects defining the mapping
      *      between JSON field and object property
      */
-    protected abstract static function getFieldPropertyMap(): array;
-
-    //static array $fieldPropertyMap = array();
+    protected static function getFieldPropertyMap(): array
+    {
+        return [];
+    }
 
     /**
      * Indicator as to whether mapping of fields to properties should be be
@@ -48,7 +49,27 @@ abstract class JsonEntity
      */
     public static function getJsonFields(): array
     {
-        return array_map(fn($entry) => $entry->getField(), static::getFieldPropertyMap());
+        $fields = [];
+        
+        $refClass = new \ReflectionClass(static::class);
+        
+        $fields = array_merge(
+            $fields,
+            array_map(
+                    fn($entry) => $entry->getName(),
+                    $refClass->getProperties(\ReflectionProperty::IS_PUBLIC)
+                )
+        );
+        
+        $fields = array_merge(
+            $fields,
+            array_map(
+                fn($entry) => $entry->getField(),
+                static::getFieldPropertyMap()
+                )
+        );
+        
+        return $fields;
     }
 
     /**
