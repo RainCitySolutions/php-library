@@ -4,7 +4,7 @@ namespace RainCity\Json;
 use RainCity\TestHelper\ReflectionHelper;
 use RainCity\TestHelper\RainCityTestCase;
 
-class FieldPropertyEntityTest extends RainCityTestCase
+class FieldPropertyEntryTest extends RainCityTestCase
 {
     private const TEST_FIELD = 'testField';
     private const TEST_PROPERTY = 'testProperty';

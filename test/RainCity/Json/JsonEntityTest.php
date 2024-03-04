@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace RainCity\Json;
 
-use JsonMapper\Middleware\Rename\Rename;
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
 
@@ -15,48 +14,47 @@ class JsonEntityTest extends RainCityTestCase
     private const PROPERTY_NAME   = 'nameProp';
     private const PROPERTY_NUMBER = 'numberProp';
 
+    public static $testPropertyMap;
+
     /**
      * {@inheritDoc}
-     * @see \RainCity\TestHelper\RainCityTestCase::tearDown()
+     * @see \PHPUnit\Framework\TestCase::setUpBeforeClass()
      */
-    protected function tearDown(): void
+    public static function setUpBeforeClass(): void
     {
-        // Reset static fields in test JSON class
-        JsonEntityTestClass::$fieldPropertyMap = array();
-        JsonEntityTestClass::$mapByIndex = false;
+        parent::setUpBeforeClass();
 
-        parent::tearDown();
+        self::$testPropertyMap = [
+            new FieldPropertyEntry(self::FIELD_ID, self::PROPERTY_ID),
+            new FieldPropertyEntry(self::FIELD_NUMBER, self::PROPERTY_NUMBER),
+            new FieldPropertyEntry(self::FIELD_NAME, self::PROPERTY_NAME)
+        ];
     }
+
 
     public function testGetJsonFields_noMap()
     {
-        $obj = new JsonEntityTestClass();
+        $obj = new EmptyMapEntityTestClass();
 
         $this->assertEmpty($obj->getJsonFields());
     }
     
     public function testGetJsonFields_withMap()
     {
-        $obj = new JsonEntityTestClass();
-
-        JsonEntityTestClass::$fieldPropertyMap = array (
-            new FieldPropertyEntry(self::FIELD_ID, self::PROPERTY_ID),
-            new FieldPropertyEntry(self::FIELD_NUMBER, self::PROPERTY_NUMBER),
-        );
+        $obj = new ByNameEntityTestClass();
 
         $fields = $obj->getJsonFields();
 
         $this->assertNotEmpty($fields);
-        $this->assertCount(2, $fields);
+        $this->assertCount(count(self::$testPropertyMap), $fields);
         $this->assertContains(self::FIELD_ID, $fields);
         $this->assertContains(self::FIELD_NUMBER, $fields);
     }
 
     public function testGetRenameMapping_noMap()
     {
-        $obj = new JsonEntityTestClass();
+        $obj = new EmptyMapEntityTestClass();
 
-        /** @var Rename */
         $rename = $obj->getRenameMapping();
 
         $this->assertNotNull($rename);
@@ -68,14 +66,8 @@ class JsonEntityTest extends RainCityTestCase
 
     public function testGetRenameMapping_fieldMap()
     {
-        $obj = new JsonEntityTestClass();
+        $obj = new ByNameEntityTestClass();
 
-        JsonEntityTestClass::$fieldPropertyMap = array (
-            new FieldPropertyEntry(self::FIELD_NAME, self::PROPERTY_NAME),
-            new FieldPropertyEntry(self::FIELD_NUMBER, self::PROPERTY_NUMBER),
-        );
-        
-        /** @var Rename */
         $rename = $obj->getRenameMapping();
         
         $this->assertNotNull($rename);
@@ -83,11 +75,11 @@ class JsonEntityTest extends RainCityTestCase
         $mappings = ReflectionHelper::getObjectProperty(get_class($rename), 'mapping', $rename);
         
         $this->assertNotEmpty($mappings);
-        $this->assertCount(count(JsonEntityTestClass::$fieldPropertyMap), $mappings);
+        $this->assertCount(count(self::$testPropertyMap), $mappings);
 
         for ($ndx = 0; $ndx < count($mappings); $ndx++) {
             $mapping = $mappings[$ndx];
-            $fieldPropEntry = JsonEntityTestClass::$fieldPropertyMap[$ndx];
+            $fieldPropEntry = self::$testPropertyMap[$ndx];
             
             $clazz = ReflectionHelper::getObjectProperty(get_class($mapping), 'class', $mapping);
             $from  = ReflectionHelper::getObjectProperty(get_class($mapping), 'from', $mapping);
@@ -101,16 +93,8 @@ class JsonEntityTest extends RainCityTestCase
     
     public function testGetRenameMapping_fieldMapByIndex()
     {
-        $obj = new JsonEntityTestClass();
+        $obj = new ByIndexEntityTestClass();
         
-        JsonEntityTestClass::$fieldPropertyMap = array (
-            new FieldPropertyEntry(self::FIELD_ID, self::PROPERTY_ID),
-            new FieldPropertyEntry(self::FIELD_NAME, self::PROPERTY_NAME),
-            new FieldPropertyEntry(self::FIELD_NUMBER, self::PROPERTY_NUMBER),
-        );
-        JsonEntityTestClass::$mapByIndex = true;
-        
-        /** @var Rename */
         $rename = $obj->getRenameMapping();
         
         $this->assertNotNull($rename);
@@ -118,11 +102,11 @@ class JsonEntityTest extends RainCityTestCase
         $mappings = ReflectionHelper::getObjectProperty(get_class($rename), 'mapping', $rename);
         
         $this->assertNotEmpty($mappings);
-        $this->assertCount(count(JsonEntityTestClass::$fieldPropertyMap), $mappings);
+        $this->assertCount(count(self::$testPropertyMap), $mappings);
         
         for ($ndx = 0; $ndx < count($mappings); $ndx++) {
             $mapping = $mappings[$ndx];
-            $fieldPropEntry = JsonEntityTestClass::$fieldPropertyMap[$ndx];
+            $fieldPropEntry = self::$testPropertyMap[$ndx];
             
             $clazz = ReflectionHelper::getObjectProperty(get_class($mapping), 'class', $mapping);
             $from  = ReflectionHelper::getObjectProperty(get_class($mapping), 'from', $mapping);
@@ -133,4 +117,52 @@ class JsonEntityTest extends RainCityTestCase
             $this->assertEquals($fieldPropEntry->getProperty(), $to);
         }
     }
+}
+
+class EmptyMapEntityTestClass extends JsonEntity
+{
+    /**
+     * {@inheritDoc}
+     * @see \RainCity\Json\JsonEntity::getFieldPropertyMap()
+     */
+    protected static function getFieldPropertyMap(): array
+    {
+        return [];
+    }
+    
+}
+
+class ByNameEntityTestClass extends JsonEntity
+{
+    /**
+     * {@inheritDoc}
+     * @see \RainCity\Json\JsonEntity::getFieldPropertyMap()
+     */
+    protected static function getFieldPropertyMap(): array
+    {
+        return JsonEntityTest::$testPropertyMap;
+    }
+
+}
+
+class ByIndexEntityTestClass extends JsonEntity
+{
+    /**
+     * {@inheritDoc}
+     * @see \RainCity\Json\JsonEntity::getFieldPropertyMap()
+     */
+    protected static function getFieldPropertyMap(): array
+    {
+        return JsonEntityTest::$testPropertyMap;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \RainCity\Json\JsonEntity::isMapByIndex()
+     */
+    protected static function isMapByIndex(): bool
+    {
+        return true;
+    }
+
 }

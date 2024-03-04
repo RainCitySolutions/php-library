@@ -18,9 +18,12 @@ abstract class JsonEntity
      * contain entries for all of the fields in the list in the appropriate
      * order. Additionally, the byIndex property must be set to 'true'.
      *
-     * @var FieldPropertyEntry[]
+     * @return array An array of FieldPropertyEntry objects defining the mapping
+     *      between JSON field and object property
      */
-    static array $fieldPropertyMap = array();
+    protected abstract static function getFieldPropertyMap(): array;
+
+    //static array $fieldPropertyMap = array();
 
     /**
      * Indicator as to whether mapping of fields to properties should be be
@@ -30,9 +33,13 @@ abstract class JsonEntity
      * necessary to have setup te fieldMap with all of the fields in the list
      * and then map them by index.
      *
-     * @var boolean
+     * @return bool True if the fields should be mapped by index, false if they
+     *      should be mapped by name.
      */
-    static bool $mapByIndex = false;
+    protected static function isMapByIndex(): bool
+    {
+        return false;
+    }
 
     /**
      * Fetch the JSON field names defined in the fieldMap.
@@ -41,7 +48,7 @@ abstract class JsonEntity
      */
     public static function getJsonFields(): array
     {
-        return array_map(fn($entry) => $entry->getField(), self::$fieldPropertyMap);
+        return array_map(fn($entry) => $entry->getField(), static::getFieldPropertyMap());
     }
 
     /**
@@ -54,12 +61,14 @@ abstract class JsonEntity
         /** @var Rename */
         $renameObj = new Rename();
 
+        $fieldMap = static::getFieldPropertyMap();
+
         array_walk(
-            self::$fieldPropertyMap,
+            $fieldMap,
             fn($entry, $key) =>
                 $renameObj->addMapping(
                     static::class,
-                    self::$mapByIndex ? strval($key) : $entry->getField(),
+                    static::isMapByIndex() ? strval($key) : $entry->getField(),
                     $entry->getProperty()
                     )
             );
