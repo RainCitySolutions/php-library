@@ -50,24 +50,20 @@ abstract class JsonEntity
     public static function getJsonFields(): array
     {
         $fields = [];
+        $mappedProperties = [];
+
+        foreach(static::getFieldPropertyMap() as $entry) {
+            $fields[] = $entry->getField();
+            $mappedProperties[] = $entry->getProperty();
+        }
         
         $refClass = new \ReflectionClass(static::class);
-        
-        $fields = array_merge(
-            $fields,
-            array_map(
-                    fn($entry) => $entry->getName(),
-                    $refClass->getProperties(\ReflectionProperty::IS_PUBLIC)
-                )
-        );
-        
-        $fields = array_merge(
-            $fields,
-            array_map(
-                fn($entry) => $entry->getField(),
-                static::getFieldPropertyMap()
-                )
-        );
+
+        foreach ($refClass->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+            if (!in_array($property->getName(), $mappedProperties)) {
+                $fields[] = $property->getName();
+            }
+        }
         
         return $fields;
     }

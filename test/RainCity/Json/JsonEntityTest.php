@@ -61,6 +61,29 @@ class JsonEntityTest extends RainCityTestCase
         $this->assertContains(self::FIELD_NUMBER, $fields);
     }
 
+    public function testGetJsonFields_propsAndMap()
+    {
+        $testObj = new class() extends JsonEntity
+        {
+            public int $intValue;
+            public string $strValue;
+            
+            protected static function getFieldPropertyMap(): array
+            {
+                return [
+                    new FieldPropertyEntry('jsonField', 'intValue')
+                ];
+            }
+        };
+        
+        $fields = $testObj->getJsonFields();
+        
+        $this->assertNotEmpty($fields);
+        $this->assertCount(2, $fields);
+        $this->assertContains('jsonField', $fields);
+        $this->assertContains('strValue', $fields);
+    }
+
     public function testGetRenameMapping_noMap()
     {
         $obj = new EmptyMapEntityTestClass();
