@@ -631,16 +631,16 @@
         },
         {
             "name": "json-mapper/json-mapper",
-            "version": "2.21.0",
+            "version": "2.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JsonMapper/JsonMapper.git",
-                "reference": "df180e75e45f2d4224064eac948f6c9521262b49"
+                "reference": "6ad28693169ccd7b09ac9c282b562a90f428a7ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JsonMapper/JsonMapper/zipball/df180e75e45f2d4224064eac948f6c9521262b49",
-                "reference": "df180e75e45f2d4224064eac948f6c9521262b49",
+                "url": "https://api.github.com/repos/JsonMapper/JsonMapper/zipball/6ad28693169ccd7b09ac9c282b562a90f428a7ea",
+                "reference": "6ad28693169ccd7b09ac9c282b562a90f428a7ea",
                 "shasum": ""
             },
             "require": {
@@ -696,7 +696,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-12T11:57:53+00:00"
+            "time": "2024-03-05T08:44:51+00:00"
         },
         {
             "name": "monolog/monolog",
