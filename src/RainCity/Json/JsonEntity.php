@@ -56,7 +56,7 @@ abstract class JsonEntity
             $fields[] = $entry->getField();
             $mappedProperties[] = $entry->getProperty();
         }
-        
+
         $refClass = new \ReflectionClass(static::class);
 
         foreach ($refClass->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
@@ -64,7 +64,7 @@ abstract class JsonEntity
                 $fields[] = $property->getName();
             }
         }
-        
+
         return $fields;
     }
 
@@ -77,18 +77,38 @@ abstract class JsonEntity
     {
         /** @var Rename */
         $renameObj = new Rename();
+        $mappedProperties = [];
 
-        $fieldMap = static::getFieldPropertyMap();
+        foreach(static::getFieldPropertyMap() as $key => $entry) {
+            $renameObj->addMapping(
+                static::class,
+                static::isMapByIndex() ? strval($key) : $entry->getField(),
+                $entry->getProperty()
+                );
+            $mappedProperties[] = $entry->getProperty();
+        }
 
-        array_walk(
-            $fieldMap,
-            fn($entry, $key) =>
-                $renameObj->addMapping(
-                    static::class,
-                    static::isMapByIndex() ? strval($key) : $entry->getField(),
-                    $entry->getProperty()
-                    )
-            );
+        /*
+         * If class uses Map By Index, then add any public properties that
+         * would have been added by getJsonFields(). If the object doesn't
+         * use Map By Index then the properties would have been added using
+         * their actual names and we can let the PropertyMapper handle them.
+         */
+        if (static::isMapByIndex()) {
+            $refClass = new \ReflectionClass(static::class);
+            $ndx = count($mappedProperties);
+
+            foreach ($refClass->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+                if (!in_array($property->getName(), $mappedProperties)) {
+                    $renameObj->addMapping(
+                        static::class,
+                        strval($ndx),
+                        $property->getName()
+                        );
+                    $ndx++;
+                }
+            }
+        }
 
         return $renameObj;
     }
