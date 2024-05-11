@@ -7,6 +7,7 @@ use RainCity\TestHelper\ReflectionHelper;
 /**
  * @covers \RainCity\Singleton
  *
+ * @covers \RainCity\Logging\Logger::getLogger
  */
 class SingletonTest extends RainCityTestCase
 {

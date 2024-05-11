@@ -7,6 +7,7 @@ use RainCity\TestHelper\ReflectionHelper;
 /**
  * @covers \RainCity\SingletonTrait
  *
+ * @covers \RainCity\Singleton::triggerIncorrectUseWarning
  */
 class SingletonTraitTest extends RainCityTestCase
 {

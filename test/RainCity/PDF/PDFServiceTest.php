@@ -13,6 +13,8 @@ use Psr\Http\Message\RequestInterface;
  * PDFService test case.
  *
  * @covers \RainCity\PDF\PDFService
+ *
+ * @covers \RainCity\Logging\Logger::getLogger
  */
 class PDFServiceTest extends RainCityTestCase
 {

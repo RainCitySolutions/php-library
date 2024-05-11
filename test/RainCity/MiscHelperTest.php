@@ -1,6 +1,10 @@
 <?php declare(strict_types=1);
 namespace RainCity;
 
+/**
+ * @covers \RainCity\MiscHelper
+ *
+ */
 class MiscHelperTest
 {
     public function testMinifyHtml_noChange () {

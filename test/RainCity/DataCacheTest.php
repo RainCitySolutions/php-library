@@ -1,27 +1,23 @@
 <?php declare(strict_types=1);
 namespace RainCity;
 
-/**
- * DataCache test case.
- */
 use RainCity\TestHelper\RainCityTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use RainCity\TestHelper\ReflectionHelper;
 
+/**
+ * DataCache test case.
+ *
+ * @covers \RainCity\DataCache
+ * @covers \RainCity\Logging\Logger::getLogger
+ *
+ */
 class DataCacheTest extends RainCityTestCase
 {
     /** @var ArrayAdapter */
     private ArrayAdapter $cacheAdapter;
 
     private DataCache $dataCache;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->cacheAdapter = new ArrayAdapter();
-        $this->dataCache = new DataCache($this->cacheAdapter);
-    }
 
     /**
      * {@inheritDoc}
@@ -31,7 +27,8 @@ class DataCacheTest extends RainCityTestCase
     {
         parent::setUp();
 
-        $this->cacheAdapter->reset();
+        $this->cacheAdapter = new ArrayAdapter();
+        $this->dataCache = new DataCache($this->cacheAdapter);
     }
 
     public function testInstance()
