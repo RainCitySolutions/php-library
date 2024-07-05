@@ -92,7 +92,7 @@ class UrlDataObjectTest extends RainCityTestCase
     {
         $testData = [self::TEST_INTEGER, self::TEST_STRING];
 
-        \Brain\Monkey\Functions\when('base64_decode')->alias(fn () => true);
+        \Brain\Monkey\Functions\when('base64_decode')->alias(fn () => false);
 
         $urlStr = UrlDataObject::toString($testData);
 
@@ -110,7 +110,7 @@ class UrlDataObjectTest extends RainCityTestCase
     {
         $testData = [self::TEST_INTEGER, self::TEST_STRING];
 
-        \Brain\Monkey\Functions\when('gzinflate')->alias(fn () => true);
+        \Brain\Monkey\Functions\when('gzinflate')->alias(fn () => false);
 
         $urlStr = UrlDataObject::toString($testData);
 
