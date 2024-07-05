@@ -1,0 +1,7 @@
+{
+	"redefinable-internals": [
+		"base64_decode",
+		"gzdeflate",
+		"gzinflate"
+		]
+}
