@@ -27,8 +27,9 @@ class ReflectionHelper
      * @param object|NULL $obj The object to retrieve the value from. If
      *      passed as null assumes the property is a class property.
      *
-     * @return mixed The value of the property. Note: If the value passed for
-     *      $clazz is not actually a class then null is returned.
+     * @return mixed The value of the property. Null is returned if value
+     *      passed for $clazz is not actually a class or the property doesn't
+     *      exist.
      */
     public static function getObjectProperty(string $clazz, string $prop, ?object $obj)
     {

@@ -5,122 +5,377 @@ namespace RainCity;
  * UrlDataObject test case.
  */
 use RainCity\TestHelper\RainCityTestCase;
+use RainCity\TestHelper\ReflectionHelper;
 
-class UrlDataObjectTest extends RainCityTestCase
+class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 {
+    private const TEST_KEY_A = 'testKeyA';
+    private const TEST_KEY_B = 'testKeyB';
+    private const TEST_KEY_C = 'testKeyC';
+
     private const TEST_STRING = 'test data';
     private const TEST_INTEGER = 3254;
 
-    public function testToString_emptyArray()
+    private const NON_BASE64_STR = 'ABC!@#DEF8978';
+
+    private function buildEncodedString(): string
     {
-        $result = UrlDataObject::toString([]);
+        $setupObj = new UrlDataObject();
+        $setupProp = new \stdClass();
+
+        $setupProp->{self::TEST_KEY_A} = self::TEST_STRING;
+        $setupProp->{self::TEST_KEY_B} = self::TEST_INTEGER;
+
+        ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $setupProp, $setupObj);
+
+        return $setupObj->encode();
+    }
+
+    public function testSet_singleProp()
+    {
+        $testObj = new UrlDataObject();
+
+        $testObj->set(self::TEST_KEY_A, self::TEST_STRING);
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+
+        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
+    }
+
+    public function testSet_multiProp()
+    {
+        $testObj = new UrlDataObject();
+
+        $testObj->set(self::TEST_KEY_A, self::TEST_INTEGER);
+        $testObj->set(self::TEST_KEY_B, self::TEST_STRING);
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        $this->assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
+
+        $this->assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_A});
+        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_B});
+    }
+
+    public function testGet_singleProp()
+    {
+        $testObj = new UrlDataObject();
+        $testProp = new \stdClass();
+
+        $testProp->{self::TEST_KEY_A} = self::TEST_STRING;
+
+        ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $testProp, $testObj);
+
+        $testValue = $testObj->get(self::TEST_KEY_A);
+
+        $this->assertNotNull($testValue);
+        $this->assertIsString($testValue);
+        $this->assertEquals(self::TEST_STRING, $testValue);
+    }
+
+    public function testGet_multiProp()
+    {
+        $testObj = new UrlDataObject();
+        $testProp = new \stdClass();
+
+        $testProp->{self::TEST_KEY_A} = self::TEST_STRING;
+        $testProp->{self::TEST_KEY_B} = self::TEST_INTEGER;
+
+        ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $testProp, $testObj);
+
+        $testValue = $testObj->get(self::TEST_KEY_B);
+
+        $this->assertNotNull($testValue);
+        $this->assertIsString($testValue);
+        $this->assertEquals(self::TEST_INTEGER, $testValue);
+
+        $testValue = $testObj->get(self::TEST_KEY_A);
+
+        $this->assertNotNull($testValue);
+        $this->assertIsString($testValue);
+        $this->assertEquals(self::TEST_STRING, $testValue);
+    }
+
+    public function testGet_missingKey()
+    {
+        $testObj = new UrlDataObject();
+        $testProp = new \stdClass();
+
+        $testProp->{self::TEST_KEY_A} = self::TEST_STRING;
+
+        ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $testProp, $testObj);
+
+        $testValue = $testObj->get(self::TEST_KEY_C);
+
+        $this->assertNull($testValue);
+    }
+
+    /**
+     * @depends testSet_multiProp
+     * @depends testGet_multiProp
+     */
+    public function testSetGet_multiProp()
+    {
+        $testObj = new UrlDataObject();
+
+        $testObj->set(self::TEST_KEY_A, self::TEST_STRING);
+        $testObj->set(self::TEST_KEY_B, self::TEST_INTEGER);
+
+        $this->assertEquals(self::TEST_INTEGER, $testObj->get(self::TEST_KEY_B));
+        $this->assertEquals(self::TEST_STRING, $testObj->get(self::TEST_KEY_A));
+    }
+
+    public function testEncode_emptyData()
+    {
+        $testObj = new UrlDataObject();
+        $testStr = $testObj->encode();
+
+        $this->assertNull($testStr);
+    }
+
+    public function testEncode_singleProp()
+    {
+        $testObj = new UrlDataObject();
+        $testProp = new \stdClass();
+
+        $testProp->{self::TEST_KEY_A} = self::TEST_STRING;
+
+        ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $testProp, $testObj);
+
+        $testStr = $testObj->encode();
+
+        $this->assertNotNull($testStr);
+        $this->assertStringNotContainsString(self::TEST_KEY_A, $testStr);
+        $this->assertStringNotContainsString(self::TEST_STRING, $testStr);
+    }
+
+    public function testEncode_multiProp()
+    {
+        $testObj = new UrlDataObject();
+        $testProp = new \stdClass();
+
+        $testProp->{self::TEST_KEY_A} = self::TEST_STRING;
+        $testProp->{self::TEST_KEY_B} = self::TEST_INTEGER;
+
+        ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $testProp, $testObj);
+
+        $testStr = $testObj->encode();
+
+        $this->assertNotNull($testStr);
+        $this->assertStringNotContainsString(self::TEST_KEY_A, $testStr);
+        $this->assertStringNotContainsString(self::TEST_KEY_B, $testStr);
+        $this->assertStringNotContainsString(self::TEST_INTEGER, $testStr);
+        $this->assertStringNotContainsString(self::TEST_STRING, $testStr);
+    }
+
+    public function testEncode_jsonEncodeError()
+    {
+        $testObj = new UrlDataObject();
+        $testProp = new \stdClass();
+
+        $testProp->{self::TEST_KEY_A} = self::TEST_STRING;
+
+        ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $testProp, $testObj);
+
+        \Brain\Monkey\Functions\when('json_encode')->alias(fn () => false);
+
+        $result = $testObj->encode();
 
         $this->assertNull($result);
     }
 
-    public function testToString_singleValue()
+    public function testEncode_deflateError()
     {
-        $testData = [self::TEST_STRING];
+        $testObj = new UrlDataObject();
+        $testProp = new \stdClass();
 
-        $result = UrlDataObject::toString($testData);
+        $testProp->{self::TEST_KEY_A} = self::TEST_STRING;
 
-        $this->assertNotNull($result);
-        $this->assertIsString($result);
-    }
-
-    public function testToString_mixedValues()
-    {
-        $testData = [self::TEST_STRING, self::TEST_INTEGER];
-
-        $result = UrlDataObject::toString($testData);
-
-        $this->assertNotNull($result);
-        $this->assertIsString($result);
-    }
-
-    public function testToString_deflateError()
-    {
-        $testData = [self::TEST_STRING];
+        ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $testProp, $testObj);
 
         \Brain\Monkey\Functions\when('gzdeflate')->alias(fn () => false);
 
-        $result = UrlDataObject::toString($testData);
+        $result = $testObj->encode();
 
         $this->assertNull($result);
     }
 
-
-    public function testFromString_emptyString()
+    public function testDecode_emptyString()
     {
-        $result = UrlDataObject::fromString('');
+        $testObj = new UrlDataObject();
 
-        $this->assertNotNull($result);
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
+        $result = $testObj->decode('');
+
+        $this->assertFalse($result);
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertEmpty((array)$dataProp);
     }
 
-    public function testFromString_noneBase64String()
+    public function testDecode_noneBase64String()
     {
-        $result = UrlDataObject::fromString('ABC!@#DEF8978');
+        $testObj = new UrlDataObject();
 
-        $this->assertNotNull($result);
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
+        $result = $testObj->decode(self::NON_BASE64_STR);
+
+        $this->assertFalse($result);
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertEmpty((array)$dataProp);
     }
 
-    public function testFromString_success()
+    /**
+     * @depends testEncode_multiProp
+     */
+    public function testDecode_jsonDecodeFailure()
     {
-        $testData = [self::TEST_INTEGER, self::TEST_STRING];
+        $encStr = $this->buildEncodedString();
 
-        $urlStr = UrlDataObject::toString($testData);
+        \Brain\Monkey\Functions\when('json_decode')->alias(fn () => false);
 
-        $this->assertNotNull($urlStr);
-        $this->assertNotEmpty($urlStr);
+        $testObj = new UrlDataObject();
+        $result = $testObj->decode($encStr);
 
-        $result = UrlDataObject::fromString($urlStr);
+        $this->assertFalse($result);
 
-        $this->assertNotNull($result);
-        $this->assertIsArray($result);
-        $this->assertNotEmpty($result);
-        $this->assertCount(count($testData), $result);
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertEquals(array_shift($testData), intval(array_shift($result)));
-        $this->assertEquals(array_shift($testData), array_shift($result));
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertEmpty((array)$dataProp);
     }
 
-    public function testFromString_base64DecodeFailure()
+    /**
+     * @depends testEncode_multiProp
+     */
+    public function testDecode_base64DecodeFailure()
     {
-        $testData = [self::TEST_INTEGER, self::TEST_STRING];
+        $encStr = $this->buildEncodedString();
 
         \Brain\Monkey\Functions\when('base64_decode')->alias(fn () => false);
 
-        $urlStr = UrlDataObject::toString($testData);
+        $testObj = new UrlDataObject();
+        $result = $testObj->decode($encStr);
 
-        $this->assertNotNull($urlStr);
-        $this->assertNotEmpty($urlStr);
+        $this->assertFalse($result);
 
-        $result = UrlDataObject::fromString($urlStr);
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($result);
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertEmpty((array)$dataProp);
     }
 
-    public function testFromString_gzinflateFailure()
+    /**
+     * @depends testEncode_multiProp
+     */
+    public function testDecode_gzinflateFailure()
     {
-        $testData = [self::TEST_INTEGER, self::TEST_STRING];
+        $encStr = $this->buildEncodedString();
 
         \Brain\Monkey\Functions\when('gzinflate')->alias(fn () => false);
 
-        $urlStr = UrlDataObject::toString($testData);
+        $testObj = new UrlDataObject();
+        $result = $testObj->decode($encStr);
 
-        $this->assertNotNull($urlStr);
-        $this->assertNotEmpty($urlStr);
+        $this->assertFalse($result);
 
-        $result = UrlDataObject::fromString($urlStr);
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($result);
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertEmpty((array)$dataProp);
+    }
+
+    /**
+     * @depends testEncode_multiProp
+     */
+    public function testDecode_success()
+    {
+        $testStr = $this->buildEncodedString();
+
+        $testObj = new UrlDataObject();
+        $result = $testObj->decode($testStr);
+
+        $this->assertTrue($result);
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        $this->assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
+
+        $this->assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_B});
+        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
+    }
+
+    public function testCtor_emptyString()
+    {
+        $testObj = new UrlDataObject('');
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertEmpty((array)$dataProp);
+    }
+
+    public function testCtor_noneBase64String()
+    {
+        $testObj = new UrlDataObject(self::NON_BASE64_STR);
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertEmpty((array)$dataProp);
+    }
+
+    public function testCtor_success()
+    {
+        $encStr = $this->buildEncodedString();
+
+        $testObj = new UrlDataObject($encStr);
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        $this->assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
+
+        $this->assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_B});
+        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
+    }
+
+    public function testSet_chainedCalls()
+    {
+        $testObj = (new UrlDataObject())
+            ->set(self::TEST_KEY_A, self::TEST_INTEGER)
+            ->set(self::TEST_KEY_B, self::TEST_STRING);
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        $this->assertNotNull($dataProp);
+        $this->assertIsObject($dataProp);
+        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        $this->assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
+
+        $this->assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_A});
+        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_B});
     }
 }
