@@ -2,14 +2,13 @@
 namespace RainCity\Csv;
 
 use RainCity\TestHelper\RainCityTestCase;
+use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 
-/**
- * @covers \RainCity\Csv\CsvBindByNameTrait
- *
- * @covers \RainCity\Csv\CsvBindByName::__construct
- * @covers \RainCity\Csv\CsvBindByName::getColumns
- */
+#[CoversTrait(\RainCity\Csv\CsvBindByNameTrait::class)]
+#[CoversMethod(\RainCity\Csv\CsvBindByName::class, '__construct')]
+#[CoversMethod(\RainCity\Csv\CsvBindByName::class, 'getColumns')]
 class CsvBindByNameTraitTest extends RainCityTestCase
 {
     private const COLUMN_IDENTITY = 'Identity';

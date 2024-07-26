@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace RainCity\TestHelper;
 
+use PHPUnit\Framework\MockObject\MockBuilder;
 use Psr\Log\LoggerInterface;
 use RainCity\Logging\LoggerIntf;
 
@@ -12,6 +13,6 @@ class StubLogger implements LoggerIntf {
             }
         };
 
-        return $obj->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
+        return (new MockBuilder($obj, \Psr\Log\LoggerInterface::class))->getMock();
     }
 }

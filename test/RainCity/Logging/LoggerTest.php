@@ -5,16 +5,16 @@ namespace RainCity\Logging;
 use PHPUnit\Framework\TestCase;
 use RainCity\TestHelper\StubLogger;
 use RainCity\TestHelper\ReflectionHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
 /**
- * @covers \RainCity\Logging\Logger
- *
- * @covers \RainCity\Logging\BaseLogger::getLogger
- * @covers \RainCity\Logging\BaseLogger::getLoggerObject
- *
  * Note: We don't extend RainCityTestCase because we need to control the
  * logger for this test.
  */
+#[CoversClass(\RainCity\Logging\Logger::class)]
+#[CoversMethod(\RainCity\Logging\BaseLogger::class, 'getLogger')]
+#[CoversMethod(\RainCity\Logging\BaseLogger::class, 'getLoggerObject')]
 class LoggerTest extends TestCase
 {
     private static $orgLoggerClass;

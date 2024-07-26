@@ -3,12 +3,11 @@ namespace RainCity;
 
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
+use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * @covers \RainCity\SingletonTrait
- *
- * @covers \RainCity\Singleton::triggerIncorrectUseWarning
- */
+#[CoversTrait(\RainCity\SingletonTrait::class)]
+#[CoversMethod(\RainCity\Singleton::class, 'triggerIncorrectUseWarning')]
 class SingletonTraitTest extends RainCityTestCase
 {
     /**

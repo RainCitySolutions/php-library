@@ -8,14 +8,11 @@ use GuzzleHttp\Psr7\Response;
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
 use Psr\Http\Message\RequestInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * PDFService test case.
- *
- * @covers \RainCity\PDF\PDFService
- *
- * @covers \RainCity\Logging\Logger::getLogger
- */
+#[CoversClass(\RainCity\PDF\PDFService::class)]
+#[CoversMethod(\RainCity\Logging\Logger::class, 'getLogger')]
 class PDFServiceTest extends RainCityTestCase
 {
     private const GOOD_TEST_URL = 'https://good.url.co';

@@ -3,12 +3,9 @@ namespace RainCity;
 
 use PHPUnit\Framework\TestCase;
 use RainCity\TestHelper\ReflectionHelper;
+use PHPUnit\Framework\Attributes\CoversTrait;
 
-/**
- *
- * @covers \RainCity\SerializeAsArrayTrait
- *
- */
+#[CoversTrait(\RainCity\SerializeAsArrayTrait::class)]
 class SerializeAsArrayTraitTest extends TestCase
 {
     const TEST_STR_KEY = 'strValue';

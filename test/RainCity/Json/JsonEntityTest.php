@@ -3,14 +3,13 @@ namespace RainCity\Json;
 
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * @covers \RainCity\Json\JsonEntity
- *
- * @covers \RainCity\Json\FieldPropertyEntry::__construct
- * @covers \RainCity\Json\FieldPropertyEntry::getField
- * @covers \RainCity\Json\FieldPropertyEntry::getProperty
- */
+#[CoversClass(\RainCity\Json\JsonEntity::class)]
+#[CoversMethod(\RainCity\Json\FieldPropertyEntry::class, '__construct')]
+#[CoversMethod(\RainCity\Json\FieldPropertyEntry::class, 'getField')]
+#[CoversMethod(\RainCity\Json\FieldPropertyEntry::class, 'getProperty')]
 class JsonEntityTest extends RainCityTestCase
 {
     private const FIELD_ID     = 'idField';

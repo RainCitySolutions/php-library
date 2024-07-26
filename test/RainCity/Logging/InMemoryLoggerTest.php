@@ -4,11 +4,9 @@ namespace RainCity\Logging;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @covers \RainCity\Logging\InMemoryLogger
- *
- */
+#[CoversClass(\RainCity\Logging\InMemoryLogger::class)]
 class InMemoryLoggerTest extends TestCase
 {
     public function testGetLogger()

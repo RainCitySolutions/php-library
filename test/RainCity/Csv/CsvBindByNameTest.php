@@ -1,13 +1,12 @@
 <?php
 namespace RainCity\Csv;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
 
-/**
- * @covers \RainCity\Csv\CsvBindByName
- *
- */
+#[CoversClass(\RainCity\Csv\CsvBindByName::class)]
 class CsvBindByNameTest extends RainCityTestCase
 {
     private const TEST_COLUMN1 = 'Test Column 1';

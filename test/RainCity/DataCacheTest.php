@@ -4,14 +4,11 @@ namespace RainCity;
 use RainCity\TestHelper\RainCityTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use RainCity\TestHelper\ReflectionHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * DataCache test case.
- *
- * @covers \RainCity\DataCache
- * @covers \RainCity\Logging\Logger::getLogger
- *
- */
+#[CoversClass(\RainCity\DataCache::class)]
+#[CoversMethod(\RainCity\Logging\Logger::class, 'getLogger')]
 class DataCacheTest extends RainCityTestCase
 {
     /** @var ArrayAdapter */

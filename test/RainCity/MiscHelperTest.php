@@ -2,11 +2,9 @@
 namespace RainCity;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @covers \RainCity\MiscHelper
- *
- */
+#[CoversClass(\RainCity\MiscHelper::class)]
 class MiscHelperTest extends TestCase
 {
     public function testMinifyHtml_noChange () {

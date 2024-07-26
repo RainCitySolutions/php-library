@@ -9,20 +9,19 @@ use RainCity\DataCache;
 use RainCity\Json\Test\JsonClientTraitTestClass;
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
+use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * @covers \RainCity\Json\JsonClientTrait
- *
- * @covers \RainCity\DataCache::__construct
- * @covers \RainCity\DataCache::createMemcachedCache
- * @covers \RainCity\DataCache::createSqliteCache
- * @covers \RainCity\DataCache::getFilesCacheDir
- * @covers \RainCity\DataCache::initBackingCache
- * @covers \RainCity\Logging\Logger::getLogger
- * @covers \RainCity\Json\FieldPropertyEntry::__construct
- * @covers \RainCity\Json\FieldPropertyEntry::getProperty
- * @covers \RainCity\Json\JsonEntity::getRenameMapping
- */
+#[CoversTrait(\RainCity\Json\JsonClientTrait::class)]
+#[CoversMethod(\RainCity\DataCache::class, '__construct')]
+#[CoversMethod(\RainCity\DataCache::class, 'createMemcachedCache')]
+#[CoversMethod(\RainCity\DataCache::class, 'createSqliteCache')]
+#[CoversMethod(\RainCity\DataCache::class, 'getFilesCacheDir')]
+#[CoversMethod(\RainCity\DataCache::class, 'initBackingCache')]
+#[CoversMethod(\RainCity\Logging\Logger::class, 'getLogger')]
+#[CoversMethod(\RainCity\Json\FieldPropertyEntry::class, '__construct')]
+#[CoversMethod(\RainCity\Json\FieldPropertyEntry::class, 'getProperty')]
+#[CoversMethod(\RainCity\Json\JsonEntity::class, 'getRenameMapping')]
 class JsonClientTraitTest extends RainCityTestCase
 {
     public const TEST_CACHE_TTL = 520;

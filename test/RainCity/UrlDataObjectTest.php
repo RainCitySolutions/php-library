@@ -3,12 +3,10 @@ namespace RainCity;
 
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Depends;
 
-/**
- * UrlDataObject test case.
- *
- * @covers \RainCity\UrlDataObject
- */
+#[CoversClass(\RainCity\UrlDataObject::class)]
 class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 {
     private const TEST_KEY_A = 'testKeyA';
@@ -119,10 +117,8 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         self::assertNull($testValue);
     }
 
-    /**
-     * @depends testSet_multiProp
-     * @depends testGet_multiProp
-     */
+    #[Depends('testSet_multiProp')]
+    #[Depends('testGet_multiProp')]
     public function testSetGet_multiProp()
     {
         $testObj = new UrlDataObject();
@@ -239,9 +235,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         self::assertEmpty((array)$dataProp);
     }
 
-    /**
-     * @depends testEncode_multiProp
-     */
+    #[Depends('testEncode_multiProp')]
     public function testDecode_jsonDecodeFailure()
     {
         $encStr = $this->buildEncodedString();
@@ -260,9 +254,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         self::assertEmpty((array)$dataProp);
     }
 
-    /**
-     * @depends testEncode_multiProp
-     */
+    #[Depends('testEncode_multiProp')]
     public function testDecode_base64DecodeFailure()
     {
         $encStr = $this->buildEncodedString();
@@ -281,9 +273,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         self::assertEmpty((array)$dataProp);
     }
 
-    /**
-     * @depends testEncode_multiProp
-     */
+    #[Depends('testEncode_multiProp')]
     public function testDecode_gzinflateFailure()
     {
         $encStr = $this->buildEncodedString();
@@ -302,9 +292,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         self::assertEmpty((array)$dataProp);
     }
 
-    /**
-     * @depends testEncode_multiProp
-     */
+    #[Depends('testEncode_multiProp')]
     public function testDecode_success()
     {
         $testStr = $this->buildEncodedString();

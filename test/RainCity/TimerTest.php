@@ -3,11 +3,9 @@ namespace RainCity;
 
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @covers \RainCity\Timer
- *
- */
+#[CoversClass(\RainCity\Timer::class)]
 class TimerTest extends RainCityTestCase
 {
     private const SLEEP_TIME_MICROSECONDS = 550000;

@@ -3,12 +3,11 @@ namespace RainCity;
 
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversMethod;
 
-/**
- * @covers \RainCity\Singleton
- *
- * @covers \RainCity\Logging\Logger::getLogger
- */
+#[CoversClass(\RainCity\Singleton::class)]
+#[CoversMethod(\RainCity\Logging\Logger::class, 'getLogger')]
 class SingletonTest extends RainCityTestCase
 {
     /**

@@ -3,11 +3,9 @@ namespace RainCity\Json;
 
 use RainCity\TestHelper\ReflectionHelper;
 use RainCity\TestHelper\RainCityTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @covers \RainCity\Json\FieldPropertyEntry
- *
- */
+#[CoversClass(\RainCity\Json\FieldPropertyEntry::class)]
 class FieldPropertyEntryTest extends RainCityTestCase
 {
     private const TEST_FIELD = 'testField';
