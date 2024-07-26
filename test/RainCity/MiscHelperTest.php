@@ -1,11 +1,13 @@
 <?php declare(strict_types=1);
 namespace RainCity;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \RainCity\MiscHelper
  *
  */
-class MiscHelperTest
+class MiscHelperTest extends TestCase
 {
     public function testMinifyHtml_noChange () {
         $input = '<button id="99">Button Text</button>';
@@ -45,11 +47,10 @@ class MiscHelperTest
 
         $expected =
             '<button id="redcapConsent-99" class="btn btn-secondary btn-sm" ' .
-            'type="button" data-redcap-url="http://test" data-redcap-code="1234567890ABCDEF" >' .
-            'Review/Revoke Consent</button>';
+            'type="button" data-redcap-url="http://test" data-redcap-code="1234567890ABCDEF" > ' .
+            'Review/Revoke Consent </button>';
 
         self::assertEquals($expected, MiscHelper::minifyHtml($input));
     }
 
 }
-

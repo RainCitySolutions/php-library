@@ -10,7 +10,7 @@ use RainCity\TestHelper\ReflectionHelper;
  */
 class TimerTest extends RainCityTestCase
 {
-    private const SLEEP_TIME_MICROSECONDS = 500000;
+    private const SLEEP_TIME_MICROSECONDS = 550000;
     private const SLEEP_TIME_SECONDS = self::SLEEP_TIME_MICROSECONDS / 1000000;
     private const START_PROPERTY = 'start';
     private const STOP_PROPERTY = 'stop';

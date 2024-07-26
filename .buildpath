@@ -36,11 +36,6 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/doctrine/instantiator/src/Doctrine/Instantiator">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/doctrine/lexer/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
@@ -252,11 +247,6 @@
 		</attributes>
 	</buildpathentry>
 	<buildpathentry kind="src" path="vendor/sebastian/recursion-context/src">
-		<attributes>
-			<attribute name="composer" value="vendor"/>
-		</attributes>
-	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/sebastian/resource-operations/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>

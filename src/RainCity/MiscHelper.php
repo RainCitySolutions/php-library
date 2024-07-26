@@ -47,8 +47,8 @@ class MiscHelper
             '>',
             '<',
             '\\1',
-            ' ',
-            ''
+            ' '
+//            ''
         );
 
         $outStr = preg_replace($search, $replace, $inStr);
