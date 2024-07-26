@@ -10,21 +10,21 @@ class MiscHelperTest
     public function testMinifyHtml_noChange () {
         $input = '<button id="99">Button Text</button>';
 
-        $this->assertEquals($input, MiscHelper::minifyHtml($input));
+        self::assertEquals($input, MiscHelper::minifyHtml($input));
     }
 
     public function testMinifyHtml_whitespaceAfterTag () {
         $input = "<div> \t  <span>  Text</span>    </div>   ";
         $expected = '<div> <span> Text</span> </div>';
 
-        $this->assertEquals($expected, MiscHelper::minifyHtml($input));
+        self::assertEquals($expected, MiscHelper::minifyHtml($input));
     }
 
     public function testMinifyHtml_whitespaceBeforeTag () {
         $input = "\t   <div>  \t\t  <span>Text    </span>   </div>";
         $expected = '<div> <span>Text </span> </div>';
 
-        $this->assertEquals($expected, MiscHelper::minifyHtml($input));
+        self::assertEquals($expected, MiscHelper::minifyHtml($input));
     }
 
     public function testMinifyHtml_singleTagMultipleLines () {
@@ -48,7 +48,7 @@ class MiscHelperTest
             'type="button" data-redcap-url="http://test" data-redcap-code="1234567890ABCDEF" >' .
             'Review/Revoke Consent</button>';
 
-        $this->assertEquals($expected, MiscHelper::minifyHtml($input));
+        self::assertEquals($expected, MiscHelper::minifyHtml($input));
     }
 
 }

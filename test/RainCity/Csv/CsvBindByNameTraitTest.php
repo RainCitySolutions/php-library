@@ -59,48 +59,48 @@ class CsvBindByNameTraitTest extends RainCityTestCase
     {
         $map = CsvBindByNameTraitTestClass::getColumnPropertyMap();
 
-        $this->assertNotNull($map);
-        $this->assertIsArray($map);
-        $this->assertNotEmpty($map);
+        self::assertNotNull($map);
+        self::assertIsArray($map);
+        self::assertNotEmpty($map);
 
-        $this->assertArrayHasKey(self::COLUMN_IDENTITY, $map);
-        $this->assertArrayHasKey(self::COLUMN_FULLNAME, $map);
-        $this->assertArrayHasKey(self::COLUMN_DATEOFBIRTH, $map);
+        self::assertArrayHasKey(self::COLUMN_IDENTITY, $map);
+        self::assertArrayHasKey(self::COLUMN_FULLNAME, $map);
+        self::assertArrayHasKey(self::COLUMN_DATEOFBIRTH, $map);
 
-        $this->assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_IDENTITY]);
-        $this->assertEquals(self::PROPERTY_FULLNAME, $map[self::COLUMN_FULLNAME]);
-        $this->assertEquals(self::PROPERTY_DATEOFBIRTH, $map[self::COLUMN_DATEOFBIRTH]);
+        self::assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_IDENTITY]);
+        self::assertEquals(self::PROPERTY_FULLNAME, $map[self::COLUMN_FULLNAME]);
+        self::assertEquals(self::PROPERTY_DATEOFBIRTH, $map[self::COLUMN_DATEOFBIRTH]);
     }
 
     public function testGetColumnNames()
     {
         $names = CsvBindByNameTraitTestClass::getColumnNames();
 
-        $this->assertNotNull($names);
-        $this->assertIsArray($names);
-        $this->assertNotEmpty($names);
-        $this->assertCount(3, $names);
+        self::assertNotNull($names);
+        self::assertIsArray($names);
+        self::assertNotEmpty($names);
+        self::assertCount(3, $names);
 
-        $this->assertContains(self::COLUMN_IDENTITY, $names);
-        $this->assertContains(self::COLUMN_FULLNAME, $names);
-        $this->assertContains(self::COLUMN_DATEOFBIRTH, $names);
+        self::assertContains(self::COLUMN_IDENTITY, $names);
+        self::assertContains(self::COLUMN_FULLNAME, $names);
+        self::assertContains(self::COLUMN_DATEOFBIRTH, $names);
     }
 
     public function testGetFieldValues()
     {
         $map = CsvBindByNameTraitTestClass::getColumnValues($this->testObj);
 
-        $this->assertNotNull($map);
-        $this->assertIsArray($map);
-        $this->assertNotEmpty($map);
+        self::assertNotNull($map);
+        self::assertIsArray($map);
+        self::assertNotEmpty($map);
 
-        $this->assertArrayHasKey(self::COLUMN_IDENTITY, $map);
-        $this->assertArrayHasKey(self::COLUMN_FULLNAME, $map);
-        $this->assertArrayHasKey(self::COLUMN_DATEOFBIRTH, $map);
+        self::assertArrayHasKey(self::COLUMN_IDENTITY, $map);
+        self::assertArrayHasKey(self::COLUMN_FULLNAME, $map);
+        self::assertArrayHasKey(self::COLUMN_DATEOFBIRTH, $map);
 
-        $this->assertEquals($this->testObj->id, $map[self::COLUMN_IDENTITY]);
-        $this->assertEquals($this->testObj->fullname, $map[self::COLUMN_FULLNAME]);
-        $this->assertEquals($this->testObj->dateOfBirth, $map[self::COLUMN_DATEOFBIRTH]);
+        self::assertEquals($this->testObj->id, $map[self::COLUMN_IDENTITY]);
+        self::assertEquals($this->testObj->fullname, $map[self::COLUMN_FULLNAME]);
+        self::assertEquals($this->testObj->dateOfBirth, $map[self::COLUMN_DATEOFBIRTH]);
     }
 
 
@@ -108,96 +108,96 @@ class CsvBindByNameTraitTest extends RainCityTestCase
     {
         $map = CsvBindByNameSubClass::getColumnPropertyMap();
 
-        $this->assertNotNull($map);
-        $this->assertIsArray($map);
-        $this->assertNotEmpty($map);
+        self::assertNotNull($map);
+        self::assertIsArray($map);
+        self::assertNotEmpty($map);
 
-        $this->assertArrayHasKey(self::COLUMN_IDENTITY, $map);
-        $this->assertArrayHasKey(self::COLUMN_FULLNAME, $map);
-        $this->assertArrayHasKey(self::COLUMN_DATEOFBIRTH, $map);
-        $this->assertArrayHasKey(self::COLUMN_SUBCLASSPROP, $map);
+        self::assertArrayHasKey(self::COLUMN_IDENTITY, $map);
+        self::assertArrayHasKey(self::COLUMN_FULLNAME, $map);
+        self::assertArrayHasKey(self::COLUMN_DATEOFBIRTH, $map);
+        self::assertArrayHasKey(self::COLUMN_SUBCLASSPROP, $map);
 
-        $this->assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_IDENTITY]);
-        $this->assertEquals(self::PROPERTY_FULLNAME, $map[self::COLUMN_FULLNAME]);
-        $this->assertEquals(self::PROPERTY_DATEOFBIRTH, $map[self::COLUMN_DATEOFBIRTH]);
-        $this->assertEquals(self::PROPERTY_SUBCLASSPROP, $map[self::COLUMN_SUBCLASSPROP]);
+        self::assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_IDENTITY]);
+        self::assertEquals(self::PROPERTY_FULLNAME, $map[self::COLUMN_FULLNAME]);
+        self::assertEquals(self::PROPERTY_DATEOFBIRTH, $map[self::COLUMN_DATEOFBIRTH]);
+        self::assertEquals(self::PROPERTY_SUBCLASSPROP, $map[self::COLUMN_SUBCLASSPROP]);
     }
 
     public function testGetColumnNames_subClass()
     {
         $names = CsvBindByNameSubClass::getColumnNames();
 
-        $this->assertNotNull($names);
-        $this->assertIsArray($names);
-        $this->assertNotEmpty($names);
-        $this->assertCount(4, $names);
+        self::assertNotNull($names);
+        self::assertIsArray($names);
+        self::assertNotEmpty($names);
+        self::assertCount(4, $names);
 
-        $this->assertContains(self::COLUMN_IDENTITY, $names);
-        $this->assertContains(self::COLUMN_FULLNAME, $names);
-        $this->assertContains(self::COLUMN_DATEOFBIRTH, $names);
-        $this->assertContains(self::COLUMN_SUBCLASSPROP, $names);
+        self::assertContains(self::COLUMN_IDENTITY, $names);
+        self::assertContains(self::COLUMN_FULLNAME, $names);
+        self::assertContains(self::COLUMN_DATEOFBIRTH, $names);
+        self::assertContains(self::COLUMN_SUBCLASSPROP, $names);
     }
 
     public function testGetFieldValues_subClass()
     {
         $map = CsvBindByNameSubClass::getColumnValues($this->testSubclassObj);
 
-        $this->assertNotNull($map);
-        $this->assertIsArray($map);
-        $this->assertNotEmpty($map);
+        self::assertNotNull($map);
+        self::assertIsArray($map);
+        self::assertNotEmpty($map);
 
-        $this->assertArrayHasKey(self::COLUMN_IDENTITY, $map);
-        $this->assertArrayHasKey(self::COLUMN_FULLNAME, $map);
-        $this->assertArrayHasKey(self::COLUMN_DATEOFBIRTH, $map);
-        $this->assertArrayHasKey(self::COLUMN_SUBCLASSPROP, $map);
+        self::assertArrayHasKey(self::COLUMN_IDENTITY, $map);
+        self::assertArrayHasKey(self::COLUMN_FULLNAME, $map);
+        self::assertArrayHasKey(self::COLUMN_DATEOFBIRTH, $map);
+        self::assertArrayHasKey(self::COLUMN_SUBCLASSPROP, $map);
 
-        $this->assertEquals($this->testSubclassObj->id, $map[self::COLUMN_IDENTITY]);
-        $this->assertEquals($this->testSubclassObj->fullname, $map[self::COLUMN_FULLNAME]);
-        $this->assertEquals($this->testSubclassObj->dateOfBirth, $map[self::COLUMN_DATEOFBIRTH]);
-        $this->assertEquals($this->testSubclassObj->subClassProp, $map[self::COLUMN_SUBCLASSPROP]);
+        self::assertEquals($this->testSubclassObj->id, $map[self::COLUMN_IDENTITY]);
+        self::assertEquals($this->testSubclassObj->fullname, $map[self::COLUMN_FULLNAME]);
+        self::assertEquals($this->testSubclassObj->dateOfBirth, $map[self::COLUMN_DATEOFBIRTH]);
+        self::assertEquals($this->testSubclassObj->subClassProp, $map[self::COLUMN_SUBCLASSPROP]);
     }
 
     public function testGetColumnPropertyMap_withAlternate()
     {
         $map = CsvBindByNameAltsTestClass::getColumnPropertyMap();
 
-        $this->assertNotNull($map);
-        $this->assertIsArray($map);
-        $this->assertNotEmpty($map);
+        self::assertNotNull($map);
+        self::assertIsArray($map);
+        self::assertNotEmpty($map);
 
-        $this->assertArrayHasKey(self::COLUMN_NAMES_IDENTITY, $map);
-        $this->assertArrayHasKey(self::COLUMN_NAMES_MEMBERSHIP, $map);
+        self::assertArrayHasKey(self::COLUMN_NAMES_IDENTITY, $map);
+        self::assertArrayHasKey(self::COLUMN_NAMES_MEMBERSHIP, $map);
 
-        $this->assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_NAMES_IDENTITY]);
-        $this->assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_NAMES_MEMBERSHIP]);
+        self::assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_NAMES_IDENTITY]);
+        self::assertEquals(self::PROPERTY_IDENTITY, $map[self::COLUMN_NAMES_MEMBERSHIP]);
     }
 
     public function testGetColumnNames_withAlternate()
     {
         $names = CsvBindByNameAltsTestClass::getColumnNames();
 
-        $this->assertNotNull($names);
-        $this->assertIsArray($names);
-        $this->assertNotEmpty($names);
-        $this->assertCount(2, $names);
+        self::assertNotNull($names);
+        self::assertIsArray($names);
+        self::assertNotEmpty($names);
+        self::assertCount(2, $names);
 
-        $this->assertContains(self::COLUMN_NAMES_IDENTITY, $names);
-        $this->assertContains(self::COLUMN_NAMES_MEMBERSHIP, $names);
+        self::assertContains(self::COLUMN_NAMES_IDENTITY, $names);
+        self::assertContains(self::COLUMN_NAMES_MEMBERSHIP, $names);
     }
 
     public function testGetFieldValues_withAlternate()
     {
         $map = CsvBindByNameAltsTestClass::getColumnValues($this->testNamesObj);
 
-        $this->assertNotNull($map);
-        $this->assertIsArray($map);
-        $this->assertNotEmpty($map);
+        self::assertNotNull($map);
+        self::assertIsArray($map);
+        self::assertNotEmpty($map);
 
-        $this->assertArrayHasKey(self::COLUMN_NAMES_IDENTITY, $map);
-        $this->assertArrayHasKey(self::COLUMN_NAMES_MEMBERSHIP, $map);
+        self::assertArrayHasKey(self::COLUMN_NAMES_IDENTITY, $map);
+        self::assertArrayHasKey(self::COLUMN_NAMES_MEMBERSHIP, $map);
 
-        $this->assertEquals($this->testNamesObj->id, $map[self::COLUMN_NAMES_IDENTITY]);
-        $this->assertEquals($this->testNamesObj->id, $map[self::COLUMN_NAMES_MEMBERSHIP]);
+        self::assertEquals($this->testNamesObj->id, $map[self::COLUMN_NAMES_IDENTITY]);
+        self::assertEquals($this->testNamesObj->id, $map[self::COLUMN_NAMES_MEMBERSHIP]);
     }
 }
 

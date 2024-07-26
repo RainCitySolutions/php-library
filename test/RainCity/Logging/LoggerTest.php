@@ -44,17 +44,17 @@ class LoggerTest extends TestCase
 
     public function testGetLogger_defaultLoggerClass () {
         $logger = Logger::getLogger('TestBaseLogger');
-        $this->assertNotNull($logger);
+        self::assertNotNull($logger);
 
-        $this->assertEquals(BaseLogger::class, self::getLoggerClazz());
+        self::assertEquals(BaseLogger::class, self::getLoggerClazz());
     }
 
     public function testGetLogger_overrideLoggerClass () {
         Logger::setLogger(StubLogger::class);
 
         $logger = Logger::getLogger('TestStubLogger');
-        $this->assertNotNull($logger);
+        self::assertNotNull($logger);
 
-        $this->assertEquals(StubLogger::class, self::getLoggerClazz());
+        self::assertEquals(StubLogger::class, self::getLoggerClazz());
     }
 }

@@ -17,12 +17,12 @@ class FieldPropertyEntryTest extends RainCityTestCase
     {
         $testObj = new FieldPropertyEntry(self::TEST_FIELD, self::TEST_PROPERTY);
 
-        $this->assertEquals(
+        self::assertEquals(
             self::TEST_FIELD,
             ReflectionHelper::getObjectProperty(FieldPropertyEntry::class, 'field', $testObj)
             );
 
-        $this->assertEquals(
+        self::assertEquals(
             self::TEST_PROPERTY,
             ReflectionHelper::getObjectProperty(FieldPropertyEntry::class, 'property', $testObj)
             );
@@ -32,7 +32,7 @@ class FieldPropertyEntryTest extends RainCityTestCase
     {
         $testObj = new FieldPropertyEntry(self::TEST_FIELD, '');
 
-        $this->assertEquals(
+        self::assertEquals(
             self::TEST_FIELD,
             $testObj->getField()
             );
@@ -42,7 +42,7 @@ class FieldPropertyEntryTest extends RainCityTestCase
     {
         $testObj = new FieldPropertyEntry('', self::TEST_PROPERTY);
 
-        $this->assertEquals(
+        self::assertEquals(
             self::TEST_PROPERTY,
             $testObj->getProperty()
             );

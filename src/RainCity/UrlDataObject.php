@@ -115,17 +115,26 @@ class UrlDataObject
                     $inflatedStr = gzinflate($b64DecodedStr);
 
                     if (false !== $inflatedStr) {
-                        $jsonObj = json_decode($inflatedStr);
-
-                        if (false !== $jsonObj && json_last_error() === JSON_ERROR_NONE) {
-                            $this->data = $jsonObj;
-                            $success = true;
-                        }
+                        $success = $this->loadFromJson($inflatedStr);
                     }
                 }
             }
         }
 
         return $success;
+    }
+    
+    private function loadFromJson(string $jsonStr): bool
+    {
+        $result = false;
+
+        $jsonObj = json_decode($jsonStr);
+        
+        if (false !== $jsonObj && json_last_error() === JSON_ERROR_NONE) {
+            $this->data = $jsonObj;
+            $result = true;
+        }
+
+        return $result;
     }
 }

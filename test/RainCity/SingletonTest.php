@@ -35,28 +35,28 @@ class SingletonTest extends RainCityTestCase
 
     public function testInstance() {
         $obj1 = TestSingleton::instance();
-        $this->assertNotNull($obj1);
+        self::assertNotNull($obj1);
 
         $obj2 = TestSingleton::instance();
-        $this->assertNotNull($obj2);
+        self::assertNotNull($obj2);
 
-        $this->assertEquals($obj1, $obj2);
+        self::assertEquals($obj1, $obj2);
     }
 
     public function testGeInstance_noInstance() {
         $obj = TestSingleton::getInstance(TestSingleton::class);
 
-        $this->assertNull($obj);
+        self::assertNull($obj);
     }
 
     public function testGeInstance_instance() {
         $obj1 = TestSingleton::instance();
-        $this->assertNotNull($obj1);
+        self::assertNotNull($obj1);
 
         $obj2 = TestSingleton::getInstance(TestSingleton::class);
-        $this->assertNotNull($obj2);
+        self::assertNotNull($obj2);
 
-        $this->assertEquals($obj1, $obj2);
+        self::assertEquals($obj1, $obj2);
     }
 }
 

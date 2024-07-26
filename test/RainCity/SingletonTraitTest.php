@@ -35,28 +35,28 @@ class SingletonTraitTest extends RainCityTestCase
 
     public function testInstance() {
         $obj1 = TestSingletonTrait::instance();
-        $this->assertNotNull($obj1);
+        self::assertNotNull($obj1);
 
         $obj2 = TestSingletonTrait::instance();
-        $this->assertNotNull($obj2);
+        self::assertNotNull($obj2);
 
-        $this->assertEquals($obj1, $obj2);
+        self::assertEquals($obj1, $obj2);
     }
 
     public function testInstance_initializeInstance() {
         $obj = TestSingletonTrait::instance();
-        $this->assertNotNull($obj);
-        $this->assertTrue($obj->initInstCalled);
+        self::assertNotNull($obj);
+        self::assertTrue($obj->initInstCalled);
     }
 
     public function testInstance_extendedClass() {
         $obj1 = TestExtendedNonSingleton::instance();
-        $this->assertNotNull($obj1);
+        self::assertNotNull($obj1);
 
         $obj2 = TestExtendedNonSingleton::instance();
-        $this->assertNotNull($obj2);
+        self::assertNotNull($obj2);
 
-        $this->assertEquals($obj1, $obj2);
+        self::assertEquals($obj1, $obj2);
     }
 }
 

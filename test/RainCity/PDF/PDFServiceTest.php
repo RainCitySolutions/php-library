@@ -48,13 +48,13 @@ class PDFServiceTest extends RainCityTestCase
         $pdfSvc = new PDFService($testUrl, $mockClient);
 
         $logger = ReflectionHelper::getObjectProperty(PDFService::class, 'logger', $pdfSvc);
-        $this->assertNotNull($logger);
+        self::assertNotNull($logger);
 
         $client = ReflectionHelper::getObjectProperty(PDFService::class, 'httpClient', $pdfSvc);
-        $this->assertSame($mockClient, $client);
+        self::assertSame($mockClient, $client);
 
         $url = ReflectionHelper::getObjectProperty(PDFService::class, 'svcUrl', $pdfSvc);
-        $this->assertSame($testUrl, $url);
+        self::assertSame($testUrl, $url);
     }
 
     /**
@@ -81,7 +81,7 @@ class PDFServiceTest extends RainCityTestCase
 
         $client = ReflectionHelper::getObjectProperty(PDFService::class, 'httpClient', $pdfSvc);
 
-        $this->assertSame($testClient, $client);
+        self::assertSame($testClient, $client);
     }
 
     /**
@@ -92,7 +92,7 @@ class PDFServiceTest extends RainCityTestCase
         $pdfSvc = $this->getTestInstance();
 
         $result = ReflectionHelper::invokeObjectMethod(PDFService::class, $pdfSvc, 'isValidServiceUrl', 'not a url');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -113,7 +113,7 @@ class PDFServiceTest extends RainCityTestCase
             'isValidServiceUrl',
             self::GOOD_TEST_URL
             );
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -134,7 +134,7 @@ class PDFServiceTest extends RainCityTestCase
             'isValidServiceUrl',
             self::GOOD_TEST_URL
             );
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -155,7 +155,7 @@ class PDFServiceTest extends RainCityTestCase
             'isValidServiceUrl',
             self::GOOD_TEST_URL
             );
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -176,7 +176,7 @@ class PDFServiceTest extends RainCityTestCase
             'isValidServiceUrl',
             self::GOOD_TEST_URL
             );
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -197,7 +197,7 @@ class PDFServiceTest extends RainCityTestCase
             'isValidServiceUrl',
             self::GOOD_TEST_URL
             );
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     /**
@@ -216,7 +216,7 @@ class PDFServiceTest extends RainCityTestCase
 
         $result = $pdfSvc->isServiceActive();
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     /**
@@ -235,7 +235,7 @@ class PDFServiceTest extends RainCityTestCase
 
         $result = $pdfSvc->isServiceActive();
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -258,7 +258,7 @@ class PDFServiceTest extends RainCityTestCase
 
         $pdfSvc->fetchPDF($testXmlFile, $testXsltFile, $testPdfFile, array());
 
-        $this->assertCount(2, $this->httpHistory);
+        self::assertCount(2, $this->httpHistory);
 
         $this->validateGenerateRequest(array_shift($this->httpHistory)['request']);
         $this->validateFetchRequest(array_shift($this->httpHistory)['request']);
@@ -285,7 +285,7 @@ class PDFServiceTest extends RainCityTestCase
 
         $pdfSvc->fetchPDF($testXmlFile, $testXsltFile, $testPdfFile, array($testSupportFile));
 
-        $this->assertCount(2, $this->httpHistory);
+        self::assertCount(2, $this->httpHistory);
 
         $this->validateGenerateRequest(array_shift($this->httpHistory)['request']);
         $this->validateFetchRequest(array_shift($this->httpHistory)['request']);
@@ -293,23 +293,23 @@ class PDFServiceTest extends RainCityTestCase
 
     private function validateGenerateRequest(RequestInterface $request): void
     {
-        $this->assertEquals('POST', $request->getMethod());
-        $this->assertEquals(self::GOOD_TEST_URL, $request->getUri()->__toString());
+        self::assertEquals('POST', $request->getMethod());
+        self::assertEquals(self::GOOD_TEST_URL, $request->getUri()->__toString());
 
         $contentType = $request->getHeader('Content-Type');
-        $this->assertCount(1, $contentType);
-        $this->assertStringStartsWith('multipart/form-data; ', array_shift($contentType));
+        self::assertCount(1, $contentType);
+        self::assertStringStartsWith('multipart/form-data; ', array_shift($contentType));
 
         $body = $request->getBody()->getContents();
         // TODO: parse body to ensure everything was included
 
-        $this->assertNotNull($body);
+        self::assertNotNull($body);
     }
 
     private function validateFetchRequest(RequestInterface $request): void
     {
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals(self::PDF_LOCATION_URL, $request->getUri()->__toString());
+        self::assertEquals('GET', $request->getMethod());
+        self::assertEquals(self::PDF_LOCATION_URL, $request->getUri()->__toString());
     }
 
     /**

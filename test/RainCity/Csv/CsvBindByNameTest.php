@@ -61,9 +61,9 @@ class CsvBindByNameTest extends RainCityTestCase
 
         $columns = ReflectionHelper::getObjectProperty(CsvBindByName::class, 'columns', $testObj);
 
-        $this->assertIsArray($columns);
-        $this->assertCount(1, $columns);
-        $this->assertEquals(self::TEST_COLUMN1, array_shift($columns));
+        self::assertIsArray($columns);
+        self::assertCount(1, $columns);
+        self::assertEquals(self::TEST_COLUMN1, array_shift($columns));
     }
 
     public function testCtor_paddedString()
@@ -72,9 +72,9 @@ class CsvBindByNameTest extends RainCityTestCase
 
         $columns = ReflectionHelper::getObjectProperty(CsvBindByName::class, 'columns', $testObj);
 
-        $this->assertIsArray($columns);
-        $this->assertCount(1, $columns);
-        $this->assertEquals(self::TEST_COLUMN2, array_shift($columns));
+        self::assertIsArray($columns);
+        self::assertCount(1, $columns);
+        self::assertEquals(self::TEST_COLUMN2, array_shift($columns));
     }
 
     public function testCtor_array()
@@ -83,10 +83,10 @@ class CsvBindByNameTest extends RainCityTestCase
 
         $columns = ReflectionHelper::getObjectProperty(CsvBindByName::class, 'columns', $testObj);
 
-        $this->assertIsArray($columns);
-        $this->assertCount(2, $columns);
-        $this->assertEquals(self::TEST_COLUMN1, array_shift($columns));
-        $this->assertEquals(self::TEST_COLUMN2, array_shift($columns));
+        self::assertIsArray($columns);
+        self::assertCount(2, $columns);
+        self::assertEquals(self::TEST_COLUMN1, array_shift($columns));
+        self::assertEquals(self::TEST_COLUMN2, array_shift($columns));
     }
 
     public function testGetColumns()
@@ -97,10 +97,10 @@ class CsvBindByNameTest extends RainCityTestCase
 
         $columns = $testObj->getColumns();
 
-        $this->assertNotNull($columns);
-        $this->assertIsArray($columns);
-        $this->assertCount(1, $columns);
+        self::assertNotNull($columns);
+        self::assertIsArray($columns);
+        self::assertCount(1, $columns);
 
-        $this->assertEquals(self::TEST_COLUMN2, array_shift($columns));
+        self::assertEquals(self::TEST_COLUMN2, array_shift($columns));
     }
 }

@@ -41,11 +41,11 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
 
-        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
+        self::assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
     }
 
     public function testSet_multiProp()
@@ -57,13 +57,13 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
-        $this->assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
 
-        $this->assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_A});
-        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_B});
+        self::assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_A});
+        self::assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_B});
     }
 
     public function testGet_singleProp()
@@ -77,9 +77,9 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $testValue = $testObj->get(self::TEST_KEY_A);
 
-        $this->assertNotNull($testValue);
-        $this->assertIsString($testValue);
-        $this->assertEquals(self::TEST_STRING, $testValue);
+        self::assertNotNull($testValue);
+        self::assertIsString($testValue);
+        self::assertEquals(self::TEST_STRING, $testValue);
     }
 
     public function testGet_multiProp()
@@ -94,15 +94,15 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $testValue = $testObj->get(self::TEST_KEY_B);
 
-        $this->assertNotNull($testValue);
-        $this->assertIsString($testValue);
-        $this->assertEquals(self::TEST_INTEGER, $testValue);
+        self::assertNotNull($testValue);
+        self::assertIsString($testValue);
+        self::assertEquals(self::TEST_INTEGER, $testValue);
 
         $testValue = $testObj->get(self::TEST_KEY_A);
 
-        $this->assertNotNull($testValue);
-        $this->assertIsString($testValue);
-        $this->assertEquals(self::TEST_STRING, $testValue);
+        self::assertNotNull($testValue);
+        self::assertIsString($testValue);
+        self::assertEquals(self::TEST_STRING, $testValue);
     }
 
     public function testGet_missingKey()
@@ -116,7 +116,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $testValue = $testObj->get(self::TEST_KEY_C);
 
-        $this->assertNull($testValue);
+        self::assertNull($testValue);
     }
 
     /**
@@ -130,8 +130,8 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $testObj->set(self::TEST_KEY_A, self::TEST_STRING);
         $testObj->set(self::TEST_KEY_B, self::TEST_INTEGER);
 
-        $this->assertEquals(self::TEST_INTEGER, $testObj->get(self::TEST_KEY_B));
-        $this->assertEquals(self::TEST_STRING, $testObj->get(self::TEST_KEY_A));
+        self::assertEquals(self::TEST_INTEGER, $testObj->get(self::TEST_KEY_B));
+        self::assertEquals(self::TEST_STRING, $testObj->get(self::TEST_KEY_A));
     }
 
     public function testEncode_emptyData()
@@ -139,7 +139,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $testObj = new UrlDataObject();
         $testStr = $testObj->encode();
 
-        $this->assertNull($testStr);
+        self::assertNull($testStr);
     }
 
     public function testEncode_singleProp()
@@ -153,9 +153,9 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $testStr = $testObj->encode();
 
-        $this->assertNotNull($testStr);
-        $this->assertStringNotContainsString(self::TEST_KEY_A, $testStr);
-        $this->assertStringNotContainsString(self::TEST_STRING, $testStr);
+        self::assertNotNull($testStr);
+        self::assertStringNotContainsString(self::TEST_KEY_A, $testStr);
+        self::assertStringNotContainsString(self::TEST_STRING, $testStr);
     }
 
     public function testEncode_multiProp()
@@ -170,11 +170,11 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $testStr = $testObj->encode();
 
-        $this->assertNotNull($testStr);
-        $this->assertStringNotContainsString(self::TEST_KEY_A, $testStr);
-        $this->assertStringNotContainsString(self::TEST_KEY_B, $testStr);
-        $this->assertStringNotContainsString(self::TEST_INTEGER, $testStr);
-        $this->assertStringNotContainsString(self::TEST_STRING, $testStr);
+        self::assertNotNull($testStr);
+        self::assertStringNotContainsString(self::TEST_KEY_A, $testStr);
+        self::assertStringNotContainsString(self::TEST_KEY_B, $testStr);
+        self::assertStringNotContainsString(self::TEST_INTEGER, $testStr);
+        self::assertStringNotContainsString(self::TEST_STRING, $testStr);
     }
 
     public function testEncode_jsonEncodeError()
@@ -190,7 +190,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $result = $testObj->encode();
 
-        $this->assertNull($result);
+        self::assertNull($result);
     }
 
     public function testEncode_deflateError()
@@ -206,7 +206,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $result = $testObj->encode();
 
-        $this->assertNull($result);
+        self::assertNull($result);
     }
 
     public function testDecode_emptyString()
@@ -215,13 +215,13 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $result = $testObj->decode('');
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertEmpty((array)$dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertEmpty((array)$dataProp);
     }
 
     public function testDecode_noneBase64String()
@@ -230,13 +230,13 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $result = $testObj->decode(self::NON_BASE64_STR);
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertEmpty((array)$dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertEmpty((array)$dataProp);
     }
 
     /**
@@ -251,13 +251,13 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $testObj = new UrlDataObject();
         $result = $testObj->decode($encStr);
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertEmpty((array)$dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertEmpty((array)$dataProp);
     }
 
     /**
@@ -272,13 +272,13 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $testObj = new UrlDataObject();
         $result = $testObj->decode($encStr);
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertEmpty((array)$dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertEmpty((array)$dataProp);
     }
 
     /**
@@ -293,13 +293,13 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $testObj = new UrlDataObject();
         $result = $testObj->decode($encStr);
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertEmpty((array)$dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertEmpty((array)$dataProp);
     }
 
     /**
@@ -312,17 +312,17 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $testObj = new UrlDataObject();
         $result = $testObj->decode($testStr);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
-        $this->assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
 
-        $this->assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_B});
-        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
+        self::assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_B});
+        self::assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
     }
 
     public function testCtor_emptyString()
@@ -331,9 +331,9 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertEmpty((array)$dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertEmpty((array)$dataProp);
     }
 
     public function testCtor_noneBase64String()
@@ -342,9 +342,9 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertEmpty((array)$dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertEmpty((array)$dataProp);
     }
 
     public function testCtor_success()
@@ -355,13 +355,13 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
-        $this->assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
 
-        $this->assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_B});
-        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
+        self::assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_B});
+        self::assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
     }
 
     public function testSet_chainedCalls()
@@ -372,12 +372,12 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
 
-        $this->assertNotNull($dataProp);
-        $this->assertIsObject($dataProp);
-        $this->assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
-        $this->assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_B, $dataProp);
 
-        $this->assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_A});
-        $this->assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_B});
+        self::assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_A});
+        self::assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_B});
     }
 }

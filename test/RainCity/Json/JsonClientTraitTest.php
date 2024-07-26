@@ -42,15 +42,15 @@ class JsonClientTraitTest extends RainCityTestCase
 
     public function testCtor_defaults()
     {
-        $this->assertEquals(10, $this->getCacheDefaultTTL($this->testObj));
-        $this->assertNotNull($this->getClassFactoryRegistry($this->testObj));
+        self::assertEquals(10, $this->getCacheDefaultTTL($this->testObj));
+        self::assertNotNull($this->getClassFactoryRegistry($this->testObj));
     }
 
     public function testCtor_setCacheTTL()
     {
         $localTestObj = new JsonClientTraitTestClass(JsonClientTraitTest::TEST_CACHE_TTL);
 
-        $this->assertEquals(self::TEST_CACHE_TTL, $this->getCacheDefaultTTL($localTestObj));
+        self::assertEquals(self::TEST_CACHE_TTL, $this->getCacheDefaultTTL($localTestObj));
     }
 
     public function testCtor_setRegistryFactory()
@@ -62,7 +62,7 @@ class JsonClientTraitTest extends RainCityTestCase
             $testFactory
             );
 
-        $this->assertSame(
+        self::assertSame(
             $testFactory,
             $this->getClassFactoryRegistry($localTestObj)
             );
@@ -77,10 +77,10 @@ class JsonClientTraitTest extends RainCityTestCase
             __FUNCTION__
             );
 
-        $this->assertNotNull($key);
-        $this->assertStringContainsString('JsonClientTraitTestClass', $key);
-        $this->assertStringContainsString(__FUNCTION__, $key);
-        $this->assertStringNotContainsString('\\', $key);
+        self::assertNotNull($key);
+        self::assertStringContainsString('JsonClientTraitTestClass', $key);
+        self::assertStringContainsString(__FUNCTION__, $key);
+        self::assertStringNotContainsString('\\', $key);
     }
 
     public function testProcessJsonResponse_notJson()
@@ -93,7 +93,7 @@ class JsonClientTraitTest extends RainCityTestCase
             new JsonEntityTestClass()
             );
 
-        $this->assertNull($result);
+        self::assertNull($result);
     }
 
     public function testProcessJsonResponse_singleObject()
@@ -108,8 +108,8 @@ class JsonClientTraitTest extends RainCityTestCase
             new JsonEntityTestClass()
             );
 
-        $this->assertNotNull($result);
-        $this->assertEquals($testJsonObj, $result);
+        self::assertNotNull($result);
+        self::assertEquals($testJsonObj, $result);
     }
 
     public function testProcessJsonResponse_array()
@@ -135,11 +135,11 @@ class JsonClientTraitTest extends RainCityTestCase
             new JsonEntityTestClass()
             );
 
-        $this->assertNotNull($result);
-        $this->assertIsArray($result);
+        self::assertNotNull($result);
+        self::assertIsArray($result);
 
         foreach ($result as $ndx => $entry) {
-            $this->assertEquals($jsonObjArray[$ndx], $entry);
+            self::assertEquals($jsonObjArray[$ndx], $entry);
         }
     }
 
@@ -166,11 +166,11 @@ class JsonClientTraitTest extends RainCityTestCase
             new JsonEntityTestClass()
             );
 
-        $this->assertNotNull($result);
-        $this->assertIsArray($result);
+        self::assertNotNull($result);
+        self::assertIsArray($result);
 
         foreach ($result as $ndx => $entry) {
-            $this->assertEquals($jsonObjArray[$ndx], $entry);
+            self::assertEquals($jsonObjArray[$ndx], $entry);
         }
     }
 

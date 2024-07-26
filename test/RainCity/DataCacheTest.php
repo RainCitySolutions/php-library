@@ -38,12 +38,12 @@ class DataCacheTest extends RainCityTestCase
 
         $instCache = DataCache::instance($tmpAdapter, 5);
 
-        $this->assertNotSame($this->dataCache, $instCache);
-        $this->assertEquals(
+        self::assertNotSame($this->dataCache, $instCache);
+        self::assertEquals(
             $tmpAdapter,
             ReflectionHelper::getObjectProperty(get_class($instCache), 'cache', $instCache)
             );
-        $this->assertEquals(
+        self::assertEquals(
             $tmpTTL,
             ReflectionHelper::getObjectProperty(get_class($instCache), 'defaultTTL', $instCache)
             );
@@ -56,12 +56,12 @@ class DataCacheTest extends RainCityTestCase
 
         $result = $this->dataCache->set($testKey, $testValue);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $cachedValue = $this->getFromAdapter($testKey);
 
-        $this->assertNotNull($cachedValue);
-        $this->assertEquals($testValue, $cachedValue);
+        self::assertNotNull($cachedValue);
+        self::assertEquals($testValue, $cachedValue);
     }
 
     public function testGet_noValue()
@@ -70,7 +70,7 @@ class DataCacheTest extends RainCityTestCase
 
         $cachedValue = $this->dataCache->get($testKey);
 
-        $this->assertNull($cachedValue);
+        self::assertNull($cachedValue);
     }
 
     public function testGet_default()
@@ -80,10 +80,10 @@ class DataCacheTest extends RainCityTestCase
 
         $cachedValue = $this->dataCache->get($testKey, $testValue);
 
-        $this->assertNotNull($cachedValue);
-        $this->assertEquals($testValue, $cachedValue);
+        self::assertNotNull($cachedValue);
+        self::assertEquals($testValue, $cachedValue);
 
-        $this->assertEquals($testValue, $this->getFromAdapter($testKey));
+        self::assertEquals($testValue, $this->getFromAdapter($testKey));
     }
 
     public function testHas_present()
@@ -91,24 +91,24 @@ class DataCacheTest extends RainCityTestCase
         $testKey = 'testHasKey';
         $testValue = 'testGetValue';
 
-        $this->assertFalse($this->cacheAdapter->hasItem($testKey));
+        self::assertFalse($this->cacheAdapter->hasItem($testKey));
 
         $this->addToAdapter($testKey, $testValue);
 
         $hasValue = $this->dataCache->has($testKey);
 
-        $this->assertTrue($hasValue);
+        self::assertTrue($hasValue);
     }
 
     public function testHas_missing()
     {
         $testKey = 'testHasMissingKey';
 
-        $this->assertFalse($this->cacheAdapter->hasItem($testKey));
+        self::assertFalse($this->cacheAdapter->hasItem($testKey));
 
         $hasValue = $this->dataCache->has($testKey);
 
-        $this->assertFalse($hasValue);
+        self::assertFalse($hasValue);
     }
 
     public function testDelete_present()
@@ -120,9 +120,9 @@ class DataCacheTest extends RainCityTestCase
 
         $result = $this->dataCache->delete($testKey);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
-        $this->assertFalse($this->cacheAdapter->hasItem($testKey));
+        self::assertFalse($this->cacheAdapter->hasItem($testKey));
     }
 
     public function testDelete_missing()
@@ -131,9 +131,9 @@ class DataCacheTest extends RainCityTestCase
 
         $result = $this->dataCache->delete($testKey);
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
-        $this->assertFalse($this->cacheAdapter->hasItem($testKey));
+        self::assertFalse($this->cacheAdapter->hasItem($testKey));
     }
 
     public function testClear()
@@ -146,14 +146,14 @@ class DataCacheTest extends RainCityTestCase
         $this->addToAdapter($testKey1, $testValue1);
         $this->addToAdapter($testKey2, $testValue2);
 
-        $this->assertTrue($this->dataCache->has($testKey1));
-        $this->assertTrue($this->dataCache->has($testKey2));
+        self::assertTrue($this->dataCache->has($testKey1));
+        self::assertTrue($this->dataCache->has($testKey2));
 
         $result = $this->dataCache->clear();
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
-        $this->assertCount(0, $this->cacheAdapter->getValues());
+        self::assertCount(0, $this->cacheAdapter->getValues());
     }
 
     public function testSetMultiple()
@@ -168,10 +168,10 @@ class DataCacheTest extends RainCityTestCase
             $testKey2 => $testValue2
         ));
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
-        $this->assertEquals($testValue1, $this->getFromAdapter($testKey1));
-        $this->assertEquals($testValue2, $this->getFromAdapter($testKey2));
+        self::assertEquals($testValue1, $this->getFromAdapter($testKey1));
+        self::assertEquals($testValue2, $this->getFromAdapter($testKey2));
     }
 
     public function testGetMultiple()
@@ -186,11 +186,11 @@ class DataCacheTest extends RainCityTestCase
 
         $result = $this->dataCache->getMultiple(array($testKey1, $testKey2));
 
-        $this->assertIsArray($result);
-        $this->assertCount(2, $result);
+        self::assertIsArray($result);
+        self::assertCount(2, $result);
 
-        $this->assertEquals($testValue1, $result[$testKey1]);
-        $this->assertEquals($testValue2, $result[$testKey2]);
+        self::assertEquals($testValue1, $result[$testKey1]);
+        self::assertEquals($testValue2, $result[$testKey2]);
     }
 
     public function testGetMultiple_default()
@@ -202,14 +202,14 @@ class DataCacheTest extends RainCityTestCase
 
         $result = $this->dataCache->getMultiple(array($testKey1, $testKey2), $defaultValue);
 
-        $this->assertIsArray($result);
-        $this->assertCount(2, $result);
+        self::assertIsArray($result);
+        self::assertCount(2, $result);
 
-        $this->assertEquals($defaultValue, $result[$testKey1]);
-        $this->assertEquals($defaultValue, $result[$testKey2]);
+        self::assertEquals($defaultValue, $result[$testKey1]);
+        self::assertEquals($defaultValue, $result[$testKey2]);
 
-        $this->assertEquals($defaultValue, $this->getFromAdapter($testKey1));
-        $this->assertEquals($defaultValue, $this->getFromAdapter($testKey2));
+        self::assertEquals($defaultValue, $this->getFromAdapter($testKey1));
+        self::assertEquals($defaultValue, $this->getFromAdapter($testKey2));
     }
 
     public function testGetMultiple_someDefault()
@@ -228,18 +228,18 @@ class DataCacheTest extends RainCityTestCase
             $defaultValue
             );
 
-        $this->assertIsArray($result);
-        $this->assertCount(3, $result);
+        self::assertIsArray($result);
+        self::assertCount(3, $result);
 
-        $this->assertEquals($defaultValue, $result[$testKey1]);
-        $this->assertEquals($defaultValue, $result[$testKey3]);
+        self::assertEquals($defaultValue, $result[$testKey1]);
+        self::assertEquals($defaultValue, $result[$testKey3]);
 
-        $this->assertEquals($testValue2, $result[$testKey2]);
+        self::assertEquals($testValue2, $result[$testKey2]);
 
-        $this->assertEquals($defaultValue, $this->getFromAdapter($testKey1));
-        $this->assertEquals($defaultValue, $this->getFromAdapter($testKey3));
+        self::assertEquals($defaultValue, $this->getFromAdapter($testKey1));
+        self::assertEquals($defaultValue, $this->getFromAdapter($testKey3));
 
-        $this->assertEquals($testValue2, $this->getFromAdapter($testKey2));
+        self::assertEquals($testValue2, $this->getFromAdapter($testKey2));
     }
 
     public function testDeleteMultiple()
@@ -260,12 +260,12 @@ class DataCacheTest extends RainCityTestCase
             array($testKey2, $testKey3)
             );
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
-        $this->assertEquals($testValue1, $this->getFromAdapter($testKey1));
+        self::assertEquals($testValue1, $this->getFromAdapter($testKey1));
 
-        $this->assertNull($this->getFromAdapter($testKey2));
-        $this->assertNull($this->getFromAdapter($testKey3));
+        self::assertNull($this->getFromAdapter($testKey2));
+        self::assertNull($this->getFromAdapter($testKey3));
     }
 
     private function addToAdapter(string $key, mixed $value)

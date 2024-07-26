@@ -15,15 +15,15 @@ class InMemoryLoggerTest extends TestCase
     {
         $logger = new InMemoryLogger();
         
-        $this->assertNotNull($logger);
-        $this->assertInstanceOf(LoggerInterface::class, $logger);
+        self::assertNotNull($logger);
+        self::assertInstanceOf(LoggerInterface::class, $logger);
     }
 
     public function testGetLogMsgs_emptyArray()
     {
         $logger = new InMemoryLogger();
         
-        $this->assertEmpty($logger->getLogMsgs());
+        self::assertEmpty($logger->getLogMsgs());
     }
 
     public function testGetLogMsgs_withMsgs()
@@ -35,7 +35,7 @@ class InMemoryLoggerTest extends TestCase
         
         $msgs = $logger->getLogMsgs();
         
-        $this->assertNotEmpty($msgs);
-        $this->assertCount(2, $msgs);
+        self::assertNotEmpty($msgs);
+        self::assertCount(2, $msgs);
     }
 }

@@ -25,7 +25,7 @@ class TimerTest extends RainCityTestCase
 
         $startVal = $this->getTimerProperty($timer, self::START_PROPERTY);
 
-        $this->assertEquals(floatval(0), $startVal);
+        self::assertEquals(floatval(0), $startVal);
     }
 
     public function testCtor_doNotStart()
@@ -34,7 +34,7 @@ class TimerTest extends RainCityTestCase
 
         $startVal = $this->getTimerProperty($timer, self::START_PROPERTY);
 
-        $this->assertEquals(floatval(0), $startVal);
+        self::assertEquals(floatval(0), $startVal);
     }
 
     public function testCtor_doStart()
@@ -43,30 +43,30 @@ class TimerTest extends RainCityTestCase
 
         $startVal = $this->getTimerProperty($timer, self::START_PROPERTY);
 
-        $this->assertNotEquals(floatval(0), $startVal);
+        self::assertNotEquals(floatval(0), $startVal);
     }
 
     public function testStart()
     {
         $timer = new Timer(false);
 
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
 
         $timer->start();
 
-        $this->assertNotEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::STOP_PROPERTY, $timer));
+        self::assertNotEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::STOP_PROPERTY, $timer));
     }
 
     public function testStop_notStarted()
     {
         $timer = new Timer(false);
 
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
 
         $timer->stop();
 
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::STOP_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::STOP_PROPERTY));
     }
 
     public function testStop_started()
@@ -80,18 +80,18 @@ class TimerTest extends RainCityTestCase
         $startVal = $this->getTimerProperty($timer, self::START_PROPERTY);
         $stopVal = $this->getTimerProperty($timer, self::STOP_PROPERTY);
 
-        $this->assertNotEquals(floatval(0), $startVal);
-        $this->assertNotEquals(floatval(0), $stopVal);
-        $this->assertGreaterThan($startVal, $stopVal);
-        $this->assertGreaterThan(self::SLEEP_TIME_SECONDS, $stopVal - $startVal);
-        $this->assertLessThan(self::SLEEP_TIME_SECONDS * 2, $stopVal - $startVal);
+        self::assertNotEquals(floatval(0), $startVal);
+        self::assertNotEquals(floatval(0), $stopVal);
+        self::assertGreaterThan($startVal, $stopVal);
+        self::assertGreaterThan(self::SLEEP_TIME_SECONDS, $stopVal - $startVal);
+        self::assertLessThan(self::SLEEP_TIME_SECONDS * 2, $stopVal - $startVal);
     }
 
     public function testStart_restart()
     {
         $timer = new Timer(false);
 
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
 
         $timer->start();
 
@@ -100,21 +100,21 @@ class TimerTest extends RainCityTestCase
         $timer->stop();
         $timer->start();
 
-        $this->assertNotEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::STOP_PROPERTY));
+        self::assertNotEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::STOP_PROPERTY));
     }
 
     public function testPause_notStarted()
     {
         $timer = new Timer(false);
 
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::START_PROPERTY));
 
         $timer->pause();
 
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::STOP_PROPERTY));
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::PAUSE_PROPERTY));
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::ELAPSED_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::STOP_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::PAUSE_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::ELAPSED_PROPERTY));
     }
 
     public function testPause_started()
@@ -129,15 +129,15 @@ class TimerTest extends RainCityTestCase
         $pauseVal = $this->getTimerProperty($timer, self::PAUSE_PROPERTY);
         $elapsedVal = $this->getTimerProperty($timer, self::ELAPSED_PROPERTY);
 
-        $this->assertNotEquals(floatval(0), $startVal);
-        $this->assertNotEquals(floatval(0), $pauseVal);
-        $this->assertNotEquals(floatval(0), $elapsedVal);
+        self::assertNotEquals(floatval(0), $startVal);
+        self::assertNotEquals(floatval(0), $pauseVal);
+        self::assertNotEquals(floatval(0), $elapsedVal);
 
-        $this->assertGreaterThan($startVal, $pauseVal);
+        self::assertGreaterThan($startVal, $pauseVal);
 
         // Time between start and pause should be just over 1 second
-        $this->assertGreaterThan(self::SLEEP_TIME_SECONDS, $elapsedVal);
-        $this->assertLessThan(self::SLEEP_TIME_SECONDS * 2, $elapsedVal);
+        self::assertGreaterThan(self::SLEEP_TIME_SECONDS, $elapsedVal);
+        self::assertLessThan(self::SLEEP_TIME_SECONDS * 2, $elapsedVal);
     }
 
     public function testPause_alreadyStopped()
@@ -149,8 +149,8 @@ class TimerTest extends RainCityTestCase
         $timer->stop();
         $timer->pause();
 
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::PAUSE_PROPERTY));
-        $this->assertEquals(floatval(0), $this->getTimerProperty($timer, self::ELAPSED_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::PAUSE_PROPERTY));
+        self::assertEquals(floatval(0), $this->getTimerProperty($timer, self::ELAPSED_PROPERTY));
     }
 
     public function testPause_alreadyPaused()
@@ -169,10 +169,10 @@ class TimerTest extends RainCityTestCase
 
         $curPauseVal = $this->getTimerProperty($timer, self::PAUSE_PROPERTY);
 
-        $this->assertNotEquals(floatval(0), $orgPauseVal);
-        $this->assertNotEquals(floatval(0), $curPauseVal);
+        self::assertNotEquals(floatval(0), $orgPauseVal);
+        self::assertNotEquals(floatval(0), $curPauseVal);
 
-        $this->assertEquals($orgPauseVal, $curPauseVal);
+        self::assertEquals($orgPauseVal, $curPauseVal);
     }
 
     public function testResume_notStartedNotPaused()
@@ -187,8 +187,8 @@ class TimerTest extends RainCityTestCase
 
         $resumeStartVal = $this->getTimerProperty($timer, self::START_PROPERTY);
 
-        $this->assertEquals(floatval(0), $orgStartVal);
-        $this->assertEquals(floatval(0), $resumeStartVal);
+        self::assertEquals(floatval(0), $orgStartVal);
+        self::assertEquals(floatval(0), $resumeStartVal);
     }
 
     public function testResume_startedNotPaused()
@@ -203,9 +203,9 @@ class TimerTest extends RainCityTestCase
 
         $resumeStartVal = $this->getTimerProperty($timer, self::START_PROPERTY);
 
-        $this->assertNotEquals(floatval(0), $orgStartVal);
-        $this->assertNotEquals(floatval(0), $resumeStartVal);
-        $this->assertEquals($orgStartVal, $resumeStartVal);
+        self::assertNotEquals(floatval(0), $orgStartVal);
+        self::assertNotEquals(floatval(0), $resumeStartVal);
+        self::assertEquals($orgStartVal, $resumeStartVal);
     }
 
     public function testPauseResumeStop()
@@ -229,24 +229,24 @@ class TimerTest extends RainCityTestCase
 
         $startStopDiff = $stopVal - $startVal;
 
-        $this->assertNotEquals(floatval(0), $orgStartVal);
-        $this->assertNotEquals(floatval(0), $startVal);
-        $this->assertNotEquals(floatval(0), $stopVal);
-        $this->assertNotEquals(floatval(0), $elapsedVal);
+        self::assertNotEquals(floatval(0), $orgStartVal);
+        self::assertNotEquals(floatval(0), $startVal);
+        self::assertNotEquals(floatval(0), $stopVal);
+        self::assertNotEquals(floatval(0), $elapsedVal);
 
-        $this->assertGreaterThan($startVal, $stopVal);
+        self::assertGreaterThan($startVal, $stopVal);
 
         // Time between initial start and pause should be just over SLEEP_TIME second
-        $this->assertGreaterThanOrEqual(self::SLEEP_TIME_SECONDS, round($elapsedVal, 2, PHP_ROUND_HALF_UP));
-        $this->assertLessThan(self::SLEEP_TIME_SECONDS * 2, $elapsedVal);
+        self::assertGreaterThanOrEqual(self::SLEEP_TIME_SECONDS, round($elapsedVal, 2, PHP_ROUND_HALF_UP));
+        self::assertLessThan(self::SLEEP_TIME_SECONDS * 2, $elapsedVal);
 
         // Time between resume and stop should be just over SLEEP_TIME second
-        $this->assertGreaterThanOrEqual(self::SLEEP_TIME_SECONDS, round($startStopDiff, 1));
-        $this->assertLessThan(self::SLEEP_TIME_SECONDS * 2, $startStopDiff);
+        self::assertGreaterThanOrEqual(self::SLEEP_TIME_SECONDS, round($startStopDiff, 1));
+        self::assertLessThan(self::SLEEP_TIME_SECONDS * 2, $startStopDiff);
 
         // Total elapsed time should be just over SLEEP_TIME * 2 seconds
-        $this->assertGreaterThan(self::SLEEP_TIME_SECONDS * 2, $startStopDiff + $elapsedVal);
-        $this->assertLessThan(self::SLEEP_TIME_SECONDS * 3, $startStopDiff + $elapsedVal);
+        self::assertGreaterThan(self::SLEEP_TIME_SECONDS * 2, $startStopDiff + $elapsedVal);
+        self::assertLessThan(self::SLEEP_TIME_SECONDS * 3, $startStopDiff + $elapsedVal);
     }
 
     public function testTimeToString_noTime()
@@ -255,7 +255,7 @@ class TimerTest extends RainCityTestCase
 
         $result = ReflectionHelper::invokeObjectMethod(Timer::class, $timer, 'timeToString', 0.0);
 
-        $this->assertEquals(Timer::NO_TIME_MESSAGE, $result);
+        self::assertEquals(Timer::NO_TIME_MESSAGE, $result);
     }
 
     public function testTimeToString_mills()
@@ -266,7 +266,7 @@ class TimerTest extends RainCityTestCase
 
         $result = ReflectionHelper::invokeObjectMethod(Timer::class, $timer, 'timeToString', $testTime);
 
-        $this->assertMatchesRegularExpression('/^0.215 seconds$/', $result);
+        self::assertMatchesRegularExpression('/^0.215 seconds$/', $result);
     }
 
     public function testTimeToString_seconds()
@@ -277,7 +277,7 @@ class TimerTest extends RainCityTestCase
 
         $result = ReflectionHelper::invokeObjectMethod(Timer::class, $timer, 'timeToString', $testTime);
 
-        $this->assertMatchesRegularExpression('/^5 seconds$/', $result);
+        self::assertMatchesRegularExpression('/^5 seconds$/', $result);
     }
 
     public function testTimeToString_minutes()
@@ -288,7 +288,7 @@ class TimerTest extends RainCityTestCase
 
         $result = ReflectionHelper::invokeObjectMethod(Timer::class, $timer, 'timeToString', $testTime);
 
-        $this->assertMatchesRegularExpression('/^3 minutes 24 seconds$/', $result);
+        self::assertMatchesRegularExpression('/^3 minutes 24 seconds$/', $result);
     }
 
     public function testTimeToString_hours()
@@ -299,24 +299,8 @@ class TimerTest extends RainCityTestCase
 
         $result = ReflectionHelper::invokeObjectMethod(Timer::class, $timer, 'timeToString', $testTime);
 
-        $this->assertMatchesRegularExpression('/^5 hours 27 minutes 52.671 seconds$/', $result);
+        self::assertMatchesRegularExpression('/^5 hours 27 minutes 52.671 seconds$/', $result);
     }
-
-//     /**
-//      * Used to build an array of times for multiple timers, adding a key parameter can be used to name the `lap`
-//      * @param string $key Used as the key in the kay value pair array.
-//      */
-//     public function lap($key = '') {
-//         $key = ($key === '') ? 'Lap' : $key;
-//         if (isset($this->start)) {
-//             $this->stop();
-//             $this->lapTotalTime += ($this->stop - $this->start);
-//             $this->laps[$key . ' ' . $this->count] = $this->getLapTime();
-//             $this->start();
-//             $this->count++;
-//         }
-//     }
-
 
     public function testGetTime_explicitStop()
     {
@@ -329,8 +313,8 @@ class TimerTest extends RainCityTestCase
 
         $result = $timer->getTime();
 
-        $this->assertIsString($result);
-        $this->assertMatchesRegularExpression(self::SECONDS_TIME_PATTERN, $result);
+        self::assertIsString($result);
+        self::assertMatchesRegularExpression(self::SECONDS_TIME_PATTERN, $result);
     }
 
     public function testGetTime_impliedStop()
@@ -341,8 +325,8 @@ class TimerTest extends RainCityTestCase
 
         $result = $timer->getTime();
 
-        $this->assertIsString($result);
-        $this->assertMatchesRegularExpression(self::SECONDS_TIME_PATTERN, $result);
+        self::assertIsString($result);
+        self::assertMatchesRegularExpression(self::SECONDS_TIME_PATTERN, $result);
     }
 
     public function testGetTime_laps()
@@ -360,12 +344,12 @@ class TimerTest extends RainCityTestCase
 
         $result = $timer->getTime();
 
-        $this->assertIsArray($result);
-        $this->assertCount(4, $result);
+        self::assertIsArray($result);
+        self::assertCount(4, $result);
 
         foreach($result as $key => $lap) {
-            $this->assertMatchesRegularExpression('/^('.self::LAP_KEY.' \d|Total)$/', $key);
-            $this->assertMatchesRegularExpression(self::SECONDS_TIME_PATTERN, $lap);
+            self::assertMatchesRegularExpression('/^('.self::LAP_KEY.' \d|Total)$/', $key);
+            self::assertMatchesRegularExpression(self::SECONDS_TIME_PATTERN, $lap);
         }
     }
 
