@@ -5,9 +5,8 @@ use RainCity\Logging\Logger;
 
 class MethodLogger
 {
-    private $method;
-    private $timer;
-
+    private string $method;
+    private Timer $timer;
 
     public function __construct()
     {
@@ -26,7 +25,7 @@ class MethodLogger
             ->debug("Exiting {$this->method} after {$this->timer->getTime()}");
     }
 
-    private function getCallingMethodName()
+    private function getCallingMethodName(): string
     {
         $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
         $caller = $trace[2];

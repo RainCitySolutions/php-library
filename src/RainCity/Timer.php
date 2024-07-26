@@ -148,7 +148,7 @@ class Timer {
             $timeSeconds = ($this->stop - $this->start) + $this->elapsed;
         }
         $timeSeconds = $this->roundMicroTime($timeSeconds);
-        
+
         // Hours?? Just because we can.
         $hours   = floor(fdiv($timeSeconds, 60 * 60));
         $minutes = floor(fmod(fdiv($timeSeconds, 60), 60));

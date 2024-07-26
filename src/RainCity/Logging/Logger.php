@@ -12,8 +12,7 @@ use Psr\Log\LoggerInterface;
  */
 final class Logger implements LoggerIntf
 {
-    /** @var Logger */
-    private static $loggerClazz = BaseLogger::class;
+    private static string $loggerClazz = BaseLogger::class;
 
     /**
      * Prevent class construction

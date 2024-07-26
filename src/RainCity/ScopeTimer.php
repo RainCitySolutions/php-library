@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace RainCity;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * A convienence class to time a period of execution. The timer starts when
  * an instance of the class is created and ends when the instance goes out
@@ -19,9 +21,9 @@ namespace RainCity;
  *
  */
 class ScopeTimer {
-    private $logger;
-    private $msg;
-    private $timer;
+    private LoggerInterface $logger;
+    private string $msg;
+    private Timer $timer;
 
     /**
      * Log a timer message when the instance goes out of scope.
@@ -29,7 +31,7 @@ class ScopeTimer {
      * @param \Psr\Log\LoggerInterface $logger
      * @param string $msg
      */
-    public function __construct(\Psr\Log\LoggerInterface $logger, $msg) {
+    public function __construct(LoggerInterface $logger, string $msg) {
         $this->logger = $logger;
         $this->msg = $msg;
         $this->timer = new Timer(true);

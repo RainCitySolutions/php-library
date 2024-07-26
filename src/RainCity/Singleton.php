@@ -18,10 +18,10 @@ use RainCity\Logging\Logger;
 abstract class Singleton {
     /** Singleton *************************************************************/
 
-    private static $instance = array();
+    private static array $instance = array();
 
     /** @var LoggerInterface */
-    protected $log;
+    protected LoggerInterface $log;
 
     public static function triggerIncorrectUseWarning(string $function) {
         trigger_error($function . ' should not be called on singleton class', E_USER_WARNING);

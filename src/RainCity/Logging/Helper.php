@@ -53,8 +53,4 @@ class Helper
     public static function logStackTrace() {
         Logger::getLogger(get_called_class())->info('back trace: ', debug_backtrace ());
     }
-
-
-
 }
-

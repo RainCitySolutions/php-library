@@ -20,7 +20,7 @@ class BaseLogger implements LoggerIntf
      *
      *  @var array
      */
-    private static $loggerImpl = array();
+    private static array $loggerImpl = array();
 
     /**
      * {@inheritDoc}

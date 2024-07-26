@@ -1,12 +1,14 @@
 <?php
 namespace RainCity;
 
-/**
- * UrlDataObject test case.
- */
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
 
+/**
+ * UrlDataObject test case.
+ *
+ * @covers \RainCity\UrlDataObject
+ */
 class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 {
     private const TEST_KEY_A = 'testKeyA';

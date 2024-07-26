@@ -16,14 +16,14 @@ class FileSystem
     {
         $finalFilename = false;
         $tmpFilename = tempnam(sys_get_temp_dir(), '');
-        
+
         if ($tmpFilename) {
             $finalFilename = $tmpFilename . $extension;
             if (!rename ($tmpFilename, $finalFilename)) {
                 $finalFilename = falseE;
             }
         }
-        
+
         return $finalFilename;
     }
 
@@ -38,7 +38,7 @@ class FileSystem
     public static function purgeFolder(string $path): void
     {
         $iterator = new \DirectoryIterator($path);
-        
+
         foreach ($iterator as $fileinfo) {
             if (!$fileinfo->isDot()) {
                 if ($fileinfo->isDir()) {

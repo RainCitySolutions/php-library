@@ -7,8 +7,8 @@ namespace RainCity\Json;
  */
 class FieldPropertyEntry
 {
-    private $field;
-    private $property;
+    private string $field;
+    private string $property;
 
     /**
      * Construct an instance of FieldPropertyEntry
