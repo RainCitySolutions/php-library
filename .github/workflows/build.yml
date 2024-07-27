@@ -101,12 +101,18 @@ jobs:
             extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
             coverage: none
 
+      - name: Download Robo
+        run: |
+          wget https://robo.li/robo.phar
+          chmod +x robo.phar
+
       - name: Initialize Build Variables
         id: build-vars
         run: |
           echo "version=$(cat version.txt)" >> $GITHUB_OUTPUT
           # From build.xml: grab the "project" element, then the "name" attribute value, then strip the leading and trailing quotes
-          PROJ_NAME=$(awk '/<project .*>/ {for (i=1;i<=NF;i++) { if (split($i,parts,"=")==2 && parts[1]=="name") print parts[2]}}' build.xml | sed "s/^\(\"\)\(.*\)\1\$/\2/g")
+          # PROJ_NAME=$(awk '/<project .*>/ {for (i=1;i<=NF;i++) { if (split($i,parts,"=")==2 && parts[1]=="name") print parts[2]}}' RoboFile.php | sed "s/^\(\"\)\(.*\)\1\$/\2/g")
+          PROJ_NAME=$(sed -nr "s/.*PROJECT_NAME[ \t]*=[ \t]*'(.+)';/\1/p" RoboFile.php)
           echo "project-name=$PROJ_NAME" >> $GITHUB_OUTPUT
 
       # Run composer install (based on the current composer.lock file) 
@@ -117,7 +123,7 @@ jobs:
         run: |
           # PHING_PHAR="bin/phing*.phar"
           # php $PHING_PHAR package -Dbuild.version=${{ steps.build-vars.outputs.version }}
-          vendor/bin/robo package ${{ steps.build-vars.outputs.version }}
+          robo.phar package ${{ steps.build-vars.outputs.version }}
 
       - name: Create Release
         id: create-release
