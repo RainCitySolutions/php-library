@@ -41,8 +41,6 @@ jobs:
       # Run the build
       - name: Full build
         run: |
-          #PHING_PHAR="bin/phing*.phar"
-          #php $PHING_PHAR
           vendor/bin/robo release
 
       # Save versioned files 
@@ -101,11 +99,6 @@ jobs:
             extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
             coverage: none
 
-      - name: Download Robo
-        run: |
-          wget https://robo.li/robo.phar
-          chmod +x robo.phar
-
       - name: Initialize Build Variables
         id: build-vars
         run: |
@@ -119,11 +112,14 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-dev
 
+      - name: Download Robo
+        run: |
+          wget https://robo.li/robo.phar
+          chmod +x robo.phar
+
       - name: Create Package
         run: |
-          # PHING_PHAR="bin/phing*.phar"
-          # php $PHING_PHAR package -Dbuild.version=${{ steps.build-vars.outputs.version }}
-          robo.phar package ${{ steps.build-vars.outputs.version }}
+          ./robo.phar package ${{ steps.build-vars.outputs.version }}
 
       - name: Create Release
         id: create-release
