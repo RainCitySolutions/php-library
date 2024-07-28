@@ -4,4 +4,5 @@ report/
 vendor/
 coverage.db
 .phpunit.cache
+.phpunit.result.cache
 test/RainCity/PDF/testPDFService.php

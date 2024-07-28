@@ -23,6 +23,8 @@ abstract class RainCityTestCase extends PHPUnitTestCase
      */
     public static function setUpBeforeClass(): void
     {
+        parent::setUpBeforeClass();
+
         self::$orgLoggerClass = ReflectionHelper::getClassProperty(Logger::class, 'loggerClazz');
         Logger::setLogger(StubLogger::class);
     }
