@@ -12,13 +12,6 @@ class CsvBindByNameTest extends RainCityTestCase
     private const TEST_COLUMN1 = 'Test Column 1';
     private const TEST_COLUMN2 = 'Test Column 2';
 
-    public function testCtor_nullParam()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        new CsvBindByName(null);    // NOSONAR
-    }
-
     public function testCtor_emptyString()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -38,13 +31,6 @@ class CsvBindByNameTest extends RainCityTestCase
         $this->expectException(\InvalidArgumentException::class);
 
         new CsvBindByName('   ');  // NOSONAR
-    }
-
-    public function testCtor_nonStringOrArray()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        new CsvBindByName(new \stdClass());  // NOSONAR
     }
 
     public function testCtor_nonStringArray()

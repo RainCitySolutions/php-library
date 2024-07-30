@@ -18,7 +18,7 @@ class BaseLogger implements LoggerIntf
      * An array of loggers that are, or extend BaseLogger. One logger is
      * allowed for each class.
      *
-     *  @var array
+     *  @var array<BaseLogger>
      */
     private static array $loggerImpl = array();
 
@@ -44,16 +44,17 @@ class BaseLogger implements LoggerIntf
      * Class variables
      ***********************************************************************/
 
-    /** @var array Array of logger objects. */
-    private $loggers = array();
-    private $logLevel = 500;
+    /** @var array<\Monolog\Logger> Array of logger objects. */
+    private array $loggers = [];
+    private int $logLevel = 500;
 
     /**
      * Initializes class instance.
      *
      * Setups up the base logger to serve as the pattern for other loggers.
      */
-    protected function __construct() {
+    protected function __construct()
+    {
         $logger = new \Monolog\Logger(self::BASE_LOGGER); // create an initial logger
 
         $this->setupLogger($logger);
@@ -68,7 +69,8 @@ class BaseLogger implements LoggerIntf
      *
      * @param \Monolog\Logger $logger
      */
-    protected function setupLogger(\Monolog\Logger $logger) {
+    protected function setupLogger(\Monolog\Logger $logger): void
+    {
         $formatter = new \Monolog\Formatter\LineFormatter (
             $this->getLogMsgFormat(),
             $this->getLogDateFormat(),
@@ -122,7 +124,8 @@ class BaseLogger implements LoggerIntf
      *
      * @return LoggerInterface
      */
-    protected function getLoggerObject(string $loggerName): LoggerInterface {
+    protected function getLoggerObject(string $loggerName): LoggerInterface
+    {
         if (isset($this->loggers[$loggerName])) {
             $logger = $this->loggers[$loggerName];
         }
@@ -141,7 +144,8 @@ class BaseLogger implements LoggerIntf
      *
      * @return string
      */
-    protected function getLogFile (): string {
+    protected function getLogFile (): string
+    {
         $logFile = sys_get_temp_dir().'/logs/application.log';
 
         if (!file_exists(dirname($logFile)) ) {
@@ -151,11 +155,13 @@ class BaseLogger implements LoggerIntf
         return $logFile;
     }
 
-    protected function getLogLevel() {
+    protected function getLogLevel(): int|string|\Monolog\Level
+    {
         return $this->logLevel;
     }
 
-    protected function setLogLevel($level) {
+    protected function setLogLevel(int $level): void
+    {
         $this->logLevel = $level;
     }
 }

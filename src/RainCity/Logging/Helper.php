@@ -14,7 +14,8 @@ class Helper
      *
      * @return string A string containing the dumped variable
      */
-    public static function dumpVar($var): string {
+    public static function dumpVar(mixed $var): string
+    {
         ob_start();
         var_dump($var);
         return ob_get_clean();
@@ -24,11 +25,12 @@ class Helper
      * Write a log message using error_log().
      *
      * @param mixed $message A string message or object to log.
-     * @param array $data Any additoinal data to log.
+     * @param array<string> $data Any additoinal data to log.
      *
-     * @return boolean Returns true on success, false on failure.
+     * @return bool Returns true on success, false on failure.
      */
-    public static function log($message, array $data = array()) {
+    public static function log($message, array $data = array()): bool
+    {
         $result = true;
 
         if (is_string($message)) {
@@ -50,7 +52,8 @@ class Helper
      *
      * @see \RainCity\Logging\Logger
      */
-    public static function logStackTrace() {
+    public static function logStackTrace(): void
+    {
         Logger::getLogger(get_called_class())->info('back trace: ', debug_backtrace ());
     }
 }

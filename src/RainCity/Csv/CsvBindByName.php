@@ -19,29 +19,34 @@ final class CsvBindByName
      * property.
      *
      * @Required
+     * @var array<string>
      */
     private array $columns;
-    
-    public function __construct($column)
+
+    /**
+     *
+     * @param string|array<string> $column
+     */
+    public function __construct(string|array $column)
     {
         if (empty($column)) {
             throw new \InvalidArgumentException(self::INVALID_ARG_MSG);
         }
-        
+
         if (is_string($column)) {
             $column = array($column);
         }
-        
-        if (is_array($column)) {
-            if (!empty(array_filter($column, fn($entry) => !is_string($entry) || empty(trim($entry))))) {
-                throw new \InvalidArgumentException(self::INVALID_ARG_MSG);
-            }
-            $this->columns = array_map(fn($entry) => trim($entry), $column);
-        } else {
+
+        if (!empty(array_filter($column, fn($entry) => !is_string($entry) || empty(trim($entry))))) {
             throw new \InvalidArgumentException(self::INVALID_ARG_MSG);
         }
+        $this->columns = array_map(fn($entry) => trim($entry), $column);
     }
-    
+
+    /**
+     *
+     * @return array<string>
+     */
     public function getColumns(): array
     {
         return $this->columns;

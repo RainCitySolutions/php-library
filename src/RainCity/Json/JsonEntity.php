@@ -18,8 +18,8 @@ abstract class JsonEntity
      * contain entries for all of the fields in the list in the appropriate
      * order. Additionally, the byIndex property must be set to 'true'.
      *
-     * @return array An array of FieldPropertyEntry objects defining the mapping
-     *      between JSON field and object property
+     * @return array<FieldPropertyEntry> An array of FieldPropertyEntry objects
+     *      defining the mapping between JSON field and object property.
      */
     protected static function getFieldPropertyMap(): array
     {

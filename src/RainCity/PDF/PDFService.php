@@ -148,7 +148,7 @@ class PDFService
      * @param string $xmlFilename   The fully qualified name of the XML file.
      * @param string $xsltFilename The fully qualified name of the XSLT file.
      * @param string $pdfFilename   The fully qualified name of the PDF file.
-     * @param array $supportFiles An array of fully qualified filenames to be
+     * @param array<string> $supportFiles An array of fully qualified filenames to be
      *      included with the request to the PDF service. These might include
      *      background images, or child XSLT files referenced by the XSLT file.
      *
@@ -205,7 +205,12 @@ class PDFService
                     $result = true;
                 }
             } else {
-                $reason = $response->getBody() ?? $response->getReasonPhrase();
+                $reason = $response->getBody()->getContents();
+
+                if (empty($reason)) {
+                    $reason = $response->getReasonPhrase();
+                }
+
                 throw new PDFServiceException(
                     'Error requesting PDF: ' . $reason,
                     PDFServiceException::GENERATION_ERROR
@@ -249,7 +254,12 @@ class PDFService
                     );
             }
         } else {
-            $reason = $response->getBody() ?? $response->getReasonPhrase();
+            $reason = $response->getBody()->getContents();
+
+            if (empty($reason)) {
+                $reason = $response->getReasonPhrase();
+            }
+
             throw new PDFServiceException(
                 'Error retrieving PDF: ' . $reason,
                 PDFServiceException::PDF_FETCH_ERROR

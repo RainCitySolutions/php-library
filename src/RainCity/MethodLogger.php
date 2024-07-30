@@ -38,9 +38,7 @@ class MethodLogger
             $str .= $caller['type'];
         }
 
-        if (isset($caller['function'])) {
-            $str .= $caller['function'];
-        }
+        $str .= $caller['function'];
 
         return $str;
     }

@@ -24,7 +24,7 @@ final class Logger implements LoggerIntf
      *
      * @param string $loggerClazz The class to use for logging, e.g. MyLogger::class
      */
-    public static function setLogger(string $loggerClazz) {
+    public static function setLogger(string $loggerClazz): void {
         self::$loggerClazz = $loggerClazz;
     }
 

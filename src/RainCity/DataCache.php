@@ -190,7 +190,7 @@ class DataCache implements CacheInterface
     {
         /** @var \Psr\Cache\CacheItemInterface */
         $item = $this->cache->getItem($key);
-        if (isset($item) && !$item->isHit() && isset($default)) {
+        if (!$item->isHit() && isset($default)) {
             $this->log->debug("Request for $key not found, returning default");
             $item->set($default);
             $this->cache->save($item);
@@ -241,16 +241,14 @@ class DataCache implements CacheInterface
 
     /**
      *
+     * @param iterable<string, mixed> $values
+     *
      * {@inheritDoc}
      * @see \Psr\SimpleCache\CacheInterface::setMultiple()
      */
-    public function setMultiple(Traversable|array $values, \DateInterval|int|null $ttl = null): bool
+    public function setMultiple(iterable $values, \DateInterval|int|null $ttl = null): bool
     {
         $result = false;
-
-        if (!is_array($values) && !($values instanceof Traversable)) {
-            throw new DataCacheException('values argument must be an array or implement the Transversable interface');
-        }
 
         foreach ($values as $key => $value) {
             if (!is_string($key)) {
@@ -268,13 +266,9 @@ class DataCache implements CacheInterface
      * {@inheritDoc}
      * @see \Psr\SimpleCache\CacheInterface::getMultiple()
      */
-    public function getMultiple(Traversable|array $keys, mixed $default = null): Traversable|array
+    public function getMultiple(iterable $keys, mixed $default = null): Traversable|array
     {
         $result = array();
-
-        if (!is_array($keys) && !($keys instanceof Traversable)) {
-            throw new DataCacheException('keys argument must be an array or implement the Transversable interface');
-        }
 
         foreach ($keys as $key) {
             if (!is_string($key)) {
@@ -287,12 +281,12 @@ class DataCache implements CacheInterface
         return $result;
     }
 
-    private static function getSqliteFile()
+    private static function getSqliteFile(): string
     {
         return sys_get_temp_dir() . '/datacache.sqlite3';
     }
 
-    private static function getFilesCacheDir()
+    private static function getFilesCacheDir(): string
     {
         return sys_get_temp_dir() . '/files.cache';
     }
@@ -300,7 +294,7 @@ class DataCache implements CacheInterface
     /**
      * Cleans up any files created by the default cache implementation
      */
-    public static function uninstall()
+    public static function uninstall(): void
     {
         Logger::getLogger(BaseLogger::BASE_LOGGER)->info('DataCache::uninstall() called');
 

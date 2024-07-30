@@ -20,7 +20,7 @@ class FileSystem
         if ($tmpFilename) {
             $finalFilename = $tmpFilename . $extension;
             if (!rename ($tmpFilename, $finalFilename)) {
-                $finalFilename = falseE;
+                $finalFilename = false;
             }
         }
 

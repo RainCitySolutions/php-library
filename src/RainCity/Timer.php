@@ -16,6 +16,7 @@ class Timer {
     private float $stop = 0.0;
     private float $elapsed = 0.0;
     private float $lapTotalTime = 0.0;
+    /** @var array<string> */
     private array $laps = array();
     private int $count = 1;
 
@@ -29,7 +30,8 @@ class Timer {
      * @param bool $startNow If set to true the timer immediately starts.
      *      Defaults to false.
      */
-    public function __construct(bool $startNow = false) {
+    public function __construct(bool $startNow = false)
+    {
         if ($startNow) {
             $this->start();
         }
@@ -40,7 +42,8 @@ class Timer {
      *
      * Resets the timer on each call.
      */
-    public function start() {
+    public function start(): void
+    {
         $this->start = $this->getMicroTime();
         $this->stop = 0.0;  // reset the stop time
     }
@@ -50,7 +53,8 @@ class Timer {
      *
      * If the timer has not be started, nothing happens.
      */
-    public function stop() {
+    public function stop(): void
+    {
         // Don't set stop if we haven't started
         if (0.0 !== $this->start) {
             $this->stop = $this->getMicroTime();
@@ -63,7 +67,8 @@ class Timer {
      * If the timer has not been started, or has already been stopped,
      * nothing happens.
      */
-    public function pause() {
+    public function pause(): void
+    {
         // Don't set pause if we haven't started or we have already stopped or we are currently paused
         if (0.0 !== $this->start && 0.0 === $this->stop && 0.0 === $this->pause) {
             $this->pause = $this->getMicroTime();
@@ -76,7 +81,8 @@ class Timer {
      *
      * If pause has not been called nothing happens.
      */
-    public function resume() {
+    public function resume(): void
+    {
         if (0.0 !== $this->pause) {
             $this->start = $this->getMicroTime();
             $this->pause = 0.0;
@@ -87,7 +93,8 @@ class Timer {
      * Used to build an array of times for multiple timers, adding a key parameter can be used to name the `lap`
      * @param string $key Used as the key in the kay value pair array.
      */
-    public function lap($key = '') {
+    public function lap($key = ''): void
+    {
         $key = ($key === '') ? 'Lap' : $key;
         if (isset($this->start)) {
             $this->stop();
@@ -106,7 +113,7 @@ class Timer {
      *
      * Otherwise returns the total elapsed time.
      *
-     * @return string|array The elapsed time or an array of times.
+     * @return string|array<string> The elapsed time or an array of times.
      */
     public function getTime(): string|array
     {
@@ -124,7 +131,8 @@ class Timer {
      * Get the time.
      * @return string lap time to lap() function
      */
-    private function getLapTime() {
+    private function getLapTime(): string
+    {
         return $this->timeToString();
     }
 
@@ -132,18 +140,20 @@ class Timer {
      * Get the microtime.
      * @return float microtime
      */
-    private function getMicroTime() {
+    private function getMicroTime(): float
+    {
         return microtime(true);
     }
 
     /**
      * Convert the time to a readable string for display or logging.
      *
-     * @param float $seconds Seconds gathered from the `getTime` function
+     * @param float $timeSeconds Seconds gathered from the `getTime` function
      *
      * @return string time in a displayable string
      */
-    private function timeToString(?float $timeSeconds = null) {
+    private function timeToString(?float $timeSeconds = null): string
+    {
         if (is_null($timeSeconds)) {
             $timeSeconds = ($this->stop - $this->start) + $this->elapsed;
         }
@@ -169,7 +179,8 @@ class Timer {
      * @param float $microTime Time from `timeToString` function
      * @return float time rounded
      */
-    private function roundMicroTime($microTime) {
+    private function roundMicroTime($microTime)
+    {
         return round($microTime, 4, PHP_ROUND_HALF_UP);
     }
 }
