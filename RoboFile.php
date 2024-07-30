@@ -71,19 +71,6 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Task to run PHPStan
-     *
-     * @return TaskInterface The task
-     */
-    protected function runPhpStan(): TaskInterface
-    {
-        return $this->taskExec('vendor/bin/phpstan')
-            ->arg('analyze')
-            ->arg('--no-progress')
-            ->arg('--error-format=github');
-    }
-
-    /**
      * Task to bump the version number
      *
      * Updates version.txt and composer.json
@@ -140,6 +127,18 @@ class RoboFile extends \Robo\Tasks
 //         </phplint>
     }
 
+    /**
+     * Task to run PHPStan
+     *
+     * @return TaskInterface The task
+     */
+    protected function runPhpStan(): TaskInterface
+    {
+        return $this->taskExec('vendor/bin/phpstan')
+        ->arg('analyze')
+        ->arg('--no-progress')
+        ->arg('--error-format=github');
+    }
 
     /**
      * Task to run the unit tests
@@ -148,7 +147,8 @@ class RoboFile extends \Robo\Tasks
      */
     public function test(): TaskInterface
     {
-        return $this->taskPHPUnit();
+        return $this->taskPHPUnit()
+            ->arg('--no-progress');
     }
 
     /**
