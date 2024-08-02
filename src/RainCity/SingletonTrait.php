@@ -17,6 +17,7 @@ trait SingletonTrait {
      * instance if one already exists.
      *
      * @param array An array of parameters for the class constructor
+     *
      * @return object Instance of the called class.
      */
     final public static function instance(...$args)
