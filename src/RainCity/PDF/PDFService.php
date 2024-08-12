@@ -167,28 +167,35 @@ class PDFService
         array_push($multipartData, array('name' => 'xsltfile', 'contents' => basename($xsltFilename)));
         array_push($multipartData, array('name' => 'pdffile', 'contents' => basename($pdfFilename)));
 
-        // Add the support files
-        foreach ($supportFiles as $file) {
+        try {
+            // Add the support files
+            foreach ($supportFiles as $file) {
+                array_push($multipartData, array(
+                    'name' => self::FILES_FIELD,
+                    'filename' => $file,
+                    'contents' => Utils::tryFopen($file, 'r')
+                    ));
+            }
+
+            // add the xml file
             array_push($multipartData, array(
                 'name' => self::FILES_FIELD,
-                'filename' => $file,
-                'contents' => fopen($file, 'r')
-            ));
+                'filename' => $xmlFilename,
+                'contents' => Utils::tryFopen($xmlFilename, 'r')
+                ));
+
+            // add the XSLT file
+            array_push($multipartData, array(
+                'name' => self::FILES_FIELD,
+                'filename' => $xsltFilename,
+                'contents' => Utils::tryFopen($xsltFilename, 'r')
+                ));
+        } catch (\RuntimeException $re) {
+            throw new PDFServiceException(
+                'Unable to read file(s) needed for PDF generation: ' . $re->getMessage(),
+                PDFServiceException::PDF_FILE_ERROR
+                );
         }
-
-        // add the xml file
-        array_push($multipartData, array(
-            'name' => self::FILES_FIELD,
-            'filename' => $xmlFilename,
-            'contents' => fopen($xmlFilename, 'r')
-        ));
-
-        // add the XSLT file
-        array_push($multipartData, array(
-            'name' => self::FILES_FIELD,
-            'filename' => $xsltFilename,
-            'contents' => fopen($xsltFilename, 'r')
-        ));
 
         try {
             // send the conversion request to the service as Multipart form data
