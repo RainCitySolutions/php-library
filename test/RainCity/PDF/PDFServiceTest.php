@@ -355,6 +355,55 @@ class PDFServiceTest extends RainCityTestCase
     /**
      * Tests PDFService->fetchPDF()
      */
+    public function testFetchPDF_missingXmlFileError()
+    {
+        $testXsltFile = $this->getTempFile();
+        $testPdfFile = $this->getTempFile();
+
+        $pdfSvc = $this->getTestInstance();
+        $this->resetHttpHistory();
+
+        $this->expectException(PDFServiceException::class);
+
+        $pdfSvc->fetchPDF('noSuchFile.xml', $testXsltFile, $testPdfFile, array());
+    }
+
+    /**
+     * Tests PDFService->fetchPDF()
+     */
+    public function testFetchPDF_missingXsltFileError()
+    {
+        $testXmlFile = $this->getTempFile();
+        $testPdfFile = $this->getTempFile();
+
+        $pdfSvc = $this->getTestInstance();
+        $this->resetHttpHistory();
+
+        $this->expectException(PDFServiceException::class);
+
+        $pdfSvc->fetchPDF($testXmlFile, 'noSuchFile.xslt', $testPdfFile, array());
+    }
+
+    /**
+     * Tests PDFService->fetchPDF()
+     */
+    public function testFetchPDF_missingSupportFiles()
+    {
+        $testXmlFile = $this->getTempFile();
+        $testXsltFile = $this->getTempFile();
+        $testPdfFile = $this->getTempFile();
+
+        $pdfSvc = $this->getTestInstance();
+        $this->resetHttpHistory();
+
+        $this->expectException(PDFServiceException::class);
+
+        $pdfSvc->fetchPDF($testXmlFile, $testXsltFile, $testPdfFile, array('noSuchFile.png'));
+    }
+
+    /**
+     * Tests PDFService->fetchPDF()
+     */
     public function testFetchPDF_serverError()
     {
         $testXmlFile = $this->getTempFile();
