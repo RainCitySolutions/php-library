@@ -31,6 +31,16 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         return $setupObj->encode();
     }
 
+    public function testSet_returnObject()
+    {
+        $testObj = new UrlDataObject();
+
+        $retObj = $testObj->set(self::TEST_KEY_A, self::TEST_STRING);
+
+        self::assertNotNull($retObj);
+        self::assertSame($testObj, $retObj);
+    }
+
     public function testSet_singleProp()
     {
         $testObj = new UrlDataObject();
@@ -367,6 +377,18 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
 
         self::assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_A});
         self::assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_B});
+    }
+
+    public function testAdd_returnObject()
+    {
+        $testObj = new UrlDataObject();
+        $retObj = $testObj->add([
+            self::TEST_KEY_A => self::TEST_STRING,
+            self::TEST_KEY_C => self::TEST_INTEGER
+        ]);
+
+        self::assertNotNull($retObj);
+        self::assertSame($testObj, $retObj);
     }
 
     public function testAdd_validPairs()

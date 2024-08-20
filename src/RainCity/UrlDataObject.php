@@ -35,12 +35,17 @@ class UrlDataObject
      *
      * @param array<string, string> $pairs An associative array of keys to
      *      values, both of which must be strings.
+     *
+     * @return UrlDataObject The instance of the object allowing calls to
+     *      be chained.
      */
-    public function add(array $pairs): void
+    public function add(array $pairs): UrlDataObject
     {
         foreach($pairs as $key => $value) {
             $this->data->$key = strval($value);
         }
+
+        return $this;
     }
 
     /**
