@@ -81,8 +81,11 @@ class TimerTest extends RainCityTestCase
         self::assertNotEquals(floatval(0), $startVal);
         self::assertNotEquals(floatval(0), $stopVal);
         self::assertGreaterThan($startVal, $stopVal);
-        self::assertGreaterThan(self::SLEEP_TIME_SECONDS, $stopVal - $startVal);
-        self::assertLessThan(self::SLEEP_TIME_SECONDS * 2, $stopVal - $startVal);
+
+        $elapsed = $stopVal - $startVal;
+
+        self::assertGreaterThan(self::SLEEP_TIME_SECONDS - 0.1, $elapsed); // within a tenth before
+        self::assertLessThan(self::SLEEP_TIME_SECONDS + 0.1, $elapsed);    // with a tenth after
     }
 
     public function testStart_restart()
