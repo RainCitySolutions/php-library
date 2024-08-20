@@ -31,6 +31,19 @@ class UrlDataObject
     }
 
     /**
+     * Stores a set of values with the associated keys.
+     *
+     * @param array<string, string> $pairs An associative array of keys to
+     *      values, both of which must be strings.
+     */
+    public function add(array $pairs): void
+    {
+        foreach($pairs as $key => $value) {
+            $this->data->$key = strval($value);
+        }
+    }
+
+    /**
      * Stores a value, associating it with the specified key.
      *
      * @param string $key A key to use in later retrieving the value.
@@ -123,13 +136,13 @@ class UrlDataObject
 
         return $success;
     }
-    
+
     private function loadFromJson(string $jsonStr): bool
     {
         $result = false;
 
         $jsonObj = json_decode($jsonStr);
-        
+
         if (false !== $jsonObj && json_last_error() === JSON_ERROR_NONE) {
             $this->data = $jsonObj;
             $result = true;

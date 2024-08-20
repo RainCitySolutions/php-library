@@ -368,4 +368,23 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         self::assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_A});
         self::assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_B});
     }
+
+    public function testAdd_validPairs()
+    {
+        $testObj = new UrlDataObject();
+        $testObj->add([
+            self::TEST_KEY_A => self::TEST_STRING,
+            self::TEST_KEY_C => self::TEST_INTEGER
+            ]);
+
+        $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
+
+        self::assertNotNull($dataProp);
+        self::assertIsObject($dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_A, $dataProp);
+        self::assertObjectHasProperty(self::TEST_KEY_C, $dataProp);
+
+        self::assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
+        self::assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_C});
+    }
 }
