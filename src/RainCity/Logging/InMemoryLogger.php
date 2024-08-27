@@ -110,7 +110,7 @@ class InMemoryLogger implements LoggerInterface
      * {@inheritDoc}
      * @see \Psr\Log\LoggerInterface::log()
      */
-    public function log($level, string|\Stringable $message, array $context = array()): void
+    public function log(mixed $level, string|\Stringable $message, array $context = array()): void
     {
         $this->logger->log($level, $message, $context);
     }
