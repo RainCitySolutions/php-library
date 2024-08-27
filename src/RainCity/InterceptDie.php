@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace RainCity\TestHelper;
+namespace RainCity;
 
 /**
  *  Trait to define die method so that when unit tests are running PHP won't
