@@ -13,7 +13,7 @@ namespace RainCity;
 trait InterceptDie
 {
     public function die($msg = '') {
-        if (! @PHPUNIT_RUNNING){
+        if (!defined('PHPUNIT_RUNNING') || !PHPUNIT_RUNNING) {
             die($msg);
         }
     }
