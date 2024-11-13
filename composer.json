@@ -9,7 +9,7 @@
 		"php" : ">=8.2",
 		"composer/installers" : "~2.3",
 		"psr/log" : "~3.0",
-		"monolog/monolog" : "~3.7",
+		"monolog/monolog" : "~3.8",
 		"psr/simple-cache" : "~3.0",
 		"symfony/cache" : "~7.1",
 		"guzzlehttp/guzzle" : "~7.9",
