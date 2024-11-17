@@ -409,4 +409,25 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         self::assertEquals(self::TEST_STRING, $dataProp->{self::TEST_KEY_A});
         self::assertEquals(self::TEST_INTEGER, $dataProp->{self::TEST_KEY_C});
     }
+
+    public function testUrlStringAlreadyDecoded()
+    {
+        $data = ['rcdId' => 'Blair', 'frm' => 'cprn_consent_form', 'pdf' => 'Consent Form', 'evt' => 'initial_visit_arm_1'];
+
+        $inputObj = new UrlDataObject();
+        $inputObj->add($data);
+
+        $urlStr = $inputObj->encode();
+
+        $urlStr = urldecode($urlStr);   // Simulate server decoding the URL string
+
+        $testObj = new UrlDataObject();
+        $result = $testObj->decode($urlStr, false);
+
+        self::assertTrue($result, 'Failed to decode string');
+        foreach($data as $key => $testValue) {
+            $value = $testObj->get($key);
+            self::assertEquals($testValue, $value);
+        }
+    }
 }

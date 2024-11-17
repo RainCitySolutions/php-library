@@ -114,17 +114,25 @@ class UrlDataObject
      *
      * @param string $urlString A string previously generated with the
      *      encode() method.
+     * @param bool $doUrlDecode Flag indicating whether urldecode() should be
+     *      called. Defaults to true. The $urlString parameter may have
+     *      already been decoded by the server in which case this flag should
+     *      be set to false.
      *
      * @return bool Returns true on success, and false of there is a problem
      *      decoding the string. If the string cannot be decoded the data
      *      will remain empty.
      */
-    public function decode(string $urlString): bool
+    public function decode(string $urlString, bool $doUrlDecode = true): bool
     {
         $success = false;
 
         if (!empty($urlString)) {
-            $urlDecodedStr = urldecode($urlString);
+            if ($doUrlDecode) {
+                $urlDecodedStr = urldecode($urlString);
+            } else {
+                $urlDecodedStr = $urlString;
+            }
 
             if (preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $urlDecodedStr)) {
                 $b64DecodedStr = base64_decode($urlDecodedStr);
