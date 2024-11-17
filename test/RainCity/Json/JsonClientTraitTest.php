@@ -9,10 +9,10 @@ use RainCity\DataCache;
 use RainCity\Json\Test\JsonClientTraitTestClass;
 use RainCity\TestHelper\RainCityTestCase;
 use RainCity\TestHelper\ReflectionHelper;
-use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversTrait(\RainCity\Json\JsonClientTrait::class)]
+#[CoversClass(\RainCity\Json\Test\JsonClientTraitTestClass::class)]
 #[CoversMethod(\RainCity\DataCache::class, '__construct')]
 #[CoversMethod(\RainCity\DataCache::class, 'createMemcachedCache')]
 #[CoversMethod(\RainCity\DataCache::class, 'createSqliteCache')]

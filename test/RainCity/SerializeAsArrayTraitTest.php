@@ -3,9 +3,9 @@ namespace RainCity;
 
 use PHPUnit\Framework\TestCase;
 use RainCity\TestHelper\ReflectionHelper;
-use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[CoversTrait(\RainCity\SerializeAsArrayTrait::class)]
+#[CoversClass(\RainCity\TestSerializeAsArrayTrait::class)]
 class SerializeAsArrayTraitTest extends TestCase
 {
     const TEST_STR_KEY = 'strValue';
@@ -14,7 +14,7 @@ class SerializeAsArrayTraitTest extends TestCase
     const TEST_OBJ_KEY = 'objValue';
     const TEST_OBJ_VALUE_KEY = 'classValue';
     const TEST_NEW_OBJ_KEY = 'newObjValue';
-    
+
     const TEST_STR_VALUE = 'TestValue';
     const TEST_ALT_STR_VALUE = 'AltTestValue';
     const TEST_INT_VALUE = 85185105;
@@ -65,7 +65,7 @@ class SerializeAsArrayTraitTest extends TestCase
 
         self::assertArrayHasKey(self::TEST_INT_KEY, $array);
         self::assertEquals(self::TEST_INT_VALUE, $array[self::TEST_INT_KEY]);
-        
+
         self::assertArrayHasKey(self::TEST_OBJ_KEY, $array);
         self::assertInstanceOf(\stdClass::class, $array[self::TEST_OBJ_KEY]);
         self::assertEquals($this->testObjValue, $array[self::TEST_OBJ_KEY]);
@@ -124,7 +124,7 @@ class SerializeAsArrayTraitTest extends TestCase
         self::assertEquals(self::TEST_ALT_STR_VALUE, $this->getTestObjProperty(self::TEST_STR_KEY));
         self::assertEquals(self::TEST_ALT_INT_VALUE, $this->getTestObjProperty(self::TEST_INT_KEY));
         self::assertEquals($this->testObjValue, $this->getTestObjProperty(self::TEST_OBJ_KEY));
-        
+
         self::assertNull($this->getTestObjProperty(self::TEST_EXTRA_KEY));
     }
 
@@ -174,7 +174,7 @@ class SerializeAsArrayTraitTest extends TestCase
 
         self::assertEquals($this->testObjValue, $this->getTestObjProperty(self::TEST_OBJ_KEY));
     }
-    
+
     public function testPreSerialize()
     {
         $testObject = new \stdClass();
@@ -187,7 +187,7 @@ class SerializeAsArrayTraitTest extends TestCase
             );
 
         $serialObj = serialize($this->testObj);
-        
+
         self::assertIsString($serialObj);
         self::assertStringStartsWith(self::$serialObjectPrefix, $serialObj);
         self::assertStringNotContainsString(self::TEST_NEW_OBJ_KEY, $serialObj);
@@ -200,17 +200,17 @@ class SerializeAsArrayTraitTest extends TestCase
         ReflectionHelper::setObjectProperty(get_class($this->testObj), self::TEST_OBJ_KEY, $obj, $this->testObj);
 
         $serialStr = serialize($this->testObj);
-        
+
         $this->testObj = unserialize($serialStr);
-        
+
         self::assertNotNull($this->testObj);
-        
+
         $obj = $this->getTestObjProperty(self::TEST_OBJ_KEY);
-        
+
         self::assertInstanceOf(\stdClass::class, $obj);
         self::assertEquals(1, $obj->classValue);
     }
-    
+
     public function testPostUnserialize()
     {
         self::assertNull(
@@ -220,7 +220,7 @@ class SerializeAsArrayTraitTest extends TestCase
                 $this->testObj
                 )
         );
-        
+
         $serialStr = sprintf(
             '%s%d:{s:%d:"%s";s:%d:"%s";s:%d:"%s";i:%d;s:%d:"%s";%s}',
             self::$serialObjectPrefix,
@@ -236,7 +236,7 @@ class SerializeAsArrayTraitTest extends TestCase
             self::TEST_OBJ_KEY,
             serialize($this->testObjValue)
             );
-        
+
         $this->testObj = unserialize($serialStr);
 
         $objVal = ReflectionHelper::getObjectProperty(
@@ -244,11 +244,11 @@ class SerializeAsArrayTraitTest extends TestCase
             self::TEST_OBJ_KEY,
             $this->testObj
             );
-            
+
         self::assertNotNull($objVal);
         self::assertInstanceOf(\stdClass::class, $objVal);
     }
-    
+
     private function getTestObjProperty(string $prop)
     {
         return ReflectionHelper::getObjectProperty(get_class($this->testObj), $prop, $this->testObj);
@@ -285,7 +285,7 @@ class TestSerializeAsArrayTrait {
         $this->intValue = $intValue;
         $this->objValue = $objValue;
     }
-    
+
     protected function preSerialize(array &$vars): void
     {
         unset($vars[SerializeAsArrayTraitTest::TEST_NEW_OBJ_KEY]);
