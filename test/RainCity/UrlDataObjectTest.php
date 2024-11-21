@@ -25,7 +25,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $setupProp = new \stdClass();
 
         $setupProp->{self::TEST_KEY_A} = self::TEST_STRING;
-        $setupProp->{self::TEST_KEY_B} = self::TEST_INTEGER;
+        $setupProp->{self::TEST_KEY_B} = strval(self::TEST_INTEGER);
 
         ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $setupProp, $setupObj);
 
@@ -61,7 +61,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
     {
         $testObj = new UrlDataObject();
 
-        $testObj->set(self::TEST_KEY_A, self::TEST_INTEGER);
+        $testObj->set(self::TEST_KEY_A, strval(self::TEST_INTEGER));
         $testObj->set(self::TEST_KEY_B, self::TEST_STRING);
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
@@ -97,7 +97,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $testProp = new \stdClass();
 
         $testProp->{self::TEST_KEY_A} = self::TEST_STRING;
-        $testProp->{self::TEST_KEY_B} = self::TEST_INTEGER;
+        $testProp->{self::TEST_KEY_B} = strval(self::TEST_INTEGER);
 
         ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $testProp, $testObj);
 
@@ -135,7 +135,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $testObj = new UrlDataObject();
 
         $testObj->set(self::TEST_KEY_A, self::TEST_STRING);
-        $testObj->set(self::TEST_KEY_B, self::TEST_INTEGER);
+        $testObj->set(self::TEST_KEY_B, strval(self::TEST_INTEGER));
 
         self::assertEquals(self::TEST_INTEGER, $testObj->get(self::TEST_KEY_B));
         self::assertEquals(self::TEST_STRING, $testObj->get(self::TEST_KEY_A));
@@ -171,7 +171,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         $testProp = new \stdClass();
 
         $testProp->{self::TEST_KEY_A} = self::TEST_STRING;
-        $testProp->{self::TEST_KEY_B} = self::TEST_INTEGER;
+        $testProp->{self::TEST_KEY_B} = strval(self::TEST_INTEGER);
 
         ReflectionHelper::setObjectProperty(UrlDataObject::class, 'data', $testProp, $testObj);
 
@@ -180,7 +180,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
         self::assertNotNull($testStr);
         self::assertStringNotContainsString(self::TEST_KEY_A, $testStr);
         self::assertStringNotContainsString(self::TEST_KEY_B, $testStr);
-        self::assertStringNotContainsString(self::TEST_INTEGER, $testStr);
+        self::assertStringNotContainsString(strval(self::TEST_INTEGER), $testStr);
         self::assertStringNotContainsString(self::TEST_STRING, $testStr);
     }
 
@@ -366,7 +366,7 @@ class UrlDataObjectTest extends RainCityTestCase // NOSONAR - too many methods
     public function testSet_chainedCalls()
     {
         $testObj = (new UrlDataObject())
-            ->set(self::TEST_KEY_A, self::TEST_INTEGER)
+            ->set(self::TEST_KEY_A, strval(self::TEST_INTEGER))
             ->set(self::TEST_KEY_B, self::TEST_STRING);
 
         $dataProp = ReflectionHelper::getObjectProperty(UrlDataObject::class, 'data', $testObj);
