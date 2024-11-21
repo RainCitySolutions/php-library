@@ -8,6 +8,7 @@ namespace RainCity;
  * singleton. Simply "use SingletonTrait;" and make the class constructor
  * protected.
  *
+ * @phpstan-ignore trait.unused
  */
 trait SingletonTrait {
     protected static $instance;

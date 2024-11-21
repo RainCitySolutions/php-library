@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace RainCity\Csv;
 
 /**
@@ -19,13 +20,13 @@ final class CsvBindByName
      * property.
      *
      * @Required
-     * @var array<string>
+     * @var string[]
      */
     private array $columns;
 
     /**
      *
-     * @param string|array<string> $column
+     * @param string|string[] $column
      */
     public function __construct(string|array $column)
     {
@@ -37,15 +38,15 @@ final class CsvBindByName
             $column = array($column);
         }
 
-        if (!empty(array_filter($column, fn($entry) => !is_string($entry) || empty(trim($entry))))) {
+        if (!empty(array_filter($column, fn(string $entry) => empty(trim($entry))))) {
             throw new \InvalidArgumentException(self::INVALID_ARG_MSG);
         }
-        $this->columns = array_map(fn($entry) => trim($entry), $column);
+        $this->columns = array_map(fn(string $entry) => trim($entry), $column);
     }
 
     /**
      *
-     * @return array<string>
+     * @return string[]
      */
     public function getColumns(): array
     {

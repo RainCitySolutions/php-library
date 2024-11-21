@@ -17,6 +17,8 @@ use RainCity\DataCache;
  *
  * It also provides a means to cache the JSON responses to avoid duplicate
  * requests to the server.
+ *
+ * @phpstan-ignore trait.unused
  */
 trait JsonClientTrait
 {

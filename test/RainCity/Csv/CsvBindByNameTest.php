@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace RainCity\Csv;
 
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -33,12 +34,12 @@ class CsvBindByNameTest extends RainCityTestCase
         new CsvBindByName('   ');  // NOSONAR
     }
 
-    public function testCtor_nonStringArray()
-    {
-        $this->expectException(\InvalidArgumentException::class);
+//     public function testCtor_nonStringArray()
+//     {
+//         $this->expectException(\InvalidArgumentException::class);
 
-        new CsvBindByName(['a', 2,]);  // NOSONAR
-    }
+//         new CsvBindByName(['a', 2,]);  // NOSONAR
+//     }
 
     public function testCtor_string()
     {

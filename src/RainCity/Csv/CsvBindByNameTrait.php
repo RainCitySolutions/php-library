@@ -6,7 +6,7 @@ use ReflectionProperty;
 
 /**
  * A Trait work in conjuction with CsvBindByName annotation.
- *
+ * @phpstan-ignore trait.unused
  */
 trait CsvBindByNameTrait
 {
@@ -78,18 +78,18 @@ trait CsvBindByNameTrait
 
         return $result;
     }
-    
+
     private static function processAnnotations(array &$result, callable $callback): void
     {
         $reader = new AnnotationReader();
         $reflectionClass = new \ReflectionClass(get_called_class());
-        
+
         /** @var ReflectionProperty[] */
         $properties = $reflectionClass->getProperties();
-        
+
         foreach ($properties as $property) {
             $annotations = $reader->getPropertyAnnotations($property);
-            
+
             foreach ($annotations as $anno) {
                 if ($anno instanceof CsvBindByName) {
                     $callback($result, $anno, $property);

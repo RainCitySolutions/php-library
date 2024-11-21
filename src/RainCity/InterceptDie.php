@@ -9,6 +9,8 @@ namespace RainCity;
  *  calling $this->die() instead of die().
 
  *  Relies on define('PHPUNIT_RUNNING').
+ *
+ *  @phpstan-ignore trait.unused
  */
 trait InterceptDie
 {

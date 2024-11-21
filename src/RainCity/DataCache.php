@@ -251,9 +251,9 @@ class DataCache implements CacheInterface
         $result = false;
 
         foreach ($values as $key => $value) {
-            if (!is_string($key)) {
-                throw new DataCacheException('Invalid key included in values parameter');
-            }
+//             if (!is_string($key)) {
+//                 throw new DataCacheException('Invalid key included in values parameter');
+//             }
 
             $result = $this->set($key, $value, $ttl) || $result;
         }
@@ -271,9 +271,9 @@ class DataCache implements CacheInterface
         $result = array();
 
         foreach ($keys as $key) {
-            if (!is_string($key)) {
-                throw new DataCacheException('key argument must be a string or an integer');
-            }
+//             if (!is_string($key)) {
+//                 throw new DataCacheException('key argument must be a string or an integer');
+//             }
 
             $result[$key] = $this->get($key, $default);
         }

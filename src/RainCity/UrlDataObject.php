@@ -135,6 +135,7 @@ class UrlDataObject
             }
 
             if (preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $urlDecodedStr)) {
+                /** @var string|false */
                 $b64DecodedStr = base64_decode($urlDecodedStr);
 
                 if (false !== $b64DecodedStr) {
