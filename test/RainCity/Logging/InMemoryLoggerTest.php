@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 namespace RainCity\Logging;
 
 
@@ -12,7 +13,7 @@ class InMemoryLoggerTest extends TestCase
     public function testGetLogger()
     {
         $logger = new InMemoryLogger();
-        
+
         self::assertNotNull($logger);
         self::assertInstanceOf(LoggerInterface::class, $logger);
     }
@@ -20,19 +21,19 @@ class InMemoryLoggerTest extends TestCase
     public function testGetLogMsgs_emptyArray()
     {
         $logger = new InMemoryLogger();
-        
+
         self::assertEmpty($logger->getLogMsgs());
     }
 
     public function testGetLogMsgs_withMsgs()
     {
         $logger = new InMemoryLogger();
-        
+
         $logger->critical('Info Msg1');
         $logger->critical('Info Msg2');
-        
+
         $msgs = $logger->getLogMsgs();
-        
+
         self::assertNotEmpty($msgs);
         self::assertCount(2, $msgs);
     }

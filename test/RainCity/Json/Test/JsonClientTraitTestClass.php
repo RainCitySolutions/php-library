@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 namespace RainCity\Json\Test;
 
 use JsonMapper\Handler\FactoryRegistry;
@@ -12,7 +13,7 @@ use RainCity\Json\JsonClientTrait;
 class JsonClientTraitTestClass
 {
     use JsonClientTrait;
-    
+
     public function __construct(?int $ttl = null, ?FactoryRegistry $factory = null)
     {
         if (isset($ttl)) {
