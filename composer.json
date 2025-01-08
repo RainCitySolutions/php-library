@@ -11,7 +11,7 @@
 		"psr/log" : "~3.0",
 		"monolog/monolog" : "~3.8",
 		"psr/simple-cache" : "~3.0",
-		"symfony/cache" : "~7.1",
+		"symfony/cache" : "~7.2",
 		"guzzlehttp/guzzle" : "~7.9",
 		"json-mapper/json-mapper" : "~2.22",
 		"doctrine/annotations" : "~2.0"
