@@ -42,13 +42,7 @@ class ReflectionHelper
             if ($reflectionClass->hasProperty($prop)) {
                 $reflectionProp = $reflectionClass->getProperty($prop);
 
-                if ($reflectionProp->isPrivate() || $reflectionProp->isProtected()) {
-                    $reflectionProp->setAccessible(true);
-                    $result = $reflectionProp->getValue($obj);
-                    $reflectionProp->setAccessible(false);
-                } else {
-                    $result = $reflectionProp->getValue($obj);
-                }
+                $result = $reflectionProp->getValue($obj);
             } else {
                 $parentClass = $reflectionClass->getParentClass();
                 if ($parentClass) {
@@ -91,13 +85,7 @@ class ReflectionHelper
             if ($reflectionClass->hasProperty($prop)) {
                 $reflectionProp = $reflectionClass->getProperty($prop);
 
-                if ($reflectionProp->isPrivate() || $reflectionProp->isProtected()) {
-                    $reflectionProp->setAccessible(true);
-                    $value = $reflectionProp->setValue($obj, $value);
-                    $reflectionProp->setAccessible(false);
-                } else {
-                    $value = $reflectionProp->setValue($obj, $value);
-                }
+                $value = $reflectionProp->setValue($obj, $value);
             } else {
                 $parentClass = $reflectionClass->getParentClass();
                 if ($parentClass) {
