@@ -26,7 +26,7 @@ class Helper
      * Write a log message using error_log().
      *
      * @param mixed $message A string message or object to log.
-     * @param array<string> $data Any additoinal data to log.
+     * @param array<mixed> $data Any additoinal data to log.
      *
      * @return bool Returns true on success, false on failure.
      */
