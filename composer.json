@@ -9,11 +9,11 @@
 		"php" : ">=8.2",
 		"composer/installers" : "~2.3",
 		"psr/log" : "~3.0",
-		"monolog/monolog" : "~3.8",
+		"monolog/monolog" : "~3.9",
 		"psr/simple-cache" : "~3.0",
 		"symfony/cache" : "~7.2",
 		"guzzlehttp/guzzle" : "~7.9",
-		"json-mapper/json-mapper" : "~2.22",
+		"json-mapper/json-mapper" : "~2.25",
 		"doctrine/annotations" : "~2.0"
 	},
 	"autoload" : {
