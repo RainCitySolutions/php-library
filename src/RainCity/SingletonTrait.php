@@ -12,21 +12,21 @@ namespace RainCity;
  * @phpstan-ignore trait.unused
  */
 trait SingletonTrait {
-    protected static $instance;
+    protected static ?self $instance;
 
     /**
      * Initializes an instance of the called class or returned an existing
      * instance if one already exists.
      *
-     * @param array An array of parameters for the class constructor
+     * @param array<mixed> $args An array of parameters for the class constructor
      *
-     * @return object Instance of the called class.
+     * @return self Instance of the called class.
      */
-    final public static function instance(...$args)
+    final public static function instance(...$args): self
     {
         if (!isset(self::$instance))
         {
-            self::$instance = new static($args);
+            self::$instance = new self($args);
         }
 
         return self::$instance;

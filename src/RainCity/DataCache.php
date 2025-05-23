@@ -173,10 +173,8 @@ class DataCache implements CacheInterface
         if (isset($ttl)) {
             $item->expiresAfter($ttl);
         } else {
-            if (isset($this->defaultTTL)) {
-                $ttl = $this->defaultTTL;
-                $item->expiresAfter($ttl);
-            }
+            $ttl = $this->defaultTTL;
+            $item->expiresAfter($ttl);
         }
 
         return $this->cache->save($item);

@@ -35,7 +35,7 @@ class ErrorLogInterceptor
 
     /**
      *
-     * @param array<int, string[]> $ignoreErrors
+     * @param array<mixed> $args
      */
     protected function __construct(array $args)
     {
