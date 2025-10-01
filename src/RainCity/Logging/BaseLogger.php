@@ -78,6 +78,7 @@ class BaseLogger implements LoggerIntf
             false,
             true
             );
+        $formatter->setMaxLevelNameLength(3);
 
         $handler = new RotatingFileHandler($this->getLogFile(), 14, $this->getLogLevel());
         $handler->setFormatter($formatter); //  attach the formatter to the handler

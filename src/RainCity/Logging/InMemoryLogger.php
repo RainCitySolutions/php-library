@@ -29,6 +29,7 @@ class InMemoryLogger implements LoggerInterface
         $format = '%datetime% %level_name% %channel%: %message% %context%'.PHP_EOL;
 
         $formatter = new LineFormatter ($format, $dateformat, false, true);
+        $formatter->setMaxLevelNameLength(3);
 
         $this->handler = new TestHandler();
         $this->handler->setFormatter($formatter); //  attach the formatter to the handler
