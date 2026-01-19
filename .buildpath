@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
-	<buildpathentry kind="src" path="src">
+	<buildpathentry excluding="RainCity/" kind="src" path="src">
 		<attributes>
 			<attribute name="composer" value="source"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="test">
+	<buildpathentry kind="src" path="src/RainCity">
+		<attributes>
+			<attribute name="composer" value="source"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry excluding="RainCity/" kind="src" path="test">
+		<attributes>
+			<attribute name="composer" value="source"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="test/RainCity">
 		<attributes>
 			<attribute name="composer" value="source"/>
 		</attributes>

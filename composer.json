@@ -9,10 +9,10 @@
 		"php" : ">=8.2",
 		"composer/installers" : "~2.3",
 		"psr/log" : "~3.0",
-		"monolog/monolog" : "~3.9",
+		"monolog/monolog" : "~3.10",
 		"psr/simple-cache" : "~3.0",
-		"symfony/cache" : "~7.2",
-		"guzzlehttp/guzzle" : "~7.9",
+		"symfony/cache" : "~7.4",
+		"guzzlehttp/guzzle" : "~7.10",
 		"json-mapper/json-mapper" : "~2.25",
 		"doctrine/annotations" : "~2.0"
 	},
@@ -21,10 +21,15 @@
 			"src/"
 		],
 		"psr-4" : {
-			"" : [
-				"src",
-				"test"
-			]
+			"RainCity\\" : "src/RainCity"
+		}
+	},
+	"autoload-dev" : {
+		"classmap" : [
+			"test/"
+		],
+		"psr-4" : {
+			"RainCity\\" : "test/RainCity"
 		}
 	},
 	"require-dev" : {
