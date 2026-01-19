@@ -21,7 +21,10 @@
 			"src/"
 		],
 		"psr-4" : {
-			"RainCity\\" : "src/RainCity"
+			"RainCity\\" : [
+				"src/RainCity",
+				"test/RainCity"
+			]
 		}
 	},
 	"autoload-dev" : {
