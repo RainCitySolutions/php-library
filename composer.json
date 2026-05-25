@@ -13,8 +13,7 @@
 		"psr/simple-cache" : "~3.0",
 		"symfony/cache" : "~7.4",
 		"guzzlehttp/guzzle" : "~7.10",
-		"json-mapper/json-mapper" : "~2.25",
-		"doctrine/annotations" : "~2.0"
+		"json-mapper/json-mapper" : "~2.25"
 	},
 	"autoload" : {
 		"classmap" : [
@@ -37,8 +36,7 @@
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "~11.5",
-		"brain/monkey" : "~2.6",
-		"consolidation/robo" : "~5.1",
+		"brain/monkey" : "~2.7",
 		"phpstan/phpstan" : "~2.1"
 	},
 	"config" : {
