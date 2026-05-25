@@ -78,9 +78,9 @@ jobs:
         id: commit-version
         run: |
           git add package.json package-lock.json composer.json composer.lock
-          echo -n "Rev to version $(cat version.txt)" | git commit -F -
+          echo -n "Rev to version ${{ steps.rev-version.outputs.project_version }}" | git commit -F -
           git push
-          echo "version-commit-ref=$(git show-ref --heads -s)" >>build.properties
+          echo "version-commit-ref=$(git show-ref --heads -s)" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -88,13 +88,13 @@ jobs:
         id: create-release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.build-vars.outputs.version }}
-          name: Release ${{ steps.build-vars.outputs.version }}
-          commit: ${{ env.version-commit-ref }}
+          tag: v${{ steps.rev-version.outputs.project_version }}
+          name: Release ${{ steps.rev-version.outputs.project_version }}
+          commit: ${{ steps.commit-version.outputs.commit-ref }}
           omitBody: true
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts:
-            build/${{ steps.build-vars.outputs.project-name }}_${{ steps.build-vars.outputs.version }}.zip
+            ${{ steps.rev-version.outputs.project_name }}-${{ steps.rev-version.outputs.project_version }}.zip
 
   dispatch:
     runs-on: ubuntu-latest
