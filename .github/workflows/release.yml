@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     name: Build and Package
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v2x'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v2.x'
     runs-on: ubuntu-latest
 
     steps:
