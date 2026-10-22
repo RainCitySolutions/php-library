@@ -1,7 +1,7 @@
 name: Build and Release Library
 
 on:
-  workflow_disptach:
+  workflow_dispatch:
 
 jobs:
   build:
