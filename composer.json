@@ -12,7 +12,7 @@
 		"monolog/monolog" : "~3.10",
 		"psr/simple-cache" : "~3.0",
 		"symfony/cache" : "~7.4",
-		"guzzlehttp/guzzle" : "~7.10",
+		"guzzlehttp/guzzle" : "~7.10 || ~8.0",
 		"json-mapper/json-mapper" : "~2.25"
 	},
 	"autoload" : {
