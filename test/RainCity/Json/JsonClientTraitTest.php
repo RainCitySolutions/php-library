@@ -14,6 +14,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(\RainCity\Json\Test\JsonClientTraitTestClass::class)]
+#[CoversClass(\RainCity\DataCache::class)]
 #[CoversMethod(\RainCity\DataCache::class, '__construct')]
 #[CoversMethod(\RainCity\DataCache::class, 'createMemcachedCache')]
 #[CoversMethod(\RainCity\DataCache::class, 'createSqliteCache')]
