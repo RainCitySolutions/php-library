@@ -57,11 +57,6 @@ jobs:
           echo "project_name=$(sed -n -e 's/.*"name": "\(.*\)",.*/\1/p' <<< cat package.json)" >> $GITHUB_OUTPUT
           echo "project_version=$(sed -n -e 's/.*"version": "\(.*\)",.*/\1/p' <<< cat package.json)" >> $GITHUB_OUTPUT
 
-      # Run the build
-#      - name: Full build
-#        run: |
-#          vendor/bin/robo release
-
       # build the app
       - name: Build
         run: |
