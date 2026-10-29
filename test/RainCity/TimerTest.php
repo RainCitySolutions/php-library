@@ -138,7 +138,7 @@ class TimerTest extends RainCityTestCase
         self::assertGreaterThan($startVal, $pauseVal);
 
         // Time between start and pause should be just over 1 second
-        self::assertGreaterThan(self::SLEEP_TIME_SECONDS, $elapsedVal);
+        self::assertGreaterThan(self::SLEEP_TIME_SECONDS, round($elapsedVal, 2));
         self::assertLessThan(self::SLEEP_TIME_SECONDS * 2, $elapsedVal);
     }
 
