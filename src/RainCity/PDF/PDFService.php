@@ -41,9 +41,9 @@ class PDFService
      * @throws PDFServiceException Thrown if the URL provided does not refer
      *      to a valid PDF Service instance.
      */
-    public function __construct(string $svcUrl, ClientInterface $httpClient = null, float $timeout = 30.0)
+    public function __construct(string $svcUrl, ?ClientInterface $httpClient = null, float $timeout = 30.0)
     {
-        $this->logger = Logger::getLogger(get_class());
+        $this->logger = Logger::getLogger($this::class);
 
         $this->httpClient = $httpClient ?? self::getDefaultHttpClient($timeout);
 

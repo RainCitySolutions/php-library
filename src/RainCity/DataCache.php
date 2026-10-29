@@ -65,7 +65,7 @@ class DataCache implements CacheInterface
      */
     public function __construct(?CacheItemPoolInterface $customCache = null, int $defaultTTL = self::DEFAULT_TTL)
     {
-        $this->log = Logger::getLogger(get_class());
+        $this->log = Logger::getLogger($this::class);
 
         if (isset($customCache)) {
             $this->cache = $customCache;
@@ -233,7 +233,7 @@ class DataCache implements CacheInterface
      * {@inheritDoc}
      * @see \Psr\SimpleCache\CacheInterface::deleteMultiple()
      */
-    public function deleteMultiple(Traversable|array $keys): bool
+    public function deleteMultiple(iterable $keys): bool
     {
         return $this->cache->deleteItems($keys);
     }
