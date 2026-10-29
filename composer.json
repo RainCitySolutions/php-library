@@ -2,7 +2,7 @@
 	"name" : "raincity/php-library",
 	"description" : "Library to support implementations in PHP",
 	"type" : "library",
-	"version" : "3.0.2",
+	"version" : "2.1.72",
 	"license" : "BSD-3-Clause",
 	"minimum-stability" : "stable",
 	"config" : {
